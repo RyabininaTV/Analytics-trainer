@@ -10,6 +10,12 @@ repositories {
 }
 
 dependencies {
+
+    //logs
+    val logbackVersion = "1.5.25"
+    implementation("ch.qos.logback:logback-core:$logbackVersion")
+    implementation("ch.qos.logback:logback-classic:$logbackVersion")
+
     testImplementation(kotlin("test"))
 }
 
