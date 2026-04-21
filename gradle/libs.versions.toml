@@ -1,0 +1,22 @@
+[versions]
+lombok = "1.18.38"
+quarkiverse-jooq = "2.1.0"
+logback = "1.5.25"
+
+[libraries]
+quarkus-arc = { module = "io.quarkus:quarkus-arc" }
+quarkus-rest = { module = "io.quarkus:quarkus-rest" }
+quarkus-rest-jackson = { module = "io.quarkus:quarkus-rest-jackson" }
+
+quarkus-jdbc-postgresql = { module = "io.quarkus:quarkus-jdbc-postgresql" }
+
+quarkus-junit = { module = "io.quarkus:quarkus-junit" }
+
+quarkus-config-yaml = { module = "io.quarkus:quarkus-config-yaml" }
+
+quarkiverse-jooq = { module = "io.quarkiverse.jooq:quarkus-jooq", version.ref = "quarkiverse-jooq" }
+
+lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
+
+logback-core = { module = "ch.qos.logback:logback-core", version.ref = "logback" }
+logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
