@@ -36,12 +36,10 @@ dependencies {
 
     // testing
     testImplementation(libs.quarkus.junit)
-    testImplementation(libs.rest.assured)
 
     //logs
-    val logbackVersion = "1.5.25"
-    implementation("ch.qos.logback:logback-core:$logbackVersion")
-    implementation("ch.qos.logback:logback-classic:$logbackVersion")
+    implementation(libs.logback.core)
+    implementation(libs.logback.classic)
 }
 
 group = "com.example"
