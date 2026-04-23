@@ -9,5 +9,3 @@ quarkus:
     password: ${DB_PASSWORD}
   jooq:
     dialect: POSTGRES
-  native:
-    builder-image: ""
