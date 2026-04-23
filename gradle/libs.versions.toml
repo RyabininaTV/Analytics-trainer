@@ -1,5 +1,5 @@
 [versions]
-quarkus = "3.6.0"
+quarkus = "3.14.0"
 lombok = "1.18.30"
 quarkiverse-jooq = "2.0.0"
 logback = "1.4.14"
