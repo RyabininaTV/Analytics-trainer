@@ -1,13 +1,13 @@
-# Stage 1: Build
-FROM gradle:8.5-jdk21 AS builder
+FROM eclipse-temurin:21-jdk AS builder
 WORKDIR /app
-COPY build.gradle settings.gradle ./
+COPY gradlew ./
+COPY gradle ./gradle
+COPY build.gradle.kts settings.gradle.kts gradle.properties ./
 COPY src ./src
-RUN gradle clean build shadowJar --no-daemon
-
-# Stage 2: Runtime
+RUN chmod +x ./gradlew
+RUN ./gradlew clean build --no-daemon
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
-COPY --from=builder /app/build/libs/analytics-trainer-*.jar app.jar
+COPY --from=builder /app/build/quarkus-app/ /app/quarkus-app/
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "/app/quarkus-app/quarkus-run.jar"]

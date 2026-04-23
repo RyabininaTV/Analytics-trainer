@@ -1,0 +1,11 @@
+quarkus:
+  http:
+    port: 8080
+  datasource:
+    db-kind: postgresql
+    jdbc:
+      url: ${DB_URL}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+  jooq:
+    dialect: POSTGRES
