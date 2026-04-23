@@ -24,21 +24,30 @@
 
 ![step-4](imgs/push-feature.png)
 
-> Перед пушем обязательно проверьте, что все unit-тесты отрабатывают корректно
+> Перед пушем обязательно проверьте, что все unit-тесты отрабатывают корректно и нет конфликтов с веткой `main`
 
 Чтобы запустить юнит тесты, достаточно выполнить команду
 ```shell
 ../gradlew -p .. test
 ```
 
+Чтобы подтянуть актуальную версию `main` ветки в свою, нужно сделать `fetch`, `update` для `main` ветки и влить `main` в
+feature-ветку
+
+![step-5.png](imgs/fetch.png)
+
+![update.png](imgs/update.png)
+
+![merge-main-into-feature.png](imgs/merge-main-into-feature.png)
+
 ## 3. Создание пул реквеста
 
 Перейдите в [GitHub проекта](https://github.com/RyabininaTV/Analytics-trainer) и создайте пул реквест, указав в целевую
 ветку как `develop`
 
-![step-5](imgs/enter-create-pull-request.png)
+![step-6](imgs/enter-create-pull-request.png)
 
-![step-6](imgs/create-pr.png)
+![step-7](imgs/create-pr.png)
 
 ---
 
@@ -58,9 +67,9 @@
 
 Чтобы задеплоить свою фичу, нужно перейти на страницу своего пул реквеста и смержить свою ветку в `develop`
 
-![step-7](imgs/merge-to-develop-step-1.png)
+![step-8](imgs/merge-to-develop-step-1.png)
 
-![step-8](imgs/merge-to-develop-step-2.png)
+![step-9](imgs/merge-to-develop-step-2.png)
 
 После мержа запустится пайплайн
 1. `build-and-test` -- сборка проекта и запуск тестов
@@ -75,6 +84,10 @@
 
 В конце разработки нужно смержить ветку `develop` в `main` ветку
 
+![step-10](imgs/checkout-on-main.png)
 
+![step-11](imgs/merge-develop-into-main.png)
 
----
+![step-12](imgs/push-main.png)
+
+![step-13](imgs/final-push.png)
