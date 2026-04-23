@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: [ main, develop ]
   workflow_dispatch:
-     
+
 env:
   JAVA_VERSION: '21'
   GRADLE_VERSION: '8.5'
@@ -45,7 +45,7 @@ jobs:
         run: ./gradlew test --no-daemon
       
       - name: Build JAR
-        run: ./gradlew build --no-daemon
+        run: ./gradlew quarkusBuild --no-daemon
       
       - name: Upload JAR artifact
         uses: actions/upload-artifact@v4

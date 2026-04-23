@@ -1,10 +1,9 @@
 plugins {
     java
-    id("io.quarkus") version "3.14.0"
+    id("io.quarkus")
 }
 
 repositories {
-    gradlePluginPortal()
     mavenCentral()
 }
 
@@ -13,6 +12,7 @@ val quarkusPlatformArtifactId: String by project
 val quarkusPlatformVersion: String by project
 
 dependencies {
+    implementation(enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}"))
 
     // web
     implementation(libs.quarkus.arc)
@@ -35,7 +35,7 @@ dependencies {
     testAnnotationProcessor(libs.lombok)
 
     // testing
-    testImplementation(libs.quarkus.junit5)
+    testImplementation(libs.quarkus.junit)
 
     //logs
     implementation(libs.logback.core)
@@ -54,8 +54,4 @@ java {
 tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
     options.compilerArgs.add("-parameters")
-}
-
-tasks.named("quarkusAppPartsBuild") {
-    enabled = false
 }
