@@ -1,9 +1,10 @@
 plugins {
     java
-    id("io.quarkus")
+    id("io.quarkus") version "3.14.0"
 }
 
 repositories {
+    gradlePluginPortal()
     mavenCentral()
 }
 
