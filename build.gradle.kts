@@ -35,7 +35,7 @@ dependencies {
     testAnnotationProcessor(libs.lombok)
 
     // testing
-    testImplementation(libs.quarkus.junit)
+    testImplementation(libs.quarkus.junit5)
 
     //logs
     implementation(libs.logback.core)
