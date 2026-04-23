@@ -1,4 +1,4 @@
-package com.example.resources;
+package com.example.controllers;
 
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
@@ -8,7 +8,7 @@ import static jakarta.ws.rs.core.MediaType.TEXT_PLAIN;
 
 @Path("/hello")
 @Produces(TEXT_PLAIN)
-public class DemoResource {
+public class DemoController {
 
     @GET
     public String hello() {

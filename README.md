@@ -13,6 +13,7 @@
 
 ## 📘 Документация по процессам
 - ### [Endpoints](docs/endpoints/index.md)
+- ### [Процесс разработки](docs/git-flow.md)
 
 ---
 
@@ -30,13 +31,18 @@
    ```yaml
    quarkus:
      datasource:
-     jdbc:
-       url: <url>
+       jdbc:
+         url: <url>
        username: <username>
        password: <password>
    ```
-3. Выполнить команду
+3. Выполнить команду, если у вас консоль `shell`
    ```shell
    $env:QUARKUS_CONFIG_LOCATIONS="./config/application.yaml"
    .\gradlew.bat quarkusDev
+   ```
+   Или, если у вас консоль `bash`, выполнить команду
+   ```bash
+   export QUARKUS_CONFIG_LOCATIONS=./config/application.yaml
+   ./gradlew quarkusDev
    ```
