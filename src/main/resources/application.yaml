@@ -4,7 +4,7 @@ quarkus:
   datasource:
     db-kind: postgresql
     jdbc:
-      url: jdbc:postgresql://${SERVER_HOST}:5432/${DB_NAME}
+      url: ${DB_URL}
     username: ${DB_USER}
     password: ${DB_PASSWORD}
   jooq:
