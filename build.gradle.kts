@@ -13,7 +13,6 @@ val quarkusPlatformArtifactId: String by project
 val quarkusPlatformVersion: String by project
 
 dependencies {
-    implementation(enforcedPlatform("io.quarkus:quarkus-bom:3.14.0"))
 
     // web
     implementation(libs.quarkus.arc)
