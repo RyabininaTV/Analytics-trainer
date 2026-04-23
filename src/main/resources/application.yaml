@@ -1,19 +1,13 @@
 quarkus:
   http:
     port: 8080
-
   datasource:
     db-kind: postgresql
     jdbc:
       url: jdbc:postgresql://${SERVER_HOST}:5432/${DB_NAME}
     username: ${DB_USER}
     password: ${DB_PASSWORD}
-
   jooq:
-  native:
-    builder-image: ""
     dialect: POSTGRES
-
-quarkus:
   native:
     builder-image: ""
