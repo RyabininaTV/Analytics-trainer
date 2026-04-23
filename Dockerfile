@@ -2,6 +2,7 @@
 FROM gradle:8.5-jdk21 AS builder
 WORKDIR /app
 COPY build.gradle.kts settings.gradle.kts ./
+COPY gradle gradle
 RUN echo "quarkusPluginId=io.quarkus" > gradle.properties && \
     echo "quarkusPluginVersion=3.6.0" >> gradle.properties
 COPY src ./src
