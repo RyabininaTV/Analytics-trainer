@@ -2,6 +2,7 @@
 FROM gradle:8.5-jdk21 AS builder
 WORKDIR /app
 COPY build.gradle.kts settings.gradle.kts ./
+RUN echo "quarkusPluginId=io.quarkus" > gradle.properties
 COPY src ./src
 RUN gradle clean build --no-daemon
 
