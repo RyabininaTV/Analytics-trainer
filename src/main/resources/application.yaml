@@ -11,3 +11,7 @@ quarkus:
 
   jooq:
     dialect: POSTGRES
+
+quarkus:
+  native:
+    builder-image: ""
