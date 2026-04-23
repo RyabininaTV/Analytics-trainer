@@ -44,7 +44,7 @@ jobs:
         run: ./gradlew test --no-daemon
       
       - name: Build JAR
-        run: ./gradlew shadowJar --no-daemon
+        run: ./gradlew build --no-daemon
       
       - name: Upload JAR artifact
         uses: actions/upload-artifact@v4
