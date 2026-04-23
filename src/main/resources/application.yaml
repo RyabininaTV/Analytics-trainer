@@ -11,4 +11,3 @@ quarkus:
 
   jooq:
     dialect: POSTGRES
-quarkus.native.enabled: false
