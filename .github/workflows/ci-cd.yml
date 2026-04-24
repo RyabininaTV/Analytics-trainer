@@ -44,7 +44,7 @@ jobs:
       - name: Run tests
         run: ./gradlew test --no-daemon
       
-      - name: Build JAR
+      - name: Build JAR (Quarkus)
         run: ./gradlew quarkusBuild --no-daemon
       
       - name: Upload JAR artifact
@@ -109,7 +109,7 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           password: ${{ secrets.SERVER_PASSWORD }}
           source: "docker-compose.yml"
-          target: "/home/toma/analytics-trainer-app/"
+          target: "/root/Analytics-trainer"
       
       - name: Deploy to server
         uses: appleboy/ssh-action@v0.1.5
@@ -118,12 +118,13 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           password: ${{ secrets.SERVER_PASSWORD }}
           script: |
-            cd /home/toma/analytics-trainer-app
-            echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" > .env
-            echo "DB_USER=${{ secrets.DB_USER }}" >> .env
-            echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env
-            echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
-            echo "DB_HOST=185.93.109.36" >> .env
+            cd /root/Analytics-trainer
+            cat > .env << 'EOF'
+            DB_URL=jdbc:postgresql://host.docker.internal:5432/postgres
+            DB_USER=postgres
+            DB_PASSWORD=123456analytic
+            JWT_SECRET=${{ secrets.JWT_SECRET }}
+            EOF
             docker compose down
             docker compose pull
             docker compose up -d --build
