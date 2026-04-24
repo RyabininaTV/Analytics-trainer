@@ -109,7 +109,7 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           password: ${{ secrets.SERVER_PASSWORD }}
           source: "docker-compose.yml"
-          target: "/home/toma/analytics-trainer-app/"
+          target: "/root/Analytics-trainer"
       
       - name: Deploy to server
         uses: appleboy/ssh-action@v0.1.5
@@ -118,7 +118,7 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           password: ${{ secrets.SERVER_PASSWORD }}
           script: |
-            cd /home/toma/analytics-trainer-app
+            cd /root/Analytics-trainer
             cat > .env << 'EOF'
             DB_URL=jdbc:postgresql://host.docker.internal:5432/postgres
             DB_USER=postgres
