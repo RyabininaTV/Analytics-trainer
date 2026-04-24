@@ -2,16 +2,13 @@ version: '3.8'
 
 services:
   app:
-    build: .
+    image: nancy_babich/analytics-trainer:develop
     container_name: analytics-app
     restart: always
     ports:
       - "8080:8080"
-    environment:
-      DB_URL: jdbc:postgresql://${DB_HOST:-localhost}:5432/${DB_NAME:-trainer}
-      DB_USER: ${DB_USER:-admin}
-      DB_PASSWORD: ${DB_PASSWORD}
-      JWT_SECRET: ${JWT_SECRET}
+    env_file:
+      - .env
     logging:
       driver: "json-file"
       options:
