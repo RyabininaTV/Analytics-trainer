@@ -13,7 +13,7 @@
 
 ## 📘 Документация по процессам
 - ### [Endpoints](docs/endpoints/index.md)
-- ### [Процесс разработки](docs/git-flow.md)
+- ### [Git flow](docs/git-flow.md)
 
 ---
 

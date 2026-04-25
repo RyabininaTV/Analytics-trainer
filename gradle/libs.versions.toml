@@ -4,6 +4,8 @@ quarkiverse-jooq = "2.1.0"
 postgresql = "42.7.7"
 jooq-codegen-plugin = "3.19.22"
 logback = "1.5.25"
+jjwt = "0.12.6"
+mockito = "5.12.0"
 
 [libraries]
 # quarkus
@@ -12,7 +14,11 @@ quarkus-rest = { module = "io.quarkus:quarkus-rest" }
 quarkus-rest-jackson = { module = "io.quarkus:quarkus-rest-jackson" }
 quarkus-jdbc-postgresql = { module = "io.quarkus:quarkus-jdbc-postgresql" }
 quarkus-config-yaml = { module = "io.quarkus:quarkus-config-yaml" }
+quarkus-smallrye-openapi = { module = "io.quarkus:quarkus-smallrye-openapi" }
+
+# tests
 quarkus-junit = { module = "io.quarkus:quarkus-junit" }
+mockito-junit-jupiter = { module = "org.mockito:mockito-junit-jupiter", version.ref = "mockito" }
 
 # jooq
 quarkiverse-jooq = { module = "io.quarkiverse.jooq:quarkus-jooq", version.ref = "quarkiverse-jooq" }
@@ -24,6 +30,13 @@ lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
 # logs
 logback-core = { module = "ch.qos.logback:logback-core", version.ref = "logback" }
 logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
+
+# security
+quarkus-elytron-security-common = { module = "io.quarkus:quarkus-elytron-security-common" }
+quarkus-hibernate-validator = { module = "io.quarkus:quarkus-hibernate-validator" }
+jjwt-api = { module = "io.jsonwebtoken:jjwt-api", version.ref = "jjwt" }
+jjwt-impl = { module = "io.jsonwebtoken:jjwt-impl", version.ref = "jjwt" }
+jjwt-jackson = { module = "io.jsonwebtoken:jjwt-jackson", version.ref = "jjwt" }
 
 [plugins]
 jooq-codegen = { id = "org.jooq.jooq-codegen-gradle", version.ref = "jooq-codegen-plugin" }

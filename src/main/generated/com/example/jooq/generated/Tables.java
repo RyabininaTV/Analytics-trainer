@@ -6,6 +6,7 @@ package com.example.jooq.generated;
 
 import com.example.jooq.generated.tables.AttemptAnswers;
 import com.example.jooq.generated.tables.Attempts;
+import com.example.jooq.generated.tables.RevokedTokens;
 import com.example.jooq.generated.tables.Simulators;
 import com.example.jooq.generated.tables.TaskErrorItems;
 import com.example.jooq.generated.tables.TaskOptions;
@@ -29,6 +30,11 @@ public class Tables {
      * попытки выполнения заданий пользователями
      */
     public static final Attempts ATTEMPTS = Attempts.ATTEMPTS;
+
+    /**
+     * отозванные jwt токены
+     */
+    public static final RevokedTokens REVOKED_TOKENS = RevokedTokens.REVOKED_TOKENS;
 
     /**
      * тренажёры или логические наборы заданий
