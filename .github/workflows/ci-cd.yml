@@ -120,7 +120,7 @@ jobs:
           script: |
             cd /root/Analytics-trainer
             cat > .env << 'EOF'
-            DB_URL=jdbc:postgresql://host.docker.internal:5432/postgres
+            DB_URL=jdbc:postgresql://141.8.198.205:5432/postgres
             DB_USER=postgres
             DB_PASSWORD=123456analytic
             JWT_SECRET=${{ secrets.JWT_SECRET }}
