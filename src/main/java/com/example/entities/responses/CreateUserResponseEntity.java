@@ -1,16 +1,16 @@
-package com.example.entities;
+package com.example.entities.responses;
 
-import lombok.Builder;
 import com.example.jooq.generated.enums.UserRoleEnum;
 import com.example.jooq.generated.enums.UserStatusEnum;
 import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import lombok.Builder;
 
 import java.time.LocalDateTime;
 
 @Builder
-public record User (
-        @Nullable
+public record CreateUserResponseEntity(
+
+        @Nonnull
         Long id,
 
         @Nonnull
@@ -28,9 +28,10 @@ public record User (
         @Nonnull
         UserStatusEnum status,
 
-        @Nullable
+        @Nonnull
         LocalDateTime createdAt,
 
-        @Nullable
+        @Nonnull
         LocalDateTime updatedAt
+
 ) {}

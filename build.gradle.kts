@@ -94,10 +94,23 @@ dependencies {
 
     // tests
     testImplementation(libs.quarkus.junit)
+    testImplementation(libs.mockito.junit.jupiter)
 
     // logs
     implementation(libs.logback.core)
     implementation(libs.logback.classic)
+
+    // security
+    implementation(libs.quarkus.elytron.security.common)
+    implementation(libs.jjwt.api)
+    runtimeOnly(libs.jjwt.impl)
+    runtimeOnly(libs.jjwt.jackson)
+
+    // validation
+    implementation(libs.quarkus.hibernate.validator)
+
+    // openapi
+    implementation(libs.quarkus.smallrye.openapi)
 }
 
 java {
@@ -140,6 +153,7 @@ jooq {
                     tasks|
                     user_progress|
                     users|
+                    revoked_tokens|
                     user_role_enum|
                     user_status_enum|
                     task_type_enum|

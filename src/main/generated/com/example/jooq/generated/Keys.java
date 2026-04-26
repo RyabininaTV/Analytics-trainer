@@ -6,6 +6,7 @@ package com.example.jooq.generated;
 
 import com.example.jooq.generated.tables.AttemptAnswers;
 import com.example.jooq.generated.tables.Attempts;
+import com.example.jooq.generated.tables.RevokedTokens;
 import com.example.jooq.generated.tables.Simulators;
 import com.example.jooq.generated.tables.TaskErrorItems;
 import com.example.jooq.generated.tables.TaskOptions;
@@ -14,6 +15,7 @@ import com.example.jooq.generated.tables.UserProgress;
 import com.example.jooq.generated.tables.Users;
 import com.example.jooq.generated.tables.records.AttemptAnswersRecord;
 import com.example.jooq.generated.tables.records.AttemptsRecord;
+import com.example.jooq.generated.tables.records.RevokedTokensRecord;
 import com.example.jooq.generated.tables.records.SimulatorsRecord;
 import com.example.jooq.generated.tables.records.TaskErrorItemsRecord;
 import com.example.jooq.generated.tables.records.TaskOptionsRecord;
@@ -41,6 +43,7 @@ public class Keys {
 
     public static final UniqueKey<AttemptAnswersRecord> ATTEMPT_ANSWERS_PKEY = Internal.createUniqueKey(AttemptAnswers.ATTEMPT_ANSWERS, DSL.name("attempt_answers_pkey"), new TableField[] { AttemptAnswers.ATTEMPT_ANSWERS.ID }, true);
     public static final UniqueKey<AttemptsRecord> ATTEMPTS_PKEY = Internal.createUniqueKey(Attempts.ATTEMPTS, DSL.name("attempts_pkey"), new TableField[] { Attempts.ATTEMPTS.ID }, true);
+    public static final UniqueKey<RevokedTokensRecord> REVOKED_TOKENS_PKEY = Internal.createUniqueKey(RevokedTokens.REVOKED_TOKENS, DSL.name("revoked_tokens_pkey"), new TableField[] { RevokedTokens.REVOKED_TOKENS.TOKEN_ID }, true);
     public static final UniqueKey<SimulatorsRecord> SIMULATORS_PKEY = Internal.createUniqueKey(Simulators.SIMULATORS, DSL.name("simulators_pkey"), new TableField[] { Simulators.SIMULATORS.ID }, true);
     public static final UniqueKey<TaskErrorItemsRecord> TASK_ERROR_ITEMS_PKEY = Internal.createUniqueKey(TaskErrorItems.TASK_ERROR_ITEMS, DSL.name("task_error_items_pkey"), new TableField[] { TaskErrorItems.TASK_ERROR_ITEMS.ID }, true);
     public static final UniqueKey<TaskOptionsRecord> TASK_OPTIONS_PKEY = Internal.createUniqueKey(TaskOptions.TASK_OPTIONS, DSL.name("task_options_pkey"), new TableField[] { TaskOptions.TASK_OPTIONS.ID }, true);

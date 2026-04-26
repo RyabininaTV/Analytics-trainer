@@ -9,3 +9,11 @@ quarkus:
     password: ${DB_PASSWORD}
   jooq:
     dialect: POSTGRES
+  smallrye-openapi:
+    store-schema-directory: docs
+app:
+  jwt:
+    secret: ${JWT_SECRET}
+    issuer: analytics-trainer
+    access-token-ttl-minutes: 15
+    refresh-token-ttl-days: 14

@@ -1,0 +1,193 @@
+{
+  "openapi" : "3.1.0",
+  "components" : {
+    "schemas" : {
+      "LoginRequest" : {
+        "type" : "object",
+        "required" : [ "email", "password" ],
+        "properties" : {
+          "email" : {
+            "type" : "string",
+            "pattern" : "\\S",
+            "maxLength" : 255
+          },
+          "password" : {
+            "type" : "string",
+            "pattern" : "\\S",
+            "maxLength" : 100
+          }
+        }
+      },
+      "LogoutRequest" : {
+        "type" : "object",
+        "properties" : {
+          "refreshToken" : {
+            "type" : "string"
+          }
+        }
+      },
+      "RefreshRequest" : {
+        "type" : "object",
+        "required" : [ "refreshToken" ],
+        "properties" : {
+          "refreshToken" : {
+            "type" : "string",
+            "pattern" : "\\S"
+          }
+        }
+      },
+      "RegisterRequest" : {
+        "type" : "object",
+        "required" : [ "email", "username", "password" ],
+        "properties" : {
+          "email" : {
+            "type" : "string",
+            "pattern" : "\\S",
+            "maxLength" : 255
+          },
+          "username" : {
+            "type" : "string",
+            "pattern" : "\\S",
+            "minLength" : 3,
+            "maxLength" : 100
+          },
+          "password" : {
+            "type" : "string",
+            "pattern" : "\\S",
+            "minLength" : 8,
+            "maxLength" : 100
+          }
+        }
+      }
+    }
+  },
+  "paths" : {
+    "/auth/login" : {
+      "post" : {
+        "summary" : "Вход пользователя",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/LoginRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        },
+        "tags" : [ "Auth Controller" ]
+      }
+    },
+    "/auth/logout" : {
+      "post" : {
+        "summary" : "Выход пользователя",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/LogoutRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        },
+        "tags" : [ "Auth Controller" ]
+      }
+    },
+    "/auth/refresh" : {
+      "post" : {
+        "summary" : "Обновление токенов",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/RefreshRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        },
+        "tags" : [ "Auth Controller" ]
+      }
+    },
+    "/auth/register" : {
+      "post" : {
+        "summary" : "Регистрация пользователя",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/RegisterRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        },
+        "tags" : [ "Auth Controller" ]
+      }
+    }
+  },
+  "info" : {
+    "title" : "Analytics-trainer API",
+    "version" : "1.0-SNAPSHOT"
+  },
+  "servers" : [ {
+    "url" : "http://localhost:8080",
+    "description" : "Auto generated value"
+  }, {
+    "url" : "http://0.0.0.0:8080",
+    "description" : "Auto generated value"
+  } ]
+}
