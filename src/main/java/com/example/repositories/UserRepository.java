@@ -13,12 +13,11 @@ import org.jooq.DSLContext;
 import java.util.Optional;
 
 import static com.example.jooq.generated.tables.Users.USERS;
-
-import lombok.AccessLevel;
+import static lombok.AccessLevel.PRIVATE;
 
 @ApplicationScoped
 @RequiredArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@FieldDefaults(level = PRIVATE, makeFinal = true)
 public class UserRepository {
 
     DSLContext dsl;

@@ -53,6 +53,7 @@ components:
 paths:
   /auth/login:
     post:
+      summary: Вход пользователя
       requestBody:
         content:
           application/json:
@@ -67,11 +68,11 @@ paths:
               schema: {}
         "400":
           description: Bad Request
-      summary: Login
       tags:
       - Auth Controller
   /auth/logout:
     post:
+      summary: Выход пользователя
       requestBody:
         content:
           application/json:
@@ -86,11 +87,11 @@ paths:
               schema: {}
         "400":
           description: Bad Request
-      summary: Logout
       tags:
       - Auth Controller
   /auth/refresh:
     post:
+      summary: Обновление токенов
       requestBody:
         content:
           application/json:
@@ -105,11 +106,11 @@ paths:
               schema: {}
         "400":
           description: Bad Request
-      summary: Refresh
       tags:
       - Auth Controller
   /auth/register:
     post:
+      summary: Регистрация пользователя
       requestBody:
         content:
           application/json:
@@ -124,7 +125,6 @@ paths:
               schema: {}
         "400":
           description: Bad Request
-      summary: Register
       tags:
       - Auth Controller
 info:

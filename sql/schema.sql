@@ -84,21 +84,6 @@ comment on column revoked_tokens.token_id is 'jwt id токена из claim jti
 comment on column revoked_tokens.expires_at is 'дата и время истечения токена';
 comment on column revoked_tokens.created_at is 'дата и время отзыва токена';
 
-create table password_reset_tokens (
-    token_hash  varchar(64) primary key,
-    user_id     bigint not null references users(id),
-    expires_at  timestamp not null,
-    used_at     timestamp null,
-    created_at  timestamp not null default now()
-);
-
-comment on table password_reset_tokens is 'токены восстановления пароля';
-comment on column password_reset_tokens.token_hash is 'sha-256 хэш токена восстановления';
-comment on column password_reset_tokens.user_id is 'пользователь, для которого создан токен';
-comment on column password_reset_tokens.expires_at is 'дата и время истечения токена';
-comment on column password_reset_tokens.used_at is 'дата и время использования токена';
-comment on column password_reset_tokens.created_at is 'дата и время создания токена';
-
 create table simulators (
     id                  bigserial primary key,
     title               varchar(255) not null,
