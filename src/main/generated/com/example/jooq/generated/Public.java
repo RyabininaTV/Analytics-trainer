@@ -6,6 +6,7 @@ package com.example.jooq.generated;
 
 import com.example.jooq.generated.tables.AttemptAnswers;
 import com.example.jooq.generated.tables.Attempts;
+import com.example.jooq.generated.tables.RevokedTokens;
 import com.example.jooq.generated.tables.Simulators;
 import com.example.jooq.generated.tables.TaskErrorItems;
 import com.example.jooq.generated.tables.TaskOptions;
@@ -43,6 +44,11 @@ public class Public extends SchemaImpl {
      * попытки выполнения заданий пользователями
      */
     public final Attempts ATTEMPTS = Attempts.ATTEMPTS;
+
+    /**
+     * отозванные jwt токены
+     */
+    public final RevokedTokens REVOKED_TOKENS = RevokedTokens.REVOKED_TOKENS;
 
     /**
      * тренажёры или логические наборы заданий
@@ -92,6 +98,7 @@ public class Public extends SchemaImpl {
         return Arrays.asList(
             AttemptAnswers.ATTEMPT_ANSWERS,
             Attempts.ATTEMPTS,
+            RevokedTokens.REVOKED_TOKENS,
             Simulators.SIMULATORS,
             TaskErrorItems.TASK_ERROR_ITEMS,
             TaskOptions.TASK_OPTIONS,

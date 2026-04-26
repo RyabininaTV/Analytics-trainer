@@ -73,6 +73,17 @@ comment on column users.status is 'статус пользователя';
 comment on column users.created_at is 'дата и время создания пользователя';
 comment on column users.updated_at is 'дата и время последнего обновления пользователя';
 
+create table revoked_tokens (
+    token_id    varchar(100) primary key,
+    expires_at  timestamp not null,
+    created_at  timestamp not null default now()
+);
+
+comment on table revoked_tokens is 'отозванные jwt токены';
+comment on column revoked_tokens.token_id is 'jwt id токена из claim jti';
+comment on column revoked_tokens.expires_at is 'дата и время истечения токена';
+comment on column revoked_tokens.created_at is 'дата и время отзыва токена';
+
 create table simulators (
     id                  bigserial primary key,
     title               varchar(255) not null,

@@ -13,7 +13,8 @@
 
 ## 📘 Документация по процессам
 - ### [Endpoints](docs/endpoints/index.md)
-- ### [Процесс разработки](docs/git-flow.md)
+- ### [Git flow](docs/git-flow.md)
+- ### [Принципы разработки](docs/principles-of-development.md)
 
 ---
 
@@ -26,8 +27,9 @@
 ---
 
 ## 🚀 Локальный запуск
-1. Узнать значения `url`, `username` и `password` для подлючения к БД
-2. Создать файл `application.yaml` в папке `config` в корне проекта (если такой папки нет, то создать) с содержимым ниже
+1. Узнать значения `url`, `username` и `password` для подключения к БД
+2. Сгенерировать `secret`, сделать это можно [здесь](https://jwtsecretkeygenerator.com/)
+3. Создать файл `application.yaml` в папке `config` в корне проекта (если такой папки нет, то создать) с содержимым ниже
    ```yaml
    quarkus:
      datasource:
@@ -35,8 +37,15 @@
          url: <url>
        username: <username>
        password: <password>
+   app:
+     jwt:
+       secret: <secret>
    ```
-3. Выполнить команду, если у вас консоль `shell`
+4. Пометить папку с генерированными jOOQ классами как `generated sources root`
+
+   ![mark-directory](docs/imgs/mark-directory-as-generated-sources-root.jpg)
+
+5. Выполнить команду, если у вас консоль `shell`
    ```shell
    $env:QUARKUS_CONFIG_LOCATIONS="./config/application.yaml"
    .\gradlew.bat quarkusDev
@@ -46,3 +55,11 @@
    export QUARKUS_CONFIG_LOCATIONS=./config/application.yaml
    ./gradlew quarkusDev
    ```
+
+---
+
+## 🔗 Полезные ссылки
+
+| Ссылка                                        | Примечание                                                          |
+|-----------------------------------------------|---------------------------------------------------------------------|
+| [swagger](http://localhost:8080/q/swagger-ui) | Открывать только после локального<br> старта приложения (порт 8080) |
