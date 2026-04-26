@@ -73,17 +73,6 @@ comment on column users.status is 'статус пользователя';
 comment on column users.created_at is 'дата и время создания пользователя';
 comment on column users.updated_at is 'дата и время последнего обновления пользователя';
 
-create table revoked_tokens (
-    token_id    varchar(100) primary key,
-    expires_at  timestamp not null,
-    created_at  timestamp not null default now()
-);
-
-comment on table revoked_tokens is 'отозванные jwt токены';
-comment on column revoked_tokens.token_id is 'jwt id токена из claim jti';
-comment on column revoked_tokens.expires_at is 'дата и время истечения токена';
-comment on column revoked_tokens.created_at is 'дата и время отзыва токена';
-
 create table simulators (
     id                  bigserial primary key,
     title               varchar(255) not null,
@@ -115,14 +104,12 @@ create table tasks (
     description         text not null,
     content             text,
     max_score           integer not null,
-    sort_order          integer not null default 0,
     is_active           boolean not null default true,
     auto_check_enabled  boolean not null default false,
     created_at          timestamp not null default now(),
     updated_at          timestamp not null default now(),
 
-    constraint chk_tasks_max_score check (max_score >= 0),
-    constraint chk_tasks_sort_order check (sort_order >= 0)
+    constraint chk_tasks_max_score check (max_score >= 0)
 );
 
 comment on table tasks is 'задания внутри тренажёров';
@@ -133,7 +120,6 @@ comment on column tasks.title is 'название задания';
 comment on column tasks.description is 'текст условия задания';
 comment on column tasks.content is 'дополнительный контент задания: кейс, артефакт, текст требования и т.д.';
 comment on column tasks.max_score is 'максимальное количество баллов за задание';
-comment on column tasks.sort_order is 'порядок отображения задания внутри тренажёра';
 comment on column tasks.is_active is 'признак доступности задания';
 comment on column tasks.auto_check_enabled is 'признак автоматической проверки задания';
 comment on column tasks.created_at is 'дата и время создания задания';
