@@ -127,6 +127,46 @@ paths:
           description: Bad Request
       tags:
       - Auth Controller
+  /tasks:
+    get:
+      summary: Список всех заданий
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - Tasks Controller
+  /tasks/random:
+    get:
+      summary: Случайное задание
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - Tasks Controller
+  /tasks/{id}:
+    get:
+      summary: Деталка задания
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - Tasks Controller
 info:
   title: Analytics-trainer API
   version: 1.0-SNAPSHOT
