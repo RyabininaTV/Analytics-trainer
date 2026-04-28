@@ -177,6 +177,63 @@
         },
         "tags" : [ "Auth Controller" ]
       }
+    },
+    "/tasks" : {
+      "get" : {
+        "summary" : "Список всех заданий",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          }
+        },
+        "tags" : [ "Tasks Controller" ]
+      }
+    },
+    "/tasks/random" : {
+      "get" : {
+        "summary" : "Получение деталей случайной задачи",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          }
+        },
+        "tags" : [ "Tasks Controller" ]
+      }
+    },
+    "/tasks/{id}" : {
+      "get" : {
+        "summary" : "Получение деталей задачи по id",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          }
+        },
+        "tags" : [ "Tasks Controller" ]
+      }
     }
   },
   "info" : {
