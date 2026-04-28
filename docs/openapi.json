@@ -196,7 +196,7 @@
     },
     "/tasks/random" : {
       "get" : {
-        "summary" : "Случайное задание",
+        "summary" : "Получение деталей случайной задачи",
         "responses" : {
           "200" : {
             "description" : "OK",
@@ -212,7 +212,7 @@
     },
     "/tasks/{id}" : {
       "get" : {
-        "summary" : "Деталка задания",
+        "summary" : "Получение деталей задачи по id",
         "parameters" : [ {
           "name" : "id",
           "in" : "path",

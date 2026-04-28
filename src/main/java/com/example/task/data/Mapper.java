@@ -1,8 +1,8 @@
-package com.example.task;
+package com.example.task.data;
 
 import com.example.jooq.generated.enums.TaskTypeEnum;
-import com.example.task.model.BasicTask;
-import com.example.task.model.TaskDetails;
+import com.example.task.domain.model.TaskDetailsResponse;
+import com.example.task.domain.model.TaskResponse;
 import lombok.experimental.UtilityClass;
 import org.jooq.Record4;
 import org.jooq.Record8;
@@ -12,8 +12,8 @@ import static com.example.jooq.generated.tables.Tasks.TASKS;
 @UtilityClass
 public class Mapper {
 
-    BasicTask toBasicTask(Record4<Long, Long, TaskTypeEnum, String> record) {
-       return BasicTask.builder()
+    public TaskResponse toBasicTask(Record4<Long, Long, TaskTypeEnum, String> record) {
+        return TaskResponse.builder()
                 .id(record.get(TASKS.ID))
                 .trainerId(record.get(TASKS.SIMULATOR_ID))
                 .type(record.get(TASKS.TASK_TYPE))
@@ -21,8 +21,8 @@ public class Mapper {
                 .build();
     }
 
-    TaskDetails toTaskDetails(Record8<Long, Long, TaskTypeEnum, String, String, String, Integer, Boolean> record) {
-        return TaskDetails.builder()
+    public TaskDetailsResponse toTaskDetails(Record8<Long, Long, TaskTypeEnum, String, String, String, Integer, Boolean> record) {
+        return TaskDetailsResponse.builder()
                 .id(record.get(TASKS.ID))
                 .trainerId(record.get(TASKS.SIMULATOR_ID))
                 .type(record.get(TASKS.TASK_TYPE))
