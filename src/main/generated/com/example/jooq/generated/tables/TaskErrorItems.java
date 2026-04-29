@@ -14,7 +14,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import org.jooq.Check;
 import org.jooq.Condition;
 import org.jooq.Field;
 import org.jooq.ForeignKey;
@@ -34,7 +33,6 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
-import org.jooq.impl.Internal;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
@@ -89,12 +87,6 @@ public class TaskErrorItems extends TableImpl<TaskErrorItemsRecord> {
      * почему фрагмент ошибочный или корректный
      */
     public final TableField<TaskErrorItemsRecord, String> EXPLANATION = createField(DSL.name("explanation"), SQLDataType.CLOB, this, "пояснение, почему фрагмент ошибочный или корректный");
-
-    /**
-     * The column <code>public.task_error_items.sort_order</code>. порядок
-     * отображения фрагмента
-     */
-    public final TableField<TaskErrorItemsRecord, Integer> SORT_ORDER = createField(DSL.name("sort_order"), SQLDataType.INTEGER.nullable(false).defaultValue(DSL.field(DSL.raw("0"), SQLDataType.INTEGER)), this, "порядок отображения фрагмента");
 
     private TaskErrorItems(Name alias, Table<TaskErrorItemsRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);
@@ -201,13 +193,6 @@ public class TaskErrorItems extends TableImpl<TaskErrorItemsRecord> {
             _attemptAnswers = new AttemptAnswersPath(this, null, Keys.ATTEMPT_ANSWERS__ATTEMPT_ANSWERS_SELECTED_ERROR_ITEM_ID_FKEY.getInverseKey());
 
         return _attemptAnswers;
-    }
-
-    @Override
-    public List<Check<TaskErrorItemsRecord>> getChecks() {
-        return Arrays.asList(
-            Internal.createCheck(this, DSL.name("chk_task_error_items_sort_order"), "((sort_order >= 0))", true)
-        );
     }
 
     @Override

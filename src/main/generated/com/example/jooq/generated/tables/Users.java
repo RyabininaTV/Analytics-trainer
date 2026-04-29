@@ -9,7 +9,7 @@ import com.example.jooq.generated.Public;
 import com.example.jooq.generated.enums.UserRoleEnum;
 import com.example.jooq.generated.enums.UserStatusEnum;
 import com.example.jooq.generated.tables.Attempts.AttemptsPath;
-import com.example.jooq.generated.tables.Simulators.SimulatorsPath;
+import com.example.jooq.generated.tables.Trainers.TrainersPath;
 import com.example.jooq.generated.tables.UserProgress.UserProgressPath;
 import com.example.jooq.generated.tables.records.UsersRecord;
 
@@ -218,10 +218,10 @@ public class Users extends TableImpl<UsersRecord> {
 
     /**
      * Get the implicit many-to-many join path to the
-     * <code>public.simulators</code> table
+     * <code>public.trainers</code> table
      */
-    public SimulatorsPath simulators() {
-        return userProgress().simulators();
+    public TrainersPath trainers() {
+        return userProgress().trainers();
     }
 
     @Override

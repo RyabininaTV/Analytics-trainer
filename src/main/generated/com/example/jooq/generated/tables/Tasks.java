@@ -8,9 +8,9 @@ import com.example.jooq.generated.Keys;
 import com.example.jooq.generated.Public;
 import com.example.jooq.generated.enums.TaskTypeEnum;
 import com.example.jooq.generated.tables.Attempts.AttemptsPath;
-import com.example.jooq.generated.tables.Simulators.SimulatorsPath;
 import com.example.jooq.generated.tables.TaskErrorItems.TaskErrorItemsPath;
 import com.example.jooq.generated.tables.TaskOptions.TaskOptionsPath;
+import com.example.jooq.generated.tables.Trainers.TrainersPath;
 import com.example.jooq.generated.tables.records.TasksRecord;
 
 import java.time.LocalDateTime;
@@ -70,10 +70,10 @@ public class Tasks extends TableImpl<TasksRecord> {
     public final TableField<TasksRecord, Long> ID = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false).identity(true), this, "уникальный идентификатор задания");
 
     /**
-     * The column <code>public.tasks.simulator_id</code>. идентификатор
-     * тренажёра, к которому относится задание
+     * The column <code>public.tasks.trainer_id</code>. идентификатор тренажёра,
+     * к которому относится задание
      */
-    public final TableField<TasksRecord, Long> SIMULATOR_ID = createField(DSL.name("simulator_id"), SQLDataType.BIGINT.nullable(false), this, "идентификатор тренажёра, к которому относится задание");
+    public final TableField<TasksRecord, Long> TRAINER_ID = createField(DSL.name("trainer_id"), SQLDataType.BIGINT.nullable(false), this, "идентификатор тренажёра, к которому относится задание");
 
     /**
      * The column <code>public.tasks.task_type</code>. тип задания: TEST,
@@ -102,12 +102,6 @@ public class Tasks extends TableImpl<TasksRecord> {
      * баллов за задание
      */
     public final TableField<TasksRecord, Integer> MAX_SCORE = createField(DSL.name("max_score"), SQLDataType.INTEGER.nullable(false), this, "максимальное количество баллов за задание");
-
-    /**
-     * The column <code>public.tasks.sort_order</code>. порядок отображения
-     * задания внутри тренажёра
-     */
-    public final TableField<TasksRecord, Integer> SORT_ORDER = createField(DSL.name("sort_order"), SQLDataType.INTEGER.nullable(false).defaultValue(DSL.field(DSL.raw("0"), SQLDataType.INTEGER)), this, "порядок отображения задания внутри тренажёра");
 
     /**
      * The column <code>public.tasks.is_active</code>. признак доступности
@@ -212,19 +206,19 @@ public class Tasks extends TableImpl<TasksRecord> {
 
     @Override
     public List<ForeignKey<TasksRecord, ?>> getReferences() {
-        return Arrays.asList(Keys.TASKS__TASKS_SIMULATOR_ID_FKEY);
+        return Arrays.asList(Keys.TASKS__TASKS_TRAINER_ID_FKEY);
     }
 
-    private transient SimulatorsPath _simulators;
+    private transient TrainersPath _trainers;
 
     /**
-     * Get the implicit join path to the <code>public.simulators</code> table.
+     * Get the implicit join path to the <code>public.trainers</code> table.
      */
-    public SimulatorsPath simulators() {
-        if (_simulators == null)
-            _simulators = new SimulatorsPath(this, Keys.TASKS__TASKS_SIMULATOR_ID_FKEY, null);
+    public TrainersPath trainers() {
+        if (_trainers == null)
+            _trainers = new TrainersPath(this, Keys.TASKS__TASKS_TRAINER_ID_FKEY, null);
 
-        return _simulators;
+        return _trainers;
     }
 
     private transient AttemptsPath _attempts;
@@ -269,8 +263,7 @@ public class Tasks extends TableImpl<TasksRecord> {
     @Override
     public List<Check<TasksRecord>> getChecks() {
         return Arrays.asList(
-            Internal.createCheck(this, DSL.name("chk_tasks_max_score"), "((max_score >= 0))", true),
-            Internal.createCheck(this, DSL.name("chk_tasks_sort_order"), "((sort_order >= 0))", true)
+            Internal.createCheck(this, DSL.name("chk_tasks_max_score"), "((max_score >= 0))", true)
         );
     }
 

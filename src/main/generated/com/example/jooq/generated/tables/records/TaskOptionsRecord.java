@@ -86,23 +86,6 @@ public class TaskOptionsRecord extends UpdatableRecordImpl<TaskOptionsRecord> {
         return (Boolean) get(3);
     }
 
-    /**
-     * Setter for <code>public.task_options.sort_order</code>. порядок
-     * отображения варианта ответа
-     */
-    public TaskOptionsRecord setSortOrder(Integer value) {
-        set(4, value);
-        return this;
-    }
-
-    /**
-     * Getter for <code>public.task_options.sort_order</code>. порядок
-     * отображения варианта ответа
-     */
-    public Integer getSortOrder() {
-        return (Integer) get(4);
-    }
-
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -126,14 +109,13 @@ public class TaskOptionsRecord extends UpdatableRecordImpl<TaskOptionsRecord> {
     /**
      * Create a detached, initialised TaskOptionsRecord
      */
-    public TaskOptionsRecord(Long id, Long taskId, String optionText, Boolean isCorrect, Integer sortOrder) {
+    public TaskOptionsRecord(Long id, Long taskId, String optionText, Boolean isCorrect) {
         super(TaskOptions.TASK_OPTIONS);
 
         setId(id);
         setTaskId(taskId);
         setOptionText(optionText);
         setIsCorrect(isCorrect);
-        setSortOrder(sortOrder);
         resetChangedOnNotNull();
     }
 }
