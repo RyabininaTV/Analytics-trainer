@@ -14,7 +14,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import org.jooq.Check;
 import org.jooq.Condition;
 import org.jooq.Field;
 import org.jooq.ForeignKey;
@@ -34,7 +33,6 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
-import org.jooq.impl.Internal;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
@@ -83,12 +81,6 @@ public class TaskOptions extends TableImpl<TaskOptionsRecord> {
      * правильного варианта ответа
      */
     public final TableField<TaskOptionsRecord, Boolean> IS_CORRECT = createField(DSL.name("is_correct"), SQLDataType.BOOLEAN.nullable(false), this, "признак правильного варианта ответа");
-
-    /**
-     * The column <code>public.task_options.sort_order</code>. порядок
-     * отображения варианта ответа
-     */
-    public final TableField<TaskOptionsRecord, Integer> SORT_ORDER = createField(DSL.name("sort_order"), SQLDataType.INTEGER.nullable(false).defaultValue(DSL.field(DSL.raw("0"), SQLDataType.INTEGER)), this, "порядок отображения варианта ответа");
 
     private TaskOptions(Name alias, Table<TaskOptionsRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);
@@ -195,13 +187,6 @@ public class TaskOptions extends TableImpl<TaskOptionsRecord> {
             _attemptAnswers = new AttemptAnswersPath(this, null, Keys.ATTEMPT_ANSWERS__ATTEMPT_ANSWERS_SELECTED_OPTION_ID_FKEY.getInverseKey());
 
         return _attemptAnswers;
-    }
-
-    @Override
-    public List<Check<TaskOptionsRecord>> getChecks() {
-        return Arrays.asList(
-            Internal.createCheck(this, DSL.name("chk_task_options_sort_order"), "((sort_order >= 0))", true)
-        );
     }
 
     @Override

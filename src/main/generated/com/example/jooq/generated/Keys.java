@@ -7,19 +7,19 @@ package com.example.jooq.generated;
 import com.example.jooq.generated.tables.AttemptAnswers;
 import com.example.jooq.generated.tables.Attempts;
 import com.example.jooq.generated.tables.RevokedTokens;
-import com.example.jooq.generated.tables.Simulators;
 import com.example.jooq.generated.tables.TaskErrorItems;
 import com.example.jooq.generated.tables.TaskOptions;
 import com.example.jooq.generated.tables.Tasks;
+import com.example.jooq.generated.tables.Trainers;
 import com.example.jooq.generated.tables.UserProgress;
 import com.example.jooq.generated.tables.Users;
 import com.example.jooq.generated.tables.records.AttemptAnswersRecord;
 import com.example.jooq.generated.tables.records.AttemptsRecord;
 import com.example.jooq.generated.tables.records.RevokedTokensRecord;
-import com.example.jooq.generated.tables.records.SimulatorsRecord;
 import com.example.jooq.generated.tables.records.TaskErrorItemsRecord;
 import com.example.jooq.generated.tables.records.TaskOptionsRecord;
 import com.example.jooq.generated.tables.records.TasksRecord;
+import com.example.jooq.generated.tables.records.TrainersRecord;
 import com.example.jooq.generated.tables.records.UserProgressRecord;
 import com.example.jooq.generated.tables.records.UsersRecord;
 
@@ -44,12 +44,12 @@ public class Keys {
     public static final UniqueKey<AttemptAnswersRecord> ATTEMPT_ANSWERS_PKEY = Internal.createUniqueKey(AttemptAnswers.ATTEMPT_ANSWERS, DSL.name("attempt_answers_pkey"), new TableField[] { AttemptAnswers.ATTEMPT_ANSWERS.ID }, true);
     public static final UniqueKey<AttemptsRecord> ATTEMPTS_PKEY = Internal.createUniqueKey(Attempts.ATTEMPTS, DSL.name("attempts_pkey"), new TableField[] { Attempts.ATTEMPTS.ID }, true);
     public static final UniqueKey<RevokedTokensRecord> REVOKED_TOKENS_PKEY = Internal.createUniqueKey(RevokedTokens.REVOKED_TOKENS, DSL.name("revoked_tokens_pkey"), new TableField[] { RevokedTokens.REVOKED_TOKENS.TOKEN_ID }, true);
-    public static final UniqueKey<SimulatorsRecord> SIMULATORS_PKEY = Internal.createUniqueKey(Simulators.SIMULATORS, DSL.name("simulators_pkey"), new TableField[] { Simulators.SIMULATORS.ID }, true);
     public static final UniqueKey<TaskErrorItemsRecord> TASK_ERROR_ITEMS_PKEY = Internal.createUniqueKey(TaskErrorItems.TASK_ERROR_ITEMS, DSL.name("task_error_items_pkey"), new TableField[] { TaskErrorItems.TASK_ERROR_ITEMS.ID }, true);
     public static final UniqueKey<TaskOptionsRecord> TASK_OPTIONS_PKEY = Internal.createUniqueKey(TaskOptions.TASK_OPTIONS, DSL.name("task_options_pkey"), new TableField[] { TaskOptions.TASK_OPTIONS.ID }, true);
     public static final UniqueKey<TasksRecord> TASKS_PKEY = Internal.createUniqueKey(Tasks.TASKS, DSL.name("tasks_pkey"), new TableField[] { Tasks.TASKS.ID }, true);
+    public static final UniqueKey<TrainersRecord> TRAINERS_PKEY = Internal.createUniqueKey(Trainers.TRAINERS, DSL.name("trainers_pkey"), new TableField[] { Trainers.TRAINERS.ID }, true);
     public static final UniqueKey<UserProgressRecord> USER_PROGRESS_PKEY = Internal.createUniqueKey(UserProgress.USER_PROGRESS, DSL.name("user_progress_pkey"), new TableField[] { UserProgress.USER_PROGRESS.ID }, true);
-    public static final UniqueKey<UserProgressRecord> USER_PROGRESS_USER_ID_SIMULATOR_ID_KEY = Internal.createUniqueKey(UserProgress.USER_PROGRESS, DSL.name("user_progress_user_id_simulator_id_key"), new TableField[] { UserProgress.USER_PROGRESS.USER_ID, UserProgress.USER_PROGRESS.SIMULATOR_ID }, true);
+    public static final UniqueKey<UserProgressRecord> USER_PROGRESS_USER_ID_TRAINER_ID_KEY = Internal.createUniqueKey(UserProgress.USER_PROGRESS, DSL.name("user_progress_user_id_trainer_id_key"), new TableField[] { UserProgress.USER_PROGRESS.USER_ID, UserProgress.USER_PROGRESS.TRAINER_ID }, true);
     public static final UniqueKey<UsersRecord> USERS_EMAIL_KEY = Internal.createUniqueKey(Users.USERS, DSL.name("users_email_key"), new TableField[] { Users.USERS.EMAIL }, true);
     public static final UniqueKey<UsersRecord> USERS_PKEY = Internal.createUniqueKey(Users.USERS, DSL.name("users_pkey"), new TableField[] { Users.USERS.ID }, true);
     public static final UniqueKey<UsersRecord> USERS_USERNAME_KEY = Internal.createUniqueKey(Users.USERS, DSL.name("users_username_key"), new TableField[] { Users.USERS.USERNAME }, true);
@@ -65,7 +65,7 @@ public class Keys {
     public static final ForeignKey<AttemptsRecord, UsersRecord> ATTEMPTS__ATTEMPTS_USER_ID_FKEY = Internal.createForeignKey(Attempts.ATTEMPTS, DSL.name("attempts_user_id_fkey"), new TableField[] { Attempts.ATTEMPTS.USER_ID }, Keys.USERS_PKEY, new TableField[] { Users.USERS.ID }, true);
     public static final ForeignKey<TaskErrorItemsRecord, TasksRecord> TASK_ERROR_ITEMS__TASK_ERROR_ITEMS_TASK_ID_FKEY = Internal.createForeignKey(TaskErrorItems.TASK_ERROR_ITEMS, DSL.name("task_error_items_task_id_fkey"), new TableField[] { TaskErrorItems.TASK_ERROR_ITEMS.TASK_ID }, Keys.TASKS_PKEY, new TableField[] { Tasks.TASKS.ID }, true);
     public static final ForeignKey<TaskOptionsRecord, TasksRecord> TASK_OPTIONS__TASK_OPTIONS_TASK_ID_FKEY = Internal.createForeignKey(TaskOptions.TASK_OPTIONS, DSL.name("task_options_task_id_fkey"), new TableField[] { TaskOptions.TASK_OPTIONS.TASK_ID }, Keys.TASKS_PKEY, new TableField[] { Tasks.TASKS.ID }, true);
-    public static final ForeignKey<TasksRecord, SimulatorsRecord> TASKS__TASKS_SIMULATOR_ID_FKEY = Internal.createForeignKey(Tasks.TASKS, DSL.name("tasks_simulator_id_fkey"), new TableField[] { Tasks.TASKS.SIMULATOR_ID }, Keys.SIMULATORS_PKEY, new TableField[] { Simulators.SIMULATORS.ID }, true);
-    public static final ForeignKey<UserProgressRecord, SimulatorsRecord> USER_PROGRESS__USER_PROGRESS_SIMULATOR_ID_FKEY = Internal.createForeignKey(UserProgress.USER_PROGRESS, DSL.name("user_progress_simulator_id_fkey"), new TableField[] { UserProgress.USER_PROGRESS.SIMULATOR_ID }, Keys.SIMULATORS_PKEY, new TableField[] { Simulators.SIMULATORS.ID }, true);
+    public static final ForeignKey<TasksRecord, TrainersRecord> TASKS__TASKS_TRAINER_ID_FKEY = Internal.createForeignKey(Tasks.TASKS, DSL.name("tasks_trainer_id_fkey"), new TableField[] { Tasks.TASKS.TRAINER_ID }, Keys.TRAINERS_PKEY, new TableField[] { Trainers.TRAINERS.ID }, true);
+    public static final ForeignKey<UserProgressRecord, TrainersRecord> USER_PROGRESS__USER_PROGRESS_TRAINER_ID_FKEY = Internal.createForeignKey(UserProgress.USER_PROGRESS, DSL.name("user_progress_trainer_id_fkey"), new TableField[] { UserProgress.USER_PROGRESS.TRAINER_ID }, Keys.TRAINERS_PKEY, new TableField[] { Trainers.TRAINERS.ID }, true);
     public static final ForeignKey<UserProgressRecord, UsersRecord> USER_PROGRESS__USER_PROGRESS_USER_ID_FKEY = Internal.createForeignKey(UserProgress.USER_PROGRESS, DSL.name("user_progress_user_id_fkey"), new TableField[] { UserProgress.USER_PROGRESS.USER_ID }, Keys.USERS_PKEY, new TableField[] { Users.USERS.ID }, true);
 }

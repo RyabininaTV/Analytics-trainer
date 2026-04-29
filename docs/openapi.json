@@ -21,16 +21,16 @@
       "LogoutRequest" : {
         "type" : "object",
         "properties" : {
-          "refreshToken" : {
+          "refresh_token" : {
             "type" : "string"
           }
         }
       },
       "RefreshRequest" : {
         "type" : "object",
-        "required" : [ "refreshToken" ],
+        "required" : [ "refresh_token" ],
         "properties" : {
-          "refreshToken" : {
+          "refresh_token" : {
             "type" : "string",
             "pattern" : "\\S"
           }
@@ -176,6 +176,122 @@
           }
         },
         "tags" : [ "Auth Controller" ]
+      }
+    },
+    "/trainers/get-all" : {
+      "get" : {
+        "summary" : "Получение списка всех тренажеров",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          }
+        },
+        "tags" : [ "Trainer Controller" ]
+      }
+    },
+    "/trainers/{id}" : {
+      "get" : {
+        "summary" : "Получение информации о тренажере по ID",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          }
+        },
+        "tags" : [ "Trainer Controller" ]
+      }
+    },
+    "/trainers/{id}/progress" : {
+      "get" : {
+        "summary" : "Получение прогресса пользователя по ID тренажера",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          }
+        },
+        "tags" : [ "Trainer Controller" ]
+      }
+    },
+    "/trainers/{id}/reset" : {
+      "post" : {
+        "summary" : "Сброс прогресса пользователя по ID тренажера",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          }
+        },
+        "tags" : [ "Trainer Controller" ]
+      }
+    },
+    "/trainers/{id}/tasks" : {
+      "get" : {
+        "summary" : "Получение задач тренажера по ID",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          }
+        },
+        "tags" : [ "Trainer Controller" ]
       }
     }
   },

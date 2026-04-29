@@ -147,7 +147,7 @@ jooq {
                 includes = """
                     attempts|
                     attempt_answers|
-                    simulators|
+                    trainers|
                     task_error_items|
                     task_options|
                     tasks|

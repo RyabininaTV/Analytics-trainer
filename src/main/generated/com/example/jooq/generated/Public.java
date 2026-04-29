@@ -7,10 +7,10 @@ package com.example.jooq.generated;
 import com.example.jooq.generated.tables.AttemptAnswers;
 import com.example.jooq.generated.tables.Attempts;
 import com.example.jooq.generated.tables.RevokedTokens;
-import com.example.jooq.generated.tables.Simulators;
 import com.example.jooq.generated.tables.TaskErrorItems;
 import com.example.jooq.generated.tables.TaskOptions;
 import com.example.jooq.generated.tables.Tasks;
+import com.example.jooq.generated.tables.Trainers;
 import com.example.jooq.generated.tables.UserProgress;
 import com.example.jooq.generated.tables.Users;
 
@@ -51,11 +51,6 @@ public class Public extends SchemaImpl {
     public final RevokedTokens REVOKED_TOKENS = RevokedTokens.REVOKED_TOKENS;
 
     /**
-     * тренажёры или логические наборы заданий
-     */
-    public final Simulators SIMULATORS = Simulators.SIMULATORS;
-
-    /**
      * элементы задания на поиск ошибок
      */
     public final TaskErrorItems TASK_ERROR_ITEMS = TaskErrorItems.TASK_ERROR_ITEMS;
@@ -69,6 +64,11 @@ public class Public extends SchemaImpl {
      * задания внутри тренажёров
      */
     public final Tasks TASKS = Tasks.TASKS;
+
+    /**
+     * тренажёры или логические наборы заданий
+     */
+    public final Trainers TRAINERS = Trainers.TRAINERS;
 
     /**
      * агрегированный прогресс пользователя по тренажёру
@@ -99,10 +99,10 @@ public class Public extends SchemaImpl {
             AttemptAnswers.ATTEMPT_ANSWERS,
             Attempts.ATTEMPTS,
             RevokedTokens.REVOKED_TOKENS,
-            Simulators.SIMULATORS,
             TaskErrorItems.TASK_ERROR_ITEMS,
             TaskOptions.TASK_OPTIONS,
             Tasks.TASKS,
+            Trainers.TRAINERS,
             UserProgress.USER_PROGRESS,
             Users.USERS
         );

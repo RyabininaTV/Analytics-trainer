@@ -1,6 +1,6 @@
 package com.example.security.current_user_context;
 
-import com.example.exceptions.CurrentUserIsNotSetException;
+import com.example.auth.exceptions.CurrentUserIsNotSetException;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.experimental.FieldDefaults;
 
