@@ -56,19 +56,19 @@ public class UserProgressRecord extends UpdatableRecordImpl<UserProgressRecord> 
     }
 
     /**
-     * Setter for <code>public.user_progress.simulator_id</code>. идентификатор
+     * Setter for <code>public.user_progress.trainer_id</code>. идентификатор
      * тренажёра
      */
-    public UserProgressRecord setSimulatorId(Long value) {
+    public UserProgressRecord setTrainerId(Long value) {
         set(2, value);
         return this;
     }
 
     /**
-     * Getter for <code>public.user_progress.simulator_id</code>. идентификатор
+     * Getter for <code>public.user_progress.trainer_id</code>. идентификатор
      * тренажёра
      */
-    public Long getSimulatorId() {
+    public Long getTrainerId() {
         return (Long) get(2);
     }
 
@@ -180,12 +180,12 @@ public class UserProgressRecord extends UpdatableRecordImpl<UserProgressRecord> 
     /**
      * Create a detached, initialised UserProgressRecord
      */
-    public UserProgressRecord(Long id, Long userId, Long simulatorId, Integer completedTasksCount, Integer totalTasksCount, Integer totalScore, BigDecimal completionPercent, LocalDateTime lastActivityAt) {
+    public UserProgressRecord(Long id, Long userId, Long trainerId, Integer completedTasksCount, Integer totalTasksCount, Integer totalScore, BigDecimal completionPercent, LocalDateTime lastActivityAt) {
         super(UserProgress.USER_PROGRESS);
 
         setId(id);
         setUserId(userId);
-        setSimulatorId(simulatorId);
+        setTrainerId(trainerId);
         setCompletedTasksCount(completedTasksCount);
         setTotalTasksCount(totalTasksCount);
         setTotalScore(totalScore);
