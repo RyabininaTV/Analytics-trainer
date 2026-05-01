@@ -28,7 +28,6 @@ public class TrainerController {
     ResetUserProgressByTrainerIdService resetUserProgressByTrainerIdService;
 
     @GET
-    @Path(GET_ALL_TRAINERS)
     @Operation(summary = "Получение списка всех тренажеров")
     public Response getAllTrainers() {
         return Response.ok(getAllTrainersService.getAllTrainers()).build();

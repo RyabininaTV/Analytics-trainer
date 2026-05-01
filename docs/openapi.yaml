@@ -127,7 +127,7 @@ paths:
           description: Bad Request
       tags:
       - Auth Controller
-  /trainers/get-all:
+  /trainers:
     get:
       summary: Получение списка всех тренажеров
       responses:
