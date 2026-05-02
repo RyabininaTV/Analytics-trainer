@@ -15,7 +15,7 @@ public class Mapper {
     public TaskResponse toBasicTask(Record4<Long, Long, TaskTypeEnum, String> record) {
         return TaskResponse.builder()
                 .id(record.get(TASKS.ID))
-                .trainerId(record.get(TASKS.SIMULATOR_ID))
+                .trainerId(record.get(TASKS.TRAINER_ID))
                 .type(record.get(TASKS.TASK_TYPE))
                 .title(record.get(TASKS.TITLE))
                 .build();
@@ -24,7 +24,7 @@ public class Mapper {
     public TaskDetailsResponse toTaskDetails(Record8<Long, Long, TaskTypeEnum, String, String, String, Integer, Boolean> record) {
         return TaskDetailsResponse.builder()
                 .id(record.get(TASKS.ID))
-                .trainerId(record.get(TASKS.SIMULATOR_ID))
+                .trainerId(record.get(TASKS.TRAINER_ID))
                 .type(record.get(TASKS.TASK_TYPE))
                 .title(record.get(TASKS.TITLE))
                 .description(record.get(TASKS.DESCRIPTION))

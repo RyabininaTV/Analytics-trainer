@@ -25,12 +25,11 @@ public class TasksRepositoryImpl implements TasksRepository {
     public List<TaskResponse> getAllTasks() {
         return dsl.select(
                         TASKS.ID,
-                        TASKS.SIMULATOR_ID,
+                        TASKS.TRAINER_ID,
                         TASKS.TASK_TYPE,
                         TASKS.TITLE
                 )
                 .from(TASKS)
-                .where(TASKS.IS_ACTIVE)
                 .fetch()
                 .map(Mapper::toBasicTask);
     }
@@ -39,7 +38,7 @@ public class TasksRepositoryImpl implements TasksRepository {
     public Optional<TaskDetailsResponse> getTaskDetailsById(long id) {
         return dsl.select(
                         TASKS.ID,
-                        TASKS.SIMULATOR_ID,
+                        TASKS.TRAINER_ID,
                         TASKS.TASK_TYPE,
                         TASKS.TITLE,
                         TASKS.DESCRIPTION,
@@ -56,7 +55,7 @@ public class TasksRepositoryImpl implements TasksRepository {
     public Optional<TaskDetailsResponse> getTaskDetailsByRandomId() {
         return dsl.select(
                         TASKS.ID,
-                        TASKS.SIMULATOR_ID,
+                        TASKS.TRAINER_ID,
                         TASKS.TASK_TYPE,
                         TASKS.TITLE,
                         TASKS.DESCRIPTION,

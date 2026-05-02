@@ -8,12 +8,14 @@ import jakarta.annotation.Nullable;
 import lombok.Builder;
 
 @Builder
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public record TaskDetailsResponse(
-
-        @Nonnull Long id,
+        @Nonnull
+        Long id,
 
         @JsonProperty(value = "trainer_id", required = true)
-        @Nonnull Long trainerId,
+        @Nonnull
+        Long trainerId,
 
         @Nonnull
         TaskTypeEnum type,
@@ -24,10 +26,14 @@ public record TaskDetailsResponse(
         @Nonnull
         String description,
 
-        @JsonInclude(JsonInclude.Include.NON_NULL)
-        @Nullable String content,
+        @Nullable
+        String content,
 
-        @Nonnull Integer maxScore,
+        @Nonnull
+        @JsonProperty(value = "max_score", required = true)
+        Integer maxScore,
 
-        @Nonnull Boolean autoCheck
+        @Nonnull
+        @JsonProperty(value = "auto_check", required = true)
+        Boolean autoCheck
 ) {}

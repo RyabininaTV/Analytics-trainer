@@ -21,7 +21,7 @@ import static lombok.AccessLevel.PRIVATE;
 @FieldDefaults(level = PRIVATE, makeFinal = true)
 public class TasksService {
 
-    private final TasksRepository tasksRepository;
+    TasksRepository tasksRepository;
 
     @Nonnull
     public List<TaskResponse> getAllTasks() {
