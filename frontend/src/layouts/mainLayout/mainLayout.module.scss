@@ -1,0 +1,22 @@
+@use "../../styles/constants.scss" as vars;
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  box-shadow: vars.$box-shadow;
+  border: vars.$border;
+  border-radius: vars.$border-radius;
+
+  padding: 4px 8px;
+
+  .active {
+    color: vars.$blue;
+  }
+}
+
+main {
+  display: flex;
+  justify-content: center;
+}

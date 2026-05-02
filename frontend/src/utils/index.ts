@@ -1,0 +1,1 @@
+export { getFromLocalStorage } from "./getFromLocalStorage";

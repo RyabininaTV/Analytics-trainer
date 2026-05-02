@@ -1,0 +1,20 @@
+@use "../../styles/constants.scss" as vars;
+
+.authCard {
+  width: 400px;
+  box-shadow: vars.$box-shadow;
+
+  .authType + .authType {
+    margin-left: 10px;
+  }
+
+  .submitButton {
+    margin-top: 8px;
+    width: 100%;
+  }
+
+  .authError {
+    color: vars.$red;
+    font-size: 16px;
+  }
+}
