@@ -37,19 +37,19 @@ public class TasksRecord extends UpdatableRecordImpl<TasksRecord> {
     }
 
     /**
-     * Setter for <code>public.tasks.simulator_id</code>. идентификатор
-     * тренажёра, к которому относится задание
+     * Setter for <code>public.tasks.trainer_id</code>. идентификатор тренажёра,
+     * к которому относится задание
      */
-    public TasksRecord setSimulatorId(Long value) {
+    public TasksRecord setTrainerId(Long value) {
         set(1, value);
         return this;
     }
 
     /**
-     * Getter for <code>public.tasks.simulator_id</code>. идентификатор
-     * тренажёра, к которому относится задание
+     * Getter for <code>public.tasks.trainer_id</code>. идентификатор тренажёра,
+     * к которому относится задание
      */
-    public Long getSimulatorId() {
+    public Long getTrainerId() {
         return (Long) get(1);
     }
 
@@ -135,28 +135,11 @@ public class TasksRecord extends UpdatableRecordImpl<TasksRecord> {
     }
 
     /**
-     * Setter for <code>public.tasks.sort_order</code>. порядок отображения
-     * задания внутри тренажёра
-     */
-    public TasksRecord setSortOrder(Integer value) {
-        set(7, value);
-        return this;
-    }
-
-    /**
-     * Getter for <code>public.tasks.sort_order</code>. порядок отображения
-     * задания внутри тренажёра
-     */
-    public Integer getSortOrder() {
-        return (Integer) get(7);
-    }
-
-    /**
      * Setter for <code>public.tasks.is_active</code>. признак доступности
      * задания
      */
     public TasksRecord setIsActive(Boolean value) {
-        set(8, value);
+        set(7, value);
         return this;
     }
 
@@ -165,7 +148,7 @@ public class TasksRecord extends UpdatableRecordImpl<TasksRecord> {
      * задания
      */
     public Boolean getIsActive() {
-        return (Boolean) get(8);
+        return (Boolean) get(7);
     }
 
     /**
@@ -173,7 +156,7 @@ public class TasksRecord extends UpdatableRecordImpl<TasksRecord> {
      * автоматической проверки задания
      */
     public TasksRecord setAutoCheckEnabled(Boolean value) {
-        set(9, value);
+        set(8, value);
         return this;
     }
 
@@ -182,7 +165,7 @@ public class TasksRecord extends UpdatableRecordImpl<TasksRecord> {
      * автоматической проверки задания
      */
     public Boolean getAutoCheckEnabled() {
-        return (Boolean) get(9);
+        return (Boolean) get(8);
     }
 
     /**
@@ -190,7 +173,7 @@ public class TasksRecord extends UpdatableRecordImpl<TasksRecord> {
      * задания
      */
     public TasksRecord setCreatedAt(LocalDateTime value) {
-        set(10, value);
+        set(9, value);
         return this;
     }
 
@@ -199,7 +182,7 @@ public class TasksRecord extends UpdatableRecordImpl<TasksRecord> {
      * задания
      */
     public LocalDateTime getCreatedAt() {
-        return (LocalDateTime) get(10);
+        return (LocalDateTime) get(9);
     }
 
     /**
@@ -207,7 +190,7 @@ public class TasksRecord extends UpdatableRecordImpl<TasksRecord> {
      * обновления задания
      */
     public TasksRecord setUpdatedAt(LocalDateTime value) {
-        set(11, value);
+        set(10, value);
         return this;
     }
 
@@ -216,7 +199,7 @@ public class TasksRecord extends UpdatableRecordImpl<TasksRecord> {
      * обновления задания
      */
     public LocalDateTime getUpdatedAt() {
-        return (LocalDateTime) get(11);
+        return (LocalDateTime) get(10);
     }
 
     // -------------------------------------------------------------------------
@@ -242,17 +225,16 @@ public class TasksRecord extends UpdatableRecordImpl<TasksRecord> {
     /**
      * Create a detached, initialised TasksRecord
      */
-    public TasksRecord(Long id, Long simulatorId, TaskTypeEnum taskType, String title, String description, String content, Integer maxScore, Integer sortOrder, Boolean isActive, Boolean autoCheckEnabled, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public TasksRecord(Long id, Long trainerId, TaskTypeEnum taskType, String title, String description, String content, Integer maxScore, Boolean isActive, Boolean autoCheckEnabled, LocalDateTime createdAt, LocalDateTime updatedAt) {
         super(Tasks.TASKS);
 
         setId(id);
-        setSimulatorId(simulatorId);
+        setTrainerId(trainerId);
         setTaskType(taskType);
         setTitle(title);
         setDescription(description);
         setContent(content);
         setMaxScore(maxScore);
-        setSortOrder(sortOrder);
         setIsActive(isActive);
         setAutoCheckEnabled(autoCheckEnabled);
         setCreatedAt(createdAt);

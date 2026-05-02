@@ -103,23 +103,6 @@ public class TaskErrorItemsRecord extends UpdatableRecordImpl<TaskErrorItemsReco
         return (String) get(4);
     }
 
-    /**
-     * Setter for <code>public.task_error_items.sort_order</code>. порядок
-     * отображения фрагмента
-     */
-    public TaskErrorItemsRecord setSortOrder(Integer value) {
-        set(5, value);
-        return this;
-    }
-
-    /**
-     * Getter for <code>public.task_error_items.sort_order</code>. порядок
-     * отображения фрагмента
-     */
-    public Integer getSortOrder() {
-        return (Integer) get(5);
-    }
-
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -143,7 +126,7 @@ public class TaskErrorItemsRecord extends UpdatableRecordImpl<TaskErrorItemsReco
     /**
      * Create a detached, initialised TaskErrorItemsRecord
      */
-    public TaskErrorItemsRecord(Long id, Long taskId, String fragmentText, Boolean isError, String explanation, Integer sortOrder) {
+    public TaskErrorItemsRecord(Long id, Long taskId, String fragmentText, Boolean isError, String explanation) {
         super(TaskErrorItems.TASK_ERROR_ITEMS);
 
         setId(id);
@@ -151,7 +134,6 @@ public class TaskErrorItemsRecord extends UpdatableRecordImpl<TaskErrorItemsReco
         setFragmentText(fragmentText);
         setIsError(isError);
         setExplanation(explanation);
-        setSortOrder(sortOrder);
         resetChangedOnNotNull();
     }
 }

@@ -1,6 +1,6 @@
 package com.example.utils;
 
-import com.example.exceptions.InvalidJwtException;
+import com.example.auth.exceptions.InvalidJwtException;
 import com.example.jooq.generated.enums.UserRoleEnum;
 import com.example.yaml.AppYamlConfig;
 import io.jsonwebtoken.Claims;

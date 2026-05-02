@@ -1,8 +1,8 @@
 package com.example.security.filters;
 
-import com.example.exceptions.InvalidJwtException;
+import com.example.auth.exceptions.InvalidJwtException;
 import com.example.jooq.generated.enums.UserRoleEnum;
-import com.example.repositories.RevokedTokenRepository;
+import com.example.repositories.RevokedTokensRepository;
 import com.example.security.annotations.Secured;
 import com.example.security.current_user_context.CurrentUser;
 import com.example.security.current_user_context.CurrentUserContext;
@@ -43,7 +43,7 @@ public class JwtAuthFilter implements ContainerRequestFilter {
     private static final String USERNAME_CLAIM = "username";
     private static final String ROLE_CLAIM = "role";
 
-    RevokedTokenRepository revokedTokenRepository;
+    RevokedTokensRepository revokedTokensRepository;
 
     CurrentUserContext currentUserContext;
 
@@ -79,7 +79,7 @@ public class JwtAuthFilter implements ContainerRequestFilter {
             return;
         }
 
-        if (revokedTokenRepository.existsActiveByTokenId(claims.getId())) {
+        if (revokedTokensRepository.existsActiveByTokenId(claims.getId())) {
             abort(requestContext, Response.Status.UNAUTHORIZED, "Token has been revoked");
             return;
         }

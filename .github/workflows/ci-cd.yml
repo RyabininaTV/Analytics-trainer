@@ -92,7 +92,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-  # ===== JOB 3: DEPLOY TO SERVER =====
+  # ===== JOB 3: DEPLOY TO SERVER (Frontend + Backend) =====
   deploy:
     needs: docker-build
     runs-on: ubuntu-latest
@@ -101,7 +101,34 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
+
+      # ---------- Frontend build and deploy ----------
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install frontend dependencies
+        run: |
+          cd frontend
+          npm ci
+
+      - name: Build frontend
+        run: |
+          cd frontend
+          npm run build
+
+      - name: Copy frontend dist to server
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          password: ${{ secrets.SERVER_PASSWORD }}
+          source: "frontend/dist/*"
+          target: "/var/www/тренажер-аналитики.рф/html/"
+          strip_components: 2
+
+      # ---------- Backend deploy ----------
       - name: Copy docker-compose to server
         uses: appleboy/scp-action@v0.1.4
         with:
@@ -110,8 +137,8 @@ jobs:
           password: ${{ secrets.SERVER_PASSWORD }}
           source: "docker-compose.yml"
           target: "/root/Analytics-trainer"
-      
-      - name: Deploy to server
+
+      - name: Deploy backend
         uses: appleboy/ssh-action@v0.1.5
         with:
           host: ${{ secrets.SERVER_HOST }}
@@ -119,14 +146,14 @@ jobs:
           password: ${{ secrets.SERVER_PASSWORD }}
           script: |
             cd /root/Analytics-trainer
-            cat > .env << 'EOF'
+            cat > .env << 'EOL'
             DB_URL=jdbc:postgresql://141.8.198.205:5432/postgres
             DB_USER=postgres
             DB_PASSWORD=123456analytic
             JWT_SECRET=${{ secrets.JWT_SECRET }}
-            EOF
+            EOL
             docker compose down
             docker compose pull
-            docker compose up -d --build
+            docker compose up -d
             docker system prune -f
             echo "Deployment completed at $(date)" >> deploy.log

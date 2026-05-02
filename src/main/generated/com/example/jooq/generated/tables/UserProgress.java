@@ -6,7 +6,7 @@ package com.example.jooq.generated.tables;
 
 import com.example.jooq.generated.Keys;
 import com.example.jooq.generated.Public;
-import com.example.jooq.generated.tables.Simulators.SimulatorsPath;
+import com.example.jooq.generated.tables.Trainers.TrainersPath;
 import com.example.jooq.generated.tables.Users.UsersPath;
 import com.example.jooq.generated.tables.records.UserProgressRecord;
 
@@ -75,10 +75,10 @@ public class UserProgress extends TableImpl<UserProgressRecord> {
     public final TableField<UserProgressRecord, Long> USER_ID = createField(DSL.name("user_id"), SQLDataType.BIGINT.nullable(false), this, "идентификатор пользователя");
 
     /**
-     * The column <code>public.user_progress.simulator_id</code>. идентификатор
+     * The column <code>public.user_progress.trainer_id</code>. идентификатор
      * тренажёра
      */
-    public final TableField<UserProgressRecord, Long> SIMULATOR_ID = createField(DSL.name("simulator_id"), SQLDataType.BIGINT.nullable(false), this, "идентификатор тренажёра");
+    public final TableField<UserProgressRecord, Long> TRAINER_ID = createField(DSL.name("trainer_id"), SQLDataType.BIGINT.nullable(false), this, "идентификатор тренажёра");
 
     /**
      * The column <code>public.user_progress.completed_tasks_count</code>.
@@ -189,24 +189,24 @@ public class UserProgress extends TableImpl<UserProgressRecord> {
 
     @Override
     public List<UniqueKey<UserProgressRecord>> getUniqueKeys() {
-        return Arrays.asList(Keys.USER_PROGRESS_USER_ID_SIMULATOR_ID_KEY);
+        return Arrays.asList(Keys.USER_PROGRESS_USER_ID_TRAINER_ID_KEY);
     }
 
     @Override
     public List<ForeignKey<UserProgressRecord, ?>> getReferences() {
-        return Arrays.asList(Keys.USER_PROGRESS__USER_PROGRESS_SIMULATOR_ID_FKEY, Keys.USER_PROGRESS__USER_PROGRESS_USER_ID_FKEY);
+        return Arrays.asList(Keys.USER_PROGRESS__USER_PROGRESS_TRAINER_ID_FKEY, Keys.USER_PROGRESS__USER_PROGRESS_USER_ID_FKEY);
     }
 
-    private transient SimulatorsPath _simulators;
+    private transient TrainersPath _trainers;
 
     /**
-     * Get the implicit join path to the <code>public.simulators</code> table.
+     * Get the implicit join path to the <code>public.trainers</code> table.
      */
-    public SimulatorsPath simulators() {
-        if (_simulators == null)
-            _simulators = new SimulatorsPath(this, Keys.USER_PROGRESS__USER_PROGRESS_SIMULATOR_ID_FKEY, null);
+    public TrainersPath trainers() {
+        if (_trainers == null)
+            _trainers = new TrainersPath(this, Keys.USER_PROGRESS__USER_PROGRESS_TRAINER_ID_FKEY, null);
 
-        return _simulators;
+        return _trainers;
     }
 
     private transient UsersPath _users;
