@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class GetTrainerInfoByIdServiceTest {
+class GetCreateTrainerEntityRequestInfoByIdServiceTest {
 
     private static final long TRAINER_ID = 1L;
 
@@ -33,7 +33,7 @@ class GetTrainerInfoByIdServiceTest {
     TrainersRepository trainersRepository;
 
     @Nested
-    class GetTrainerInfoByIdTest {
+    class GetCreateTrainerEntityRequestInfoByIdTest {
 
         @Test
         void trainerExists_shouldReturnTrainerInfoByIdResponse() {

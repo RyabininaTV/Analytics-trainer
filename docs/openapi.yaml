@@ -2,6 +2,21 @@
 openapi: 3.1.0
 components:
   schemas:
+    CreateTrainerRequest:
+      type: object
+      required:
+      - title
+      - is_active
+      properties:
+        title:
+          type: string
+          pattern: \S
+        description:
+          type: string
+        difficulty_level:
+          type: string
+        is_active:
+          type: boolean
     LoginRequest:
       type: object
       required:
@@ -51,6 +66,25 @@ components:
           minLength: 8
           maxLength: 100
 paths:
+  /admin/trainers/create:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateTrainerRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: {}
+        "400":
+          description: Bad Request
+      summary: Create Trainer
+      tags:
+      - Admin Controller
   /auth/login:
     post:
       summary: Вход пользователя
@@ -254,7 +288,7 @@ info:
   title: Analytics-trainer API
   version: 1.0-SNAPSHOT
 servers:
-- url: http://localhost:8080
+- url: http://localhost:8085
   description: Auto generated value
-- url: http://0.0.0.0:8080
+- url: http://0.0.0.0:8085
   description: Auto generated value
