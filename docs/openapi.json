@@ -58,10 +58,120 @@
             "maxLength" : 100
           }
         }
+      },
+      "SubmitAttemptRequest" : {
+        "type" : "object",
+        "required" : [ "task_id", "answer" ],
+        "properties" : {
+          "task_id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "user_id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "answer" : {
+            "type" : "string"
+          }
+        }
       }
     }
   },
   "paths" : {
+    "/attempts" : {
+      "post" : {
+        "summary" : "Отправка ответа на задание",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/SubmitAttemptRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        },
+        "tags" : [ "Attempt Controller" ]
+      },
+      "get" : {
+        "summary" : "Получение истории всех попыток пользователя",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          }
+        },
+        "tags" : [ "Attempt Controller" ]
+      }
+    },
+    "/attempts/{id}/details" : {
+      "get" : {
+        "summary" : "Детали попытки (включая ответ)",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          }
+        },
+        "tags" : [ "Attempt Controller" ]
+      }
+    },
+    "/attempts/{taskId}" : {
+      "get" : {
+        "summary" : "Получение попытки по конкретному заданию",
+        "parameters" : [ {
+          "name" : "taskId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          }
+        },
+        "tags" : [ "Attempt Controller" ]
+      }
+    },
     "/auth/login" : {
       "post" : {
         "summary" : "Вход пользователя",
@@ -357,10 +467,10 @@
     "version" : "1.0-SNAPSHOT"
   },
   "servers" : [ {
-    "url" : "http://localhost:8080",
+    "url" : "http://localhost:8087",
     "description" : "Auto generated value"
   }, {
-    "url" : "http://0.0.0.0:8080",
+    "url" : "http://0.0.0.0:8087",
     "description" : "Auto generated value"
   } ]
 }
