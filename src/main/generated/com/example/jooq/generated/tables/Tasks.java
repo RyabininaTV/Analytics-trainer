@@ -127,6 +127,16 @@ public class Tasks extends TableImpl<TasksRecord> {
      */
     public final TableField<TasksRecord, LocalDateTime> UPDATED_AT = createField(DSL.name("updated_at"), SQLDataType.LOCALDATETIME(6).nullable(false).defaultValue(DSL.field(DSL.raw("now()"), SQLDataType.LOCALDATETIME)), this, "дата и время последнего обновления задания");
 
+    /**
+     * The column <code>public.tasks.simulator_id</code>.
+     */
+    public final TableField<TasksRecord, Long> SIMULATOR_ID = createField(DSL.name("simulator_id"), SQLDataType.BIGINT, this, "");
+
+    /**
+     * The column <code>public.tasks.sort_order</code>.
+     */
+    public final TableField<TasksRecord, Integer> SORT_ORDER = createField(DSL.name("sort_order"), SQLDataType.INTEGER.defaultValue(DSL.field(DSL.raw("0"), SQLDataType.INTEGER)), this, "");
+
     private Tasks(Name alias, Table<TasksRecord> aliased) {
         this(alias, aliased, (Field<?>[]) null, null);
     }

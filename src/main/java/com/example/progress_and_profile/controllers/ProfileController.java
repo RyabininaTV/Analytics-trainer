@@ -14,7 +14,7 @@ import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 
 import static com.example.jooq.generated.enums.UserRoleEnum.ADMIN;
 import static com.example.jooq.generated.enums.UserRoleEnum.USER;
-import static com.example.progress_and_profile.constants.ProgressEndpoints.BASE;
+import static com.example.progress_and_profile.constants.ProfileEndpoints.BASE;
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 import static lombok.AccessLevel.PRIVATE;
 
