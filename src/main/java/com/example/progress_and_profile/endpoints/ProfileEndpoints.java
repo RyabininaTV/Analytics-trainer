@@ -1,4 +1,4 @@
-package com.example.progress_and_profile.constants;
+package com.example.progress_and_profile.endpoints;
 
 import lombok.experimental.UtilityClass;
 
