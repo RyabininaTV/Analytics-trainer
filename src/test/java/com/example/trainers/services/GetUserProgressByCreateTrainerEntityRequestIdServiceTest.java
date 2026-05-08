@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class GetUserProgressByTrainerIdServiceTest {
+class GetUserProgressByCreateTrainerEntityRequestIdServiceTest {
 
     private static final Long PROGRESS_ID = 100L;
     private static final Long USER_ID = 1L;
@@ -47,7 +47,7 @@ class GetUserProgressByTrainerIdServiceTest {
     UserProgressRepository userProgressRepository;
 
     @Nested
-    class GetUserProgressByTrainerIdTest {
+    class GetUserProgressByCreateTrainerEntityRequestIdTest {
 
         @Test
         void userProgressExists_shouldReturnUserProgressByTrainerIdResponse() {

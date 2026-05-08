@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class ResetUserProgressByTrainerIdServiceTest {
+class ResetUserProgressByCreateTrainerEntityRequestIdServiceTest {
 
     private static final Long USER_ID = 1L;
     private static final Long TRAINER_ID = 10L;
@@ -37,7 +37,7 @@ class ResetUserProgressByTrainerIdServiceTest {
     AttemptsRepository attemptsRepository;
 
     @Nested
-    class ResetUserProgressByTrainerIdTest {
+    class ResetUserProgressByCreateTrainerEntityRequestIdTest {
 
         @Test
         void userIsAuthorized_shouldDeleteUserProgressAndAttemptsByTrainerId() {
