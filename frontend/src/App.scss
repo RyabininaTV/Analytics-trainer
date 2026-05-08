@@ -205,3 +205,12 @@ ul {
     text-decoration: none;
   }
 }
+
+a {
+  color: vars.$text-main-color;
+  font-size: 16px;
+  display: flex;
+  padding: 6px 12px;
+  align-items: center;
+  text-decoration: none;
+}

@@ -1,3 +1,4 @@
+import type { AllTrainersResponse } from "../hooks/api/types";
 import api from "./instance";
 
 export interface RegFieldsType {
@@ -19,4 +20,9 @@ export const authApi = {
     await api.post("auth/login/", payload),
   logout: async (payload: LogoutProps) =>
     await api.post("auth/logout/", payload),
+};
+
+export const trainersApi = {
+  getAll: async (): Promise<{ data: Array<AllTrainersResponse> }> =>
+    await api.get("trainers/"),
 };
