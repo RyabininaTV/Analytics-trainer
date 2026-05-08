@@ -7,9 +7,8 @@ import com.example.auth.entities.responses.FindUserByIdResponseEntity;
 import com.example.auth.exceptions.InvalidRefreshTokenException;
 import com.example.auth.exceptions.RefreshTokenIsRevokedException;
 import com.example.auth.exceptions.UserIsBlockedException;
-import com.example.auth.services.RefreshTokenService;
 import com.example.repositories.RevokedTokensRepository;
-import com.example.repositories.UsersRepository;
+import com.example.repositories.UserRepository;
 import com.example.utils.JwtUtil;
 import com.example.yaml.AppYamlConfig;
 import io.jsonwebtoken.Claims;
@@ -42,7 +41,7 @@ class RefreshTokenServiceTest {
     private static final long REFRESH_TOKEN_TTL_DAYS = 14L;
 
     @Mock
-    UsersRepository usersRepository;
+    UserRepository userRepository;
 
     @Mock
     RevokedTokensRepository revokedTokensRepository;
@@ -69,11 +68,11 @@ class RefreshTokenServiceTest {
 
             when(revokedTokensRepository.existsActiveByTokenId(refreshClaims.getId()))
                     .thenReturn(false);
-            when(usersRepository.findById(USER_ID))
+            when(userRepository.findById(USER_ID))
                     .thenReturn(Optional.of(activeUser()));
 
             RefreshTokenService refreshTokenService = new RefreshTokenService(
-                    usersRepository,
+                    userRepository,
                     revokedTokensRepository,
                     appYaml
             );
@@ -106,8 +105,8 @@ class RefreshTokenServiceTest {
             assertEquals("refresh", newRefreshClaims.get("token_type", String.class));
 
             verify(revokedTokensRepository).existsActiveByTokenId(refreshClaims.getId());
-            verify(usersRepository).findById(USER_ID);
-            verifyNoMoreInteractions(revokedTokensRepository, usersRepository);
+            verify(userRepository).findById(USER_ID);
+            verifyNoMoreInteractions(revokedTokensRepository, userRepository);
         }
 
         @Test
@@ -120,7 +119,7 @@ class RefreshTokenServiceTest {
             );
 
             RefreshTokenService refreshTokenService = new RefreshTokenService(
-                    usersRepository,
+                    userRepository,
                     revokedTokensRepository,
                     appYaml
             );
@@ -133,7 +132,7 @@ class RefreshTokenServiceTest {
                     )
             );
 
-            verifyNoInteractions(revokedTokensRepository, usersRepository);
+            verifyNoInteractions(revokedTokensRepository, userRepository);
         }
 
         @Test
@@ -151,7 +150,7 @@ class RefreshTokenServiceTest {
                     .thenReturn(true);
 
             RefreshTokenService refreshTokenService = new RefreshTokenService(
-                    usersRepository,
+                    userRepository,
                     revokedTokensRepository,
                     appYaml
             );
@@ -165,7 +164,7 @@ class RefreshTokenServiceTest {
             );
 
             verify(revokedTokensRepository).existsActiveByTokenId(refreshClaims.getId());
-            verifyNoInteractions(usersRepository);
+            verifyNoInteractions(userRepository);
             verifyNoMoreInteractions(revokedTokensRepository);
         }
 
@@ -182,11 +181,11 @@ class RefreshTokenServiceTest {
 
             when(revokedTokensRepository.existsActiveByTokenId(refreshClaims.getId()))
                     .thenReturn(false);
-            when(usersRepository.findById(USER_ID))
+            when(userRepository.findById(USER_ID))
                     .thenReturn(Optional.empty());
 
             RefreshTokenService refreshTokenService = new RefreshTokenService(
-                    usersRepository,
+                    userRepository,
                     revokedTokensRepository,
                     appYaml
             );
@@ -201,8 +200,8 @@ class RefreshTokenServiceTest {
             );
 
             verify(revokedTokensRepository).existsActiveByTokenId(refreshClaims.getId());
-            verify(usersRepository).findById(USER_ID);
-            verifyNoMoreInteractions(revokedTokensRepository, usersRepository);
+            verify(userRepository).findById(USER_ID);
+            verifyNoMoreInteractions(revokedTokensRepository, userRepository);
         }
 
         @Test
@@ -218,11 +217,11 @@ class RefreshTokenServiceTest {
 
             when(revokedTokensRepository.existsActiveByTokenId(refreshClaims.getId()))
                     .thenReturn(false);
-            when(usersRepository.findById(USER_ID))
+            when(userRepository.findById(USER_ID))
                     .thenReturn(Optional.of(blockedUser()));
 
             RefreshTokenService refreshTokenService = new RefreshTokenService(
-                    usersRepository,
+                    userRepository,
                     revokedTokensRepository,
                     appYaml
             );
@@ -236,8 +235,8 @@ class RefreshTokenServiceTest {
             );
 
             verify(revokedTokensRepository).existsActiveByTokenId(refreshClaims.getId());
-            verify(usersRepository).findById(USER_ID);
-            verifyNoMoreInteractions(revokedTokensRepository, usersRepository);
+            verify(userRepository).findById(USER_ID);
+            verifyNoMoreInteractions(revokedTokensRepository, userRepository);
         }
     }
 

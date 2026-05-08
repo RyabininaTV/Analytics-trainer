@@ -6,8 +6,7 @@ import com.example.auth.entities.requests.CreateUserRequestEntity;
 import com.example.auth.entities.responses.CreateUserResponseEntity;
 import com.example.auth.exceptions.EmailIsAlreadyUsedException;
 import com.example.auth.exceptions.UsernameIsAlreadyUsedException;
-import com.example.auth.services.RegisterService;
-import com.example.repositories.UsersRepository;
+import com.example.repositories.UserRepository;
 import com.example.utils.JwtUtil;
 import com.example.yaml.AppYamlConfig;
 import io.jsonwebtoken.Claims;
@@ -41,7 +40,7 @@ class RegisterServiceTest {
     private static final long REFRESH_TOKEN_TTL_DAYS = 14L;
 
     @Mock
-    UsersRepository usersRepository;
+    UserRepository userRepository;
 
     @Mock
     AppYamlConfig appYaml;
@@ -56,14 +55,14 @@ class RegisterServiceTest {
         void emailAndUsernameAreFree_shouldCreateUserAndReturnAuthResponse() {
             mockJwtConfig();
 
-            when(usersRepository.existsByEmail(EMAIL))
+            when(userRepository.existsByEmail(EMAIL))
                     .thenReturn(false);
-            when(usersRepository.existsByUsername(USERNAME))
+            when(userRepository.existsByUsername(USERNAME))
                     .thenReturn(false);
-            when(usersRepository.create(any(CreateUserRequestEntity.class)))
+            when(userRepository.create(any(CreateUserRequestEntity.class)))
                     .thenReturn(createdUser());
 
-            RegisterService registerService = new RegisterService(usersRepository, appYaml);
+            RegisterService registerService = new RegisterService(userRepository, appYaml);
 
             AuthResponse response = registerService.register(RegisterRequest.builder()
                     .email(RAW_EMAIL)
@@ -86,10 +85,10 @@ class RegisterServiceTest {
             ArgumentCaptor<CreateUserRequestEntity> captor =
                     ArgumentCaptor.forClass(CreateUserRequestEntity.class);
 
-            verify(usersRepository).existsByEmail(EMAIL);
-            verify(usersRepository).existsByUsername(USERNAME);
-            verify(usersRepository).create(captor.capture());
-            verifyNoMoreInteractions(usersRepository);
+            verify(userRepository).existsByEmail(EMAIL);
+            verify(userRepository).existsByUsername(USERNAME);
+            verify(userRepository).create(captor.capture());
+            verifyNoMoreInteractions(userRepository);
 
             CreateUserRequestEntity createUserRequest = captor.getValue();
 
@@ -112,10 +111,10 @@ class RegisterServiceTest {
 
         @Test
         void emailIsAlreadyUsed_shouldThrowEmailIsAlreadyUsedException() {
-            when(usersRepository.existsByEmail(EMAIL))
+            when(userRepository.existsByEmail(EMAIL))
                     .thenReturn(true);
 
-            RegisterService registerService = new RegisterService(usersRepository, appYaml);
+            RegisterService registerService = new RegisterService(userRepository, appYaml);
 
             assertThrows(
                     EmailIsAlreadyUsedException.class,
@@ -127,19 +126,19 @@ class RegisterServiceTest {
                     )
             );
 
-            verify(usersRepository).existsByEmail(EMAIL);
-            verifyNoMoreInteractions(usersRepository);
+            verify(userRepository).existsByEmail(EMAIL);
+            verifyNoMoreInteractions(userRepository);
             verifyNoInteractions(appYaml);
         }
 
         @Test
         void usernameIsAlreadyUsed_shouldThrowUsernameIsAlreadyUsedException() {
-            when(usersRepository.existsByEmail(EMAIL))
+            when(userRepository.existsByEmail(EMAIL))
                     .thenReturn(false);
-            when(usersRepository.existsByUsername(USERNAME))
+            when(userRepository.existsByUsername(USERNAME))
                     .thenReturn(true);
 
-            RegisterService registerService = new RegisterService(usersRepository, appYaml);
+            RegisterService registerService = new RegisterService(userRepository, appYaml);
 
             assertThrows(
                     UsernameIsAlreadyUsedException.class,
@@ -151,9 +150,9 @@ class RegisterServiceTest {
                     )
             );
 
-            verify(usersRepository).existsByEmail(EMAIL);
-            verify(usersRepository).existsByUsername(USERNAME);
-            verifyNoMoreInteractions(usersRepository);
+            verify(userRepository).existsByEmail(EMAIL);
+            verify(userRepository).existsByUsername(USERNAME);
+            verifyNoMoreInteractions(userRepository);
             verifyNoInteractions(appYaml);
         }
     }

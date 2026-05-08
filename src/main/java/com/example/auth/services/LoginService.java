@@ -5,7 +5,7 @@ import com.example.auth.dto.responses.AuthResponse;
 import com.example.auth.entities.responses.FindUserByEmailResponseEntity;
 import com.example.auth.exceptions.InvalidEmailOrPasswordException;
 import com.example.auth.exceptions.UserIsBlockedException;
-import com.example.repositories.UsersRepository;
+import com.example.repositories.UserRepository;
 import com.example.utils.EmailUtil;
 import com.example.utils.JwtUtil;
 import com.example.yaml.AppYamlConfig;
@@ -23,14 +23,14 @@ import static lombok.AccessLevel.PRIVATE;
 @FieldDefaults(level = PRIVATE, makeFinal = true)
 public class LoginService {
 
-    UsersRepository usersRepository;
+    UserRepository userRepository;
 
     AppYamlConfig appYaml;
 
     public AuthResponse login(@Nonnull LoginRequest request) {
         String email = EmailUtil.normalize(request.email());
 
-        FindUserByEmailResponseEntity user = usersRepository.findByEmail(email)
+        FindUserByEmailResponseEntity user = userRepository.findByEmail(email)
                 .orElseThrow(InvalidEmailOrPasswordException::new);
 
         if (!BcryptUtil.matches(request.password(), user.passwordHash())) {
