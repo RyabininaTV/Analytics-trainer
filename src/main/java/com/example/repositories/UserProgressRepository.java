@@ -2,14 +2,15 @@ package com.example.repositories;
 
 import com.example.progress_and_profile.entity.responses.FindTotalUserProgressResponseEntity;
 import com.example.progress_and_profile.entity.responses.FindUserProgressByUserIdResponseEntity;
+import com.example.ratings_and_achievements.entity.responses.FindLeaderboardByTrainerIdResponseEntity;
 import com.example.trainers.entities.requests.DeleteUserProgressByTrainerIdEntityRequest;
 import com.example.trainers.entities.requests.GetUserProgressByTrainerIdEntityRequest;
 import com.example.trainers.entities.responses.UserProgressByTrainerIdEntityResponse;
+import com.example.utils.ProgressStatUtil;
 import jakarta.annotation.Nonnull;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.jooq.AggregateFunction;
 import org.jooq.DSLContext;
 import org.jooq.Field;
 import org.jooq.impl.DSL;
@@ -19,7 +20,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import static com.example.jooq.generated.enums.UserRoleEnum.USER;
+import static com.example.jooq.generated.enums.UserStatusEnum.ACTIVE;
 import static com.example.jooq.generated.tables.UserProgress.USER_PROGRESS;
+import static com.example.jooq.generated.tables.Users.USERS;
 import static lombok.AccessLevel.PRIVATE;
 
 @ApplicationScoped
@@ -82,31 +86,63 @@ public class UserProgressRepository {
     }
 
     public FindTotalUserProgressResponseEntity findTotalByUserId(Long userId) {
-        Field<Integer> completedTasksCount = coalesceInteger(DSL.sum(USER_PROGRESS.COMPLETED_TASKS_COUNT));
-        Field<Integer> totalTasksCount = coalesceInteger(DSL.sum(USER_PROGRESS.TOTAL_TASKS_COUNT));
-        Field<Integer> totalScore = coalesceInteger(DSL.sum(USER_PROGRESS.TOTAL_SCORE));
-        Field<LocalDateTime> lastActivityAt = DSL.max(USER_PROGRESS.LAST_ACTIVITY_AT);
+        ProgressStatUtil.Stat stat = ProgressStatUtil.stat();
 
         return dsl.select(
-                        completedTasksCount,
-                        totalTasksCount,
-                        totalScore,
-                        lastActivityAt
+                        stat.completedTasksCount(),
+                        stat.totalTasksCount(),
+                        stat.totalScore(),
+                        stat.lastActivityAt()
                 )
                 .from(USER_PROGRESS)
                 .where(USER_PROGRESS.USER_ID.eq(userId))
                 .fetchOne(record -> FindTotalUserProgressResponseEntity.builder()
-                        .completedTasksCount(record.get(completedTasksCount))
-                        .totalTasksCount(record.get(totalTasksCount))
-                        .totalScore(record.get(totalScore))
-                        .lastActivityAt(record.get(lastActivityAt))
+                        .completedTasksCount(record.get(stat.completedTasksCount()))
+                        .totalTasksCount(record.get(stat.totalTasksCount()))
+                        .totalScore(record.get(stat.totalScore()))
+                        .lastActivityAt(record.get(stat.lastActivityAt()))
                         .build()
                 );
     }
 
-    @Nonnull
-    private static Field<Integer> coalesceInteger(AggregateFunction<BigDecimal> field) {
-        return DSL.coalesce(field, BigDecimal.ZERO).cast(Integer.class);
+    public List<FindLeaderboardByTrainerIdResponseEntity> findLeaderboardByTrainerId(@Nonnull Long trainerId) {
+        Field<Integer> completedTasksCount = DSL.coalesce(USER_PROGRESS.COMPLETED_TASKS_COUNT, 0);
+        Field<Integer> totalTasksCount = DSL.coalesce(USER_PROGRESS.TOTAL_TASKS_COUNT, 0);
+        Field<Integer> totalScore = DSL.coalesce(USER_PROGRESS.TOTAL_SCORE, 0);
+        Field<BigDecimal> completionPercent = DSL.coalesce(USER_PROGRESS.COMPLETION_PERCENT, BigDecimal.ZERO);
+        Field<LocalDateTime> lastActivityAt = USER_PROGRESS.LAST_ACTIVITY_AT;
+
+        return dsl.select(
+                        USERS.ID,
+                        USERS.USERNAME,
+                        completedTasksCount,
+                        totalTasksCount,
+                        totalScore,
+                        completionPercent,
+                        lastActivityAt
+                )
+                .from(USERS)
+                .leftJoin(USER_PROGRESS)
+                .on(USER_PROGRESS.USER_ID.eq(USERS.ID))
+                .and(USER_PROGRESS.TRAINER_ID.eq(trainerId))
+                .where(USERS.ROLE.eq(USER))
+                .and(USERS.STATUS.eq(ACTIVE))
+                .orderBy(
+                        totalScore.desc(),
+                        completedTasksCount.desc(),
+                        completionPercent.desc(),
+                        USERS.USERNAME.asc()
+                )
+                .fetch(record -> FindLeaderboardByTrainerIdResponseEntity.builder()
+                        .userId(record.get(USERS.ID))
+                        .username(record.get(USERS.USERNAME))
+                        .completedTasksCount(record.get(completedTasksCount))
+                        .totalTasksCount(record.get(totalTasksCount))
+                        .totalScore(record.get(totalScore))
+                        .completionPercent(record.get(completionPercent))
+                        .lastActivityAt(record.get(lastActivityAt))
+                        .build()
+                );
     }
 
 }

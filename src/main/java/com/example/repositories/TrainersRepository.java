@@ -49,4 +49,13 @@ public class TrainersRepository {
                 );
     }
 
+    public boolean existsActiveById(Long trainerId) {
+        return dsl.fetchExists(
+                dsl.selectOne()
+                        .from(TRAINERS)
+                        .where(TRAINERS.ID.eq(trainerId))
+                        .and(TRAINERS.IS_ACTIVE.isTrue())
+        );
+    }
+
 }

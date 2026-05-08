@@ -150,6 +150,35 @@ paths:
           description: Bad Request
       tags:
       - Auth Controller
+  /leaderboard:
+    get:
+      summary: Глобальный рейтинг всех пользователей
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - Leaderboard Controller
+  /leaderboard/{trainerId}:
+    get:
+      parameters:
+      - name: trainerId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: {}
+      summary: Get Leaderboard By Trainer
+      tags:
+      - Leaderboard Controller
   /profile:
     put:
       summary: Обновление профиля пользователя

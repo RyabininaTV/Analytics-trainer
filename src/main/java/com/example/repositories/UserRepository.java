@@ -11,14 +11,21 @@ import com.example.progress_and_profile.entity.requests.UpdateProfileEntityReque
 import com.example.progress_and_profile.entity.responses.FindProfileForUpdateByIdEntityResponse;
 import com.example.progress_and_profile.entity.responses.GetProfileResponseEntity;
 import com.example.progress_and_profile.entity.responses.UpdateProfileEntityResponse;
+import com.example.ratings_and_achievements.entity.responses.FindLeaderboardUsersResponseEntity;
+import com.example.utils.ProgressStatUtil;
 import jakarta.annotation.Nonnull;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.jooq.DSLContext;
+import org.jooq.Field;
+import org.jooq.impl.DSL;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
+import static com.example.jooq.generated.tables.UserProgress.USER_PROGRESS;
 import static com.example.jooq.generated.tables.Users.USERS;
 import static lombok.AccessLevel.PRIVATE;
 
@@ -216,6 +223,40 @@ public class UserRepository {
                         .status(record.get(USERS.STATUS))
                         .createdAt(record.get(USERS.CREATED_AT))
                         .updatedAt(record.get(USERS.UPDATED_AT))
+                        .build()
+                );
+    }
+
+    public List<FindLeaderboardUsersResponseEntity> findLeaderboardUsers() {
+        ProgressStatUtil.Stat stat = ProgressStatUtil.stat();
+
+        return dsl.select(
+                        USERS.ID,
+                        USERS.USERNAME,
+                        stat.completedTasksCount(),
+                        stat.totalTasksCount(),
+                        stat.totalScore(),
+                        stat.lastActivityAt()
+                )
+                .from(USERS)
+                .leftJoin(USER_PROGRESS)
+                .on(USER_PROGRESS.USER_ID.eq(USERS.ID))
+                .groupBy(
+                        USERS.ID,
+                        USERS.USERNAME
+                )
+                .orderBy(
+                        stat.totalScore().desc(),
+                        stat.completedTasksCount().desc(),
+                        USERS.USERNAME.asc()
+                )
+                .fetch(record -> FindLeaderboardUsersResponseEntity.builder()
+                        .userId(record.get(USERS.ID))
+                        .username(record.get(USERS.USERNAME))
+                        .completedTasksCount(record.get(stat.completedTasksCount()))
+                        .totalTasksCount(record.get(stat.totalTasksCount()))
+                        .totalScore(record.get(stat.totalScore()))
+                        .lastActivityAt(record.get(stat.lastActivityAt()))
                         .build()
                 );
     }
