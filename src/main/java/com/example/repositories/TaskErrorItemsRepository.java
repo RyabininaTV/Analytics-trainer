@@ -2,6 +2,7 @@ package com.example.repositories;
 
 import com.example.admin.entities.requests.CreateTaskErrorItemRequestEntity;
 import com.example.admin.entities.response.CreateTaskErrorItemResponseEntity;
+import com.example.tasks.entity.responses.FindTaskErrorItemsByTaskIdResponseEntity;
 import jakarta.annotation.Nonnull;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
@@ -62,6 +63,21 @@ public class TaskErrorItemsRepository {
         dsl.deleteFrom(TASK_ERROR_ITEMS)
                 .where(TASK_ERROR_ITEMS.TASK_ID.eq(taskId))
                 .execute();
+    }
+
+    public List<FindTaskErrorItemsByTaskIdResponseEntity> findByTaskId(Long taskId) {
+        return dsl.select(
+                        TASK_ERROR_ITEMS.ID,
+                        TASK_ERROR_ITEMS.FRAGMENT_TEXT
+                )
+                .from(TASK_ERROR_ITEMS)
+                .where(TASK_ERROR_ITEMS.TASK_ID.eq(taskId))
+                .orderBy(TASK_ERROR_ITEMS.ID.asc())
+                .fetch(record -> FindTaskErrorItemsByTaskIdResponseEntity.builder()
+                        .id(record.get(TASK_ERROR_ITEMS.ID))
+                        .fragmentText(record.get(TASK_ERROR_ITEMS.FRAGMENT_TEXT))
+                        .build()
+                );
     }
 
 }

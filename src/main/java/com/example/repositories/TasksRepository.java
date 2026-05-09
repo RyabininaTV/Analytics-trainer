@@ -6,18 +6,24 @@ import com.example.admin.entities.response.CreateTaskResponseEntity;
 import com.example.admin.entities.response.DeactivateTaskResponseEntity;
 import com.example.admin.entities.response.UpdateTaskResponseEntity;
 import com.example.jooq.generated.enums.TaskTypeEnum;
+import com.example.tasks.entity.requests.FindTasksRequestEntity;
+import com.example.tasks.entity.responses.FindTaskDetailsByIdResponseEntity;
+import com.example.tasks.entity.responses.FindTasksResponseEntity;
 import com.example.trainers.entities.responses.TaskByTrainerIdEntityResponse;
 import jakarta.annotation.Nonnull;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.jooq.Condition;
 import org.jooq.DSLContext;
+import org.jooq.Field;
 import org.jooq.impl.DSL;
 
 import java.util.List;
 import java.util.Optional;
 
 import static com.example.jooq.generated.tables.Tasks.TASKS;
+import static com.example.jooq.generated.tables.Trainers.TRAINERS;
 import static lombok.AccessLevel.PRIVATE;
 
 @ApplicationScoped
@@ -134,6 +140,123 @@ public class TasksRepository {
                 .set(TASKS.UPDATED_AT, DSL.currentLocalDateTime())
                 .where(TASKS.ID.eq(id))
                 .execute();
+    }
+
+    public List<FindTasksResponseEntity> findTasks(@Nonnull FindTasksRequestEntity request) {
+        return dsl.select(
+                        TASKS.ID,
+                        TASKS.TRAINER_ID,
+                        TRAINERS.TITLE,
+                        TASKS.TASK_TYPE,
+                        TASKS.TITLE,
+                        TASKS.DESCRIPTION,
+                        TASKS.CONTENT,
+                        TASKS.MAX_SCORE,
+                        TASKS.AUTO_CHECK_ENABLED,
+                        TASKS.CREATED_AT,
+                        TASKS.UPDATED_AT
+                )
+                .from(TASKS)
+                .join(TRAINERS)
+                .on(TRAINERS.ID.eq(TASKS.TRAINER_ID))
+                .where(TASKS.IS_ACTIVE.isTrue())
+                .and(TRAINERS.IS_ACTIVE.isTrue())
+                .and(request.trainerId() == null
+                        ? DSL.noCondition()
+                        : TASKS.TRAINER_ID.eq(request.trainerId()
+                ))
+                .orderBy(
+                        TRAINERS.TITLE.asc(),
+                        TASKS.CREATED_AT.desc(),
+                        TASKS.ID.desc()
+                )
+                .fetch(record -> FindTasksResponseEntity.builder()
+                        .id(record.get(TASKS.ID))
+                        .trainerId(record.get(TASKS.TRAINER_ID))
+                        .trainerTitle(record.get(TRAINERS.TITLE))
+                        .taskType(record.get(TASKS.TASK_TYPE).name())
+                        .title(record.get(TASKS.TITLE))
+                        .description(record.get(TASKS.DESCRIPTION))
+                        .content(record.get(TASKS.CONTENT))
+                        .maxScore(record.get(TASKS.MAX_SCORE))
+                        .autoCheckEnabled(record.get(TASKS.AUTO_CHECK_ENABLED))
+                        .createdAt(record.get(TASKS.CREATED_AT))
+                        .updatedAt(record.get(TASKS.UPDATED_AT))
+                        .build()
+                );
+    }
+
+    public Optional<FindTaskDetailsByIdResponseEntity> findDetailsById(Long id) {
+        return dsl.select(
+                        TASKS.ID,
+                        TASKS.TRAINER_ID,
+                        TRAINERS.TITLE,
+                        TASKS.TASK_TYPE,
+                        TASKS.TITLE,
+                        TASKS.DESCRIPTION,
+                        TASKS.CONTENT,
+                        TASKS.MAX_SCORE,
+                        TASKS.AUTO_CHECK_ENABLED,
+                        TASKS.CREATED_AT,
+                        TASKS.UPDATED_AT
+                )
+                .from(TASKS)
+                .join(TRAINERS)
+                .on(TRAINERS.ID.eq(TASKS.TRAINER_ID))
+                .where(TASKS.ID.eq(id))
+                .and(TASKS.IS_ACTIVE.isTrue())
+                .and(TRAINERS.IS_ACTIVE.isTrue())
+                .fetchOptional(record -> FindTaskDetailsByIdResponseEntity.builder()
+                        .id(record.get(TASKS.ID))
+                        .trainerId(record.get(TASKS.TRAINER_ID))
+                        .trainerTitle(record.get(TRAINERS.TITLE))
+                        .taskType(record.get(TASKS.TASK_TYPE).name())
+                        .title(record.get(TASKS.TITLE))
+                        .description(record.get(TASKS.DESCRIPTION))
+                        .content(record.get(TASKS.CONTENT))
+                        .maxScore(record.get(TASKS.MAX_SCORE))
+                        .autoCheckEnabled(record.get(TASKS.AUTO_CHECK_ENABLED))
+                        .createdAt(record.get(TASKS.CREATED_AT))
+                        .updatedAt(record.get(TASKS.UPDATED_AT))
+                        .build()
+                );
+    }
+
+    public Optional<FindTaskDetailsByIdResponseEntity> findRandom() {
+        return dsl.select(
+                        TASKS.ID,
+                        TASKS.TRAINER_ID,
+                        TRAINERS.TITLE,
+                        TASKS.TASK_TYPE,
+                        TASKS.TITLE,
+                        TASKS.DESCRIPTION,
+                        TASKS.CONTENT,
+                        TASKS.MAX_SCORE,
+                        TASKS.AUTO_CHECK_ENABLED,
+                        TASKS.CREATED_AT,
+                        TASKS.UPDATED_AT
+                )
+                .from(TASKS)
+                .join(TRAINERS)
+                .on(TRAINERS.ID.eq(TASKS.TRAINER_ID))
+                .where(TASKS.IS_ACTIVE.isTrue())
+                .and(TRAINERS.IS_ACTIVE.isTrue())
+                .orderBy(DSL.field("random()", Double.class))
+                .limit(1)
+                .fetchOptional(record -> FindTaskDetailsByIdResponseEntity.builder()
+                        .id(record.get(TASKS.ID))
+                        .trainerId(record.get(TASKS.TRAINER_ID))
+                        .trainerTitle(record.get(TRAINERS.TITLE))
+                        .taskType(record.get(TASKS.TASK_TYPE).name())
+                        .title(record.get(TASKS.TITLE))
+                        .description(record.get(TASKS.DESCRIPTION))
+                        .content(record.get(TASKS.CONTENT))
+                        .maxScore(record.get(TASKS.MAX_SCORE))
+                        .autoCheckEnabled(record.get(TASKS.AUTO_CHECK_ENABLED))
+                        .createdAt(record.get(TASKS.CREATED_AT))
+                        .updatedAt(record.get(TASKS.UPDATED_AT))
+                        .build()
+                );
     }
 
 }

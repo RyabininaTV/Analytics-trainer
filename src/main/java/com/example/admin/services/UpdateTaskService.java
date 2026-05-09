@@ -9,11 +9,11 @@ import com.example.admin.entities.response.CreateTaskErrorItemResponseEntity;
 import com.example.admin.entities.response.CreateTaskOptionResponseEntity;
 import com.example.admin.entities.response.UpdateTaskResponseEntity;
 import com.example.admin.exceptions.InvalidTaskPayloadException;
+import com.example.attempts.exceptions.TaskNotFoundException;
 import com.example.repositories.TaskErrorItemsRepository;
 import com.example.repositories.TaskOptionsRepository;
 import com.example.repositories.TasksRepository;
 import com.example.repositories.TrainersRepository;
-import com.example.tasks.domain.exception.TaskNotFoundException;
 import com.example.trainers.exceptions.TrainerNotFoundException;
 import jakarta.annotation.Nonnull;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -48,7 +48,7 @@ public class UpdateTaskService {
         validateTaskPayload(request);
 
         UpdateTaskResponseEntity task = tasksRepository.update(toUpdateTaskRequestEntity(taskId, request))
-                .orElseThrow(TaskNotFoundException::new);
+                .orElseThrow(() -> new TaskNotFoundException(taskId));
 
         taskOptionsRepository.deleteByTaskId(task.id());
         taskErrorItemsRepository.deleteByTaskId(task.id());

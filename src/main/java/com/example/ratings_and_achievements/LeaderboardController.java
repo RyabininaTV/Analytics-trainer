@@ -36,7 +36,8 @@ public class LeaderboardController {
     @GET
     @Path(BY_TRAINER_ID)
     @Secured(roles = {USER, ADMIN})
-    public Response getLeaderboardByTrainer(@PathParam("trainerId") Long trainerId) {
+    @Operation(summary = "Рейтинг по конкретному тренажеру")
+    public Response getLeaderboardByTrainer(@PathParam("trainerId") long trainerId) {
         return Response.ok(getLeaderboardByTrainerService.getLeaderboardByTrainer(trainerId)).build();
     }
 

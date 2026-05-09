@@ -804,7 +804,14 @@
     },
     "/tasks" : {
       "get" : {
-        "summary" : "Список всех заданий",
+        "parameters" : [ {
+          "name" : "trainer_id",
+          "in" : "query",
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
         "responses" : {
           "200" : {
             "description" : "OK",
@@ -815,12 +822,12 @@
             }
           }
         },
+        "summary" : "Get Tasks",
         "tags" : [ "Tasks Controller" ]
       }
     },
     "/tasks/random" : {
       "get" : {
-        "summary" : "Получение деталей случайной задачи",
         "responses" : {
           "200" : {
             "description" : "OK",
@@ -831,12 +838,12 @@
             }
           }
         },
+        "summary" : "Get Random Task",
         "tags" : [ "Tasks Controller" ]
       }
     },
     "/tasks/{id}" : {
       "get" : {
-        "summary" : "Получение деталей задачи по id",
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
@@ -856,6 +863,7 @@
             }
           }
         },
+        "summary" : "Get Task Details",
         "tags" : [ "Tasks Controller" ]
       }
     },

@@ -3,11 +3,13 @@ package com.example.attempts;
 import com.example.attempts.dto.requests.SubmitAttemptRequest;
 import com.example.attempts.services.*;
 import com.example.security.annotations.Secured;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 
 import static com.example.attempts.AttemptEndpoints.*;
 import static com.example.jooq.generated.enums.UserRoleEnum.ADMIN;
@@ -55,7 +57,8 @@ public class AttemptController {
     @Secured(roles = {USER, ADMIN})
     @Path(SUBMIT_ATTEMPT)
     @Operation(summary = "Отправка ответа на задание")
-    public Response submitAttempt(SubmitAttemptRequest request) {
+    public Response submitAttempt(@Valid @RequestBody SubmitAttemptRequest request) {
         return Response.ok(submitAttemptService.submitAttempt(request)).build();
     }
+
 }

@@ -1,4 +1,4 @@
-package com.example.tasks.utils;
+package com.example.tasks;
 
 import lombok.experimental.UtilityClass;
 
@@ -7,7 +7,7 @@ public class TasksEndpoints {
 
     public static final String BASE = "/tasks";
 
-    public static final String DETAILS = "{id}";
+    public static final String TASK_DETAILS = "/{id}";
     public static final String RANDOM = "/random";
 
 }

@@ -1,16 +1,26 @@
 quarkus:
   http:
     port: 8080
+
   datasource:
     db-kind: postgresql
     jdbc:
       url: ${DB_URL}
     username: ${DB_USER}
     password: ${DB_PASSWORD}
+
   jooq:
     dialect: POSTGRES
+
   smallrye-openapi:
+    path: /q/openapi
     store-schema-directory: docs
+
+  swagger-ui:
+    path: /q/swagger-ui
+    always-include: true
+    enabled: true
+
 app:
   jwt:
     secret: ${JWT_SECRET}

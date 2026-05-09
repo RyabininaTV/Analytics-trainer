@@ -2,6 +2,7 @@ package com.example.repositories;
 
 import com.example.admin.entities.requests.CreateTaskOptionRequestEntity;
 import com.example.admin.entities.response.CreateTaskOptionResponseEntity;
+import com.example.tasks.entity.responses.FindTaskOptionsByTaskIdResponseEntity;
 import jakarta.annotation.Nonnull;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
@@ -59,6 +60,21 @@ public class TaskOptionsRepository {
         dsl.deleteFrom(TASK_OPTIONS)
                 .where(TASK_OPTIONS.TASK_ID.eq(taskId))
                 .execute();
+    }
+
+    public List<FindTaskOptionsByTaskIdResponseEntity> findByTaskId(Long taskId) {
+        return dsl.select(
+                        TASK_OPTIONS.ID,
+                        TASK_OPTIONS.OPTION_TEXT
+                )
+                .from(TASK_OPTIONS)
+                .where(TASK_OPTIONS.TASK_ID.eq(taskId))
+                .orderBy(TASK_OPTIONS.ID.asc())
+                .fetch(record -> FindTaskOptionsByTaskIdResponseEntity.builder()
+                        .id(record.get(TASK_OPTIONS.ID))
+                        .optionText(record.get(TASK_OPTIONS.OPTION_TEXT))
+                        .build()
+                );
     }
 
 }

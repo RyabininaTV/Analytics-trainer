@@ -20,6 +20,7 @@ import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 
 import static com.example.auth.AuthEndpoints.*;
 import static com.example.jooq.generated.enums.UserRoleEnum.ADMIN;
@@ -43,7 +44,7 @@ public class AuthController {
     @POST
     @Path(REGISTER)
     @Operation(summary = "Регистрация пользователя")
-    public Response register(@Valid RegisterRequest request) {
+    public Response register(@Valid @RequestBody RegisterRequest request) {
         return Response.status(CREATED)
                 .entity(registerService.register(request))
                 .build();
@@ -52,7 +53,7 @@ public class AuthController {
     @POST
     @Path(LOGIN)
     @Operation(summary = "Вход пользователя")
-    public Response login(@Valid LoginRequest request) {
+    public Response login(@Valid @RequestBody LoginRequest request) {
         return Response.ok(loginService.login(request)).build();
     }
 
@@ -61,7 +62,7 @@ public class AuthController {
     @Secured(roles = {USER, ADMIN})
     @Operation(summary = "Выход пользователя")
     public Response logout(
-            @Valid LogoutRequest request,
+            @Valid @RequestBody LogoutRequest request,
             @Context HttpHeaders headers
     ) {
         logoutService.logout(request, headers);
@@ -71,7 +72,7 @@ public class AuthController {
     @POST
     @Path(REFRESH)
     @Operation(summary = "Обновление токенов")
-    public Response refresh(@Valid RefreshRequest request) {
+    public Response refresh(@Valid @RequestBody RefreshRequest request) {
         return Response.ok(refreshTokenService.refresh(request)).build();
     }
 
