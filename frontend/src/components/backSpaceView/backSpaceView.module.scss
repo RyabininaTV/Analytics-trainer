@@ -1,0 +1,27 @@
+@use "../../styles/constants.scss" as vars;
+
+.backSpaceWrapper {
+  width: 100%;
+  padding: 0 20px;
+
+  & > p {
+    font-size: 16px;
+    margin-bottom: 8px;
+  }
+
+  .backSpaceLink {
+    width: 50%;
+
+    & + .backSpaceLink {
+      margin-top: 8px;
+    }
+    
+    & > button {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      color: vars.$text-main-color;
+    }
+  }
+}

@@ -8,6 +8,7 @@ const queryClient = new QueryClient({
     queries: {
       retry: false,
       throwOnError: false,
+      staleTime: 5 * 60 * 1000,
     },
   },
 });

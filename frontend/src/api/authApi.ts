@@ -1,3 +1,8 @@
+import type {
+  AllTasksResponse,
+  AllTrainersResponse,
+  TaskDetailResponse,
+} from "../hooks/api/types";
 import api from "./instance";
 
 export interface RegFieldsType {
@@ -19,4 +24,22 @@ export const authApi = {
     await api.post("auth/login/", payload),
   logout: async (payload: LogoutProps) =>
     await api.post("auth/logout/", payload),
+};
+
+export const trainersApi = {
+  getAll: async (): Promise<{ data: AllTrainersResponse }> =>
+    await api.get("trainers/"),
+  getTrainer: async (
+    trainerId: number,
+  ): Promise<{ data: AllTrainersResponse }> =>
+    await api.get(`trainers/${trainerId}`),
+  getTrainerTasks: async (
+    trainerId: number,
+  ): Promise<{ data: AllTasksResponse }> =>
+    await api.get(`trainers/${trainerId}/tasks`),
+};
+
+export const tasksApi = {
+  getTask: async (taskId: number): Promise<{ data: TaskDetailResponse }> =>
+    await api.get(`tasks/${taskId}`),
 };
