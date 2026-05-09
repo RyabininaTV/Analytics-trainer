@@ -306,6 +306,7 @@
   "paths" : {
     "/admin/tasks" : {
       "post" : {
+        "summary" : "Создание нового задания",
         "requestBody" : {
           "content" : {
             "application/json" : {
@@ -329,12 +330,12 @@
             "description" : "Bad Request"
           }
         },
-        "summary" : "Create Task",
         "tags" : [ "Admin Controller" ]
       }
     },
     "/admin/tasks/{id}" : {
       "put" : {
+        "summary" : "Редактирование задания",
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
@@ -367,10 +368,10 @@
             "description" : "Bad Request"
           }
         },
-        "summary" : "Update Task",
         "tags" : [ "Admin Controller" ]
       },
       "delete" : {
+        "summary" : "Удаление задания",
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
@@ -390,12 +391,12 @@
             }
           }
         },
-        "summary" : "Delete Task",
         "tags" : [ "Admin Controller" ]
       }
     },
     "/admin/trainers" : {
       "post" : {
+        "summary" : "Создание нового тренажера",
         "requestBody" : {
           "content" : {
             "application/json" : {
@@ -419,12 +420,12 @@
             "description" : "Bad Request"
           }
         },
-        "summary" : "Create Trainer",
         "tags" : [ "Admin Controller" ]
       }
     },
     "/admin/trainers/{id}" : {
       "put" : {
+        "summary" : "Редактирование тренажера",
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
@@ -457,7 +458,6 @@
             "description" : "Bad Request"
           }
         },
-        "summary" : "Update Trainer",
         "tags" : [ "Admin Controller" ]
       }
     },
@@ -688,6 +688,7 @@
     },
     "/leaderboard/{trainerId}" : {
       "get" : {
+        "summary" : "Рейтинг по конкретному тренажеру",
         "parameters" : [ {
           "name" : "trainerId",
           "in" : "path",
@@ -707,7 +708,6 @@
             }
           }
         },
-        "summary" : "Get Leaderboard By Trainer",
         "tags" : [ "Leaderboard Controller" ]
       }
     },
@@ -804,6 +804,7 @@
     },
     "/tasks" : {
       "get" : {
+        "summary" : "Получение списка всех заданий по тренажеру",
         "parameters" : [ {
           "name" : "trainer_id",
           "in" : "query",
@@ -822,12 +823,12 @@
             }
           }
         },
-        "summary" : "Get Tasks",
         "tags" : [ "Tasks Controller" ]
       }
     },
     "/tasks/random" : {
       "get" : {
+        "summary" : "Получение случайного задания",
         "responses" : {
           "200" : {
             "description" : "OK",
@@ -838,12 +839,12 @@
             }
           }
         },
-        "summary" : "Get Random Task",
         "tags" : [ "Tasks Controller" ]
       }
     },
     "/tasks/{id}" : {
       "get" : {
+        "summary" : "Получение деталей конкретного задания",
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
@@ -863,7 +864,6 @@
             }
           }
         },
-        "summary" : "Get Task Details",
         "tags" : [ "Tasks Controller" ]
       }
     },
