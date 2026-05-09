@@ -12,7 +12,7 @@ import { useLogoutQuery } from "../../hooks/api";
 import { getFromLocalStorage } from "../../utils";
 import type { RegistrationResponse } from "../../hooks/api/useRegistrationQuery";
 import { LoadingSpin } from "../../components/loadingSpin";
-import { BackSpace } from "../../modules/backSpace";
+import { BackSpaceView } from "../../components/backSpaceView";
 
 const menuItemHandler = ({ isActive }: NavLinkRenderProps) => {
   return isActive ? styles.active : "";
@@ -65,7 +65,7 @@ const MainLayout: FC = () => {
       </header>
       <main>
         <Col span={4}>
-          <BackSpace />
+          <BackSpaceView />
         </Col>
         <Col span={16}>
           <Suspense fallback={<LoadingSpin />}>

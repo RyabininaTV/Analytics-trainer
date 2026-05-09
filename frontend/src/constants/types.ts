@@ -7,6 +7,11 @@ export type BackSpaceData = {
   url: string | ((id: number) => `/${string}`);
 };
 
-export type IActiveBackSpaceInPage = {
-  [N: string]: BackSpaceData[];
+// export type IActiveBackSpaceInPage = {
+//   [N: string]: BackSpaceData[];
+// };
+
+export type BackSpaceLinks = {
+  matchLink: RegExp;
+  goBack: Array<BackSpaceData>;
 };
