@@ -1,4 +1,4 @@
-package com.example.task.domain.exception;
+package com.example.tasks.domain.exception;
 
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response;

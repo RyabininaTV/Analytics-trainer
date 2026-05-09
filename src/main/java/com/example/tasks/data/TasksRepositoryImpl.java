@@ -1,8 +1,8 @@
-package com.example.task.data;
+package com.example.tasks.data;
 
-import com.example.task.domain.TasksRepository;
-import com.example.task.domain.model.TaskDetailsResponse;
-import com.example.task.domain.model.TaskResponse;
+import com.example.tasks.domain.TasksRepository;
+import com.example.tasks.domain.model.TaskDetailsResponse;
+import com.example.tasks.domain.model.TaskResponse;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;

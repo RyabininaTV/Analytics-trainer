@@ -1,13 +1,13 @@
-package com.example.task.presentation;
+package com.example.tasks.presentation;
 
-import com.example.task.domain.service.TasksService;
+import com.example.tasks.domain.service.TasksService;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 
-import static com.example.task.utils.TasksEndpoints.*;
+import static com.example.tasks.utils.TasksEndpoints.*;
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 import static jakarta.ws.rs.core.Response.Status.OK;
 import static lombok.AccessLevel.PRIVATE;

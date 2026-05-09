@@ -1,4 +1,4 @@
-package com.example.task.domain.model;
+package com.example.tasks.domain.model;
 
 import com.example.jooq.generated.enums.TaskTypeEnum;
 import com.fasterxml.jackson.annotation.JsonProperty;

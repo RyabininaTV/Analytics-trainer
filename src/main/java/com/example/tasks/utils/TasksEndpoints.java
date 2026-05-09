@@ -1,4 +1,4 @@
-package com.example.task.utils;
+package com.example.tasks.utils;
 
 import lombok.experimental.UtilityClass;
 

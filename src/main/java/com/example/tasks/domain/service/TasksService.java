@@ -1,9 +1,9 @@
-package com.example.task.domain.service;
+package com.example.tasks.domain.service;
 
-import com.example.task.domain.TasksRepository;
-import com.example.task.domain.exception.TaskNotFoundException;
-import com.example.task.domain.model.TaskDetailsResponse;
-import com.example.task.domain.model.TaskResponse;
+import com.example.tasks.domain.TasksRepository;
+import com.example.tasks.domain.exception.TaskNotFoundException;
+import com.example.tasks.domain.model.TaskDetailsResponse;
+import com.example.tasks.domain.model.TaskResponse;
 import jakarta.annotation.Nonnull;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;

@@ -2,6 +2,85 @@
   "openapi" : "3.1.0",
   "components" : {
     "schemas" : {
+      "CreateTaskErrorItemRequest" : {
+        "type" : "object",
+        "required" : [ "fragment_text", "is_error" ],
+        "properties" : {
+          "fragment_text" : {
+            "type" : "string",
+            "pattern" : "\\S"
+          },
+          "is_error" : {
+            "type" : "boolean"
+          },
+          "explanation" : {
+            "type" : "string"
+          }
+        }
+      },
+      "CreateTaskOptionRequest" : {
+        "type" : "object",
+        "required" : [ "option_text", "is_correct" ],
+        "properties" : {
+          "option_text" : {
+            "type" : "string",
+            "pattern" : "\\S"
+          },
+          "is_correct" : {
+            "type" : "boolean"
+          }
+        }
+      },
+      "CreateTaskRequest" : {
+        "type" : "object",
+        "required" : [ "trainer_id", "task_type", "title", "description", "max_score", "is_active", "auto_check_enabled" ],
+        "properties" : {
+          "trainer_id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "exclusiveMinimum" : 0
+          },
+          "task_type" : {
+            "type" : "string",
+            "pattern" : "TEST|ERROR_FIND|OPEN"
+          },
+          "title" : {
+            "type" : "string",
+            "pattern" : "\\S",
+            "maxLength" : 255
+          },
+          "description" : {
+            "type" : "string",
+            "pattern" : "\\S"
+          },
+          "content" : {
+            "type" : "string"
+          },
+          "max_score" : {
+            "type" : "integer",
+            "format" : "int32",
+            "minimum" : 0
+          },
+          "is_active" : {
+            "type" : "boolean"
+          },
+          "auto_check_enabled" : {
+            "type" : "boolean"
+          },
+          "options" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/CreateTaskOptionRequest"
+            }
+          },
+          "error_items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/CreateTaskErrorItemRequest"
+            }
+          }
+        }
+      },
       "CreateTrainerRequest" : {
         "type" : "object",
         "required" : [ "title", "is_active" ],
@@ -14,7 +93,8 @@
             "type" : "string"
           },
           "difficulty_level" : {
-            "type" : "string"
+            "type" : "string",
+            "pattern" : "EASY|MEDIUM|HARD"
           },
           "is_active" : {
             "type" : "boolean"
@@ -104,11 +184,201 @@
             "maxLength" : 100
           }
         }
+      },
+      "UpdateTaskErrorItemRequest" : {
+        "type" : "object",
+        "required" : [ "fragment_text", "is_error" ],
+        "properties" : {
+          "fragment_text" : {
+            "type" : "string",
+            "pattern" : "\\S"
+          },
+          "is_error" : {
+            "type" : "boolean"
+          },
+          "explanation" : {
+            "type" : "string"
+          }
+        }
+      },
+      "UpdateTaskOptionRequest" : {
+        "type" : "object",
+        "required" : [ "option_text", "is_correct" ],
+        "properties" : {
+          "option_text" : {
+            "type" : "string",
+            "pattern" : "\\S"
+          },
+          "is_correct" : {
+            "type" : "boolean"
+          }
+        }
+      },
+      "UpdateTaskRequest" : {
+        "type" : "object",
+        "required" : [ "trainer_id", "task_type", "title", "description", "max_score", "is_active", "auto_check_enabled" ],
+        "properties" : {
+          "trainer_id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "exclusiveMinimum" : 0
+          },
+          "task_type" : {
+            "type" : "string",
+            "pattern" : "TEST|ERROR_FIND|OPEN"
+          },
+          "title" : {
+            "type" : "string",
+            "pattern" : "\\S",
+            "maxLength" : 255
+          },
+          "description" : {
+            "type" : "string",
+            "pattern" : "\\S"
+          },
+          "content" : {
+            "type" : "string"
+          },
+          "max_score" : {
+            "type" : "integer",
+            "format" : "int32",
+            "minimum" : 0
+          },
+          "is_active" : {
+            "type" : "boolean"
+          },
+          "auto_check_enabled" : {
+            "type" : "boolean"
+          },
+          "options" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/UpdateTaskOptionRequest"
+            }
+          },
+          "error_items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/UpdateTaskErrorItemRequest"
+            }
+          }
+        }
+      },
+      "UpdateTrainerRequest" : {
+        "type" : "object",
+        "required" : [ "title", "is_active" ],
+        "properties" : {
+          "title" : {
+            "type" : "string",
+            "pattern" : "\\S",
+            "maxLength" : 255
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "difficulty_level" : {
+            "type" : "string",
+            "pattern" : "EASY|MEDIUM|HARD"
+          },
+          "is_active" : {
+            "type" : "boolean"
+          }
+        }
       }
     }
   },
   "paths" : {
-    "/admin/trainers/create" : {
+    "/admin/tasks" : {
+      "post" : {
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateTaskRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        },
+        "summary" : "Create Task",
+        "tags" : [ "Admin Controller" ]
+      }
+    },
+    "/admin/tasks/{id}" : {
+      "put" : {
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateTaskRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        },
+        "summary" : "Update Task",
+        "tags" : [ "Admin Controller" ]
+      },
+      "delete" : {
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          }
+        },
+        "summary" : "Delete Task",
+        "tags" : [ "Admin Controller" ]
+      }
+    },
+    "/admin/trainers" : {
       "post" : {
         "requestBody" : {
           "content" : {
@@ -134,6 +404,44 @@
           }
         },
         "summary" : "Create Trainer",
+        "tags" : [ "Admin Controller" ]
+      }
+    },
+    "/admin/trainers/{id}" : {
+      "put" : {
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateTrainerRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        },
+        "summary" : "Update Trainer",
         "tags" : [ "Admin Controller" ]
       }
     },
@@ -564,10 +872,10 @@
     "version" : "1.0-SNAPSHOT"
   },
   "servers" : [ {
-    "url" : "http://localhost:8085",
+    "url" : "http://localhost:8080",
     "description" : "Auto generated value"
   }, {
-    "url" : "http://0.0.0.0:8085",
+    "url" : "http://0.0.0.0:8080",
     "description" : "Auto generated value"
   } ]
 }

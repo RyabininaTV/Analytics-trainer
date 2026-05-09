@@ -5,7 +5,10 @@ import jakarta.annotation.Nullable;
 import lombok.Builder;
 
 @Builder
-public record CreateTrainerEntityRequest(
+public record UpdateTrainerRequestEntity(
+
+        @Nonnull
+        Long id,
 
         @Nonnull
         String title,

@@ -11,14 +11,17 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotNull;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+
+import static lombok.AccessLevel.PRIVATE;
 
 @ApplicationScoped
 @RequiredArgsConstructor
+@FieldDefaults(level = PRIVATE, makeFinal = true)
 public class CreateTrainerService {
 
-    private final TrainersRepository trainerRepository;
+    TrainersRepository trainerRepository;
 
-    @Transactional
     public CreateTrainerResponse createTrainer(@Nonnull CreateTrainerRequest request) {
         CreateTrainerEntityResponse response = trainerRepository.createTrainer(CreateTrainerEntityRequest.builder()
                 .title(request.title())
@@ -37,4 +40,5 @@ public class CreateTrainerService {
                 .updatedAt(response.updatedAt())
                 .build();
     }
+
 }

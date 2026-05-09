@@ -1,8 +1,8 @@
-package com.example.task.data;
+package com.example.tasks.data;
 
 import com.example.jooq.generated.enums.TaskTypeEnum;
-import com.example.task.domain.model.TaskDetailsResponse;
-import com.example.task.domain.model.TaskResponse;
+import com.example.tasks.domain.model.TaskDetailsResponse;
+import com.example.tasks.domain.model.TaskResponse;
 import lombok.experimental.UtilityClass;
 import org.jooq.Record4;
 import org.jooq.Record8;

@@ -5,18 +5,18 @@ import jakarta.annotation.Nullable;
 import lombok.Builder;
 
 @Builder
-public record CreateTrainerEntityRequest(
+public record CreateTaskErrorItemRequestEntity(
 
         @Nonnull
-        String title,
-
-        @Nullable
-        String description,
-
-        @Nullable
-        String difficultyLevel,
+        Long taskId,
 
         @Nonnull
-        Boolean isActive
+        String fragmentText,
+
+        @Nonnull
+        Boolean isError,
+
+        @Nullable
+        String explanation
 
 ) {}

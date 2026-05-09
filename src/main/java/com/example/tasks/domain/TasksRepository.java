@@ -1,7 +1,7 @@
-package com.example.task.domain;
+package com.example.tasks.domain;
 
-import com.example.task.domain.model.TaskDetailsResponse;
-import com.example.task.domain.model.TaskResponse;
+import com.example.tasks.domain.model.TaskDetailsResponse;
+import com.example.tasks.domain.model.TaskResponse;
 
 import java.util.List;
 import java.util.Optional;

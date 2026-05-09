@@ -10,7 +10,7 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 
 @Builder
 @JsonInclude(NON_NULL)
-public record CreateTrainerResponse(
+public record UpdateTrainerResponse(
 
         @JsonProperty(value = "id", required = true)
         Long id,
