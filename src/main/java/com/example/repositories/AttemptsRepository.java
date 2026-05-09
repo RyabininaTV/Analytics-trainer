@@ -1,5 +1,6 @@
 package com.example.repositories;
 
+import com.example.progress_and_profile.dto.responses.FindCheckedAttemptsByUserIdResponseEntity;
 import com.example.attempts.entities.responses.*;
 import com.example.trainers.entities.requests.DeleteUserAttemptsByTrainerIdEntityRequest;
 import com.example.attempts.entities.requests.GetAttemptByTaskIdEntityRequest;
@@ -10,7 +11,13 @@ import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.jooq.DSLContext;
+import org.jooq.Field;
+import org.jooq.impl.DSL;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
+import static com.example.jooq.generated.enums.AttemptStatusEnum.CHECKED;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -38,6 +45,28 @@ public class AttemptsRepository {
                                 .where(TASKS.TRAINER_ID.eq(request.trainerId()))
                 ))
                 .execute();
+    }
+
+    public List<FindCheckedAttemptsByUserIdResponseEntity> findCheckedAttemptsByUserId(@Nonnull Long userId) {
+        Field<LocalDateTime> changedAt = DSL.coalesce(ATTEMPTS.REVIEWED_AT, ATTEMPTS.SUBMITTED_AT);
+
+        return dsl.select(
+                        ATTEMPTS.TASK_ID,
+                        changedAt,
+                        ATTEMPTS.SCORE
+                )
+                .from(ATTEMPTS)
+                .where(ATTEMPTS.USER_ID.eq(userId))
+                .and(ATTEMPTS.STATUS.eq(CHECKED))
+                .and(ATTEMPTS.SCORE.isNotNull())
+                .and(changedAt.isNotNull())
+                .orderBy(changedAt.asc(), ATTEMPTS.ID.asc())
+                .fetch(record -> FindCheckedAttemptsByUserIdResponseEntity.builder()
+                        .taskId(record.get(ATTEMPTS.TASK_ID))
+                        .changedAt(record.get(changedAt))
+                        .score(record.get(ATTEMPTS.SCORE))
+                        .build()
+                );
     }
 
     public List<AttemptEntityResponse> getUserAttempts(Long userId) {

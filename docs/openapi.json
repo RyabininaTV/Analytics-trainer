@@ -2,6 +2,105 @@
   "openapi" : "3.1.0",
   "components" : {
     "schemas" : {
+      "CreateTaskErrorItemRequest" : {
+        "type" : "object",
+        "required" : [ "fragment_text", "is_error" ],
+        "properties" : {
+          "fragment_text" : {
+            "type" : "string",
+            "pattern" : "\\S"
+          },
+          "is_error" : {
+            "type" : "boolean"
+          },
+          "explanation" : {
+            "type" : "string"
+          }
+        }
+      },
+      "CreateTaskOptionRequest" : {
+        "type" : "object",
+        "required" : [ "option_text", "is_correct" ],
+        "properties" : {
+          "option_text" : {
+            "type" : "string",
+            "pattern" : "\\S"
+          },
+          "is_correct" : {
+            "type" : "boolean"
+          }
+        }
+      },
+      "CreateTaskRequest" : {
+        "type" : "object",
+        "required" : [ "trainer_id", "task_type", "title", "description", "max_score", "is_active", "auto_check_enabled" ],
+        "properties" : {
+          "trainer_id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "exclusiveMinimum" : 0
+          },
+          "task_type" : {
+            "type" : "string",
+            "pattern" : "TEST|ERROR_FIND|OPEN"
+          },
+          "title" : {
+            "type" : "string",
+            "pattern" : "\\S",
+            "maxLength" : 255
+          },
+          "description" : {
+            "type" : "string",
+            "pattern" : "\\S"
+          },
+          "content" : {
+            "type" : "string"
+          },
+          "max_score" : {
+            "type" : "integer",
+            "format" : "int32",
+            "minimum" : 0
+          },
+          "is_active" : {
+            "type" : "boolean"
+          },
+          "auto_check_enabled" : {
+            "type" : "boolean"
+          },
+          "options" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/CreateTaskOptionRequest"
+            }
+          },
+          "error_items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/CreateTaskErrorItemRequest"
+            }
+          }
+        }
+      },
+      "CreateTrainerRequest" : {
+        "type" : "object",
+        "required" : [ "title", "is_active" ],
+        "properties" : {
+          "title" : {
+            "type" : "string",
+            "pattern" : "\\S"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "difficulty_level" : {
+            "type" : "string",
+            "pattern" : "EASY|MEDIUM|HARD"
+          },
+          "is_active" : {
+            "type" : "boolean"
+          }
+        }
+      },
       "LoginRequest" : {
         "type" : "object",
         "required" : [ "email", "password" ],
@@ -74,10 +173,294 @@
             "maxLength" : 10000
           }
         }
+      },
+      "UpdateProfileRequest" : {
+        "type" : "object",
+        "required" : [ "email", "username" ],
+        "properties" : {
+          "email" : {
+            "type" : "string",
+            "pattern" : "\\S",
+            "maxLength" : 255
+          },
+          "username" : {
+            "type" : "string",
+            "pattern" : "\\S",
+            "minLength" : 3,
+            "maxLength" : 100
+          },
+          "old_password" : {
+            "type" : "string",
+            "minLength" : 8,
+            "maxLength" : 100
+          },
+          "new_password" : {
+            "type" : "string",
+            "minLength" : 8,
+            "maxLength" : 100
+          }
+        }
+      },
+      "UpdateTaskErrorItemRequest" : {
+        "type" : "object",
+        "required" : [ "fragment_text", "is_error" ],
+        "properties" : {
+          "fragment_text" : {
+            "type" : "string",
+            "pattern" : "\\S"
+          },
+          "is_error" : {
+            "type" : "boolean"
+          },
+          "explanation" : {
+            "type" : "string"
+          }
+        }
+      },
+      "UpdateTaskOptionRequest" : {
+        "type" : "object",
+        "required" : [ "option_text", "is_correct" ],
+        "properties" : {
+          "option_text" : {
+            "type" : "string",
+            "pattern" : "\\S"
+          },
+          "is_correct" : {
+            "type" : "boolean"
+          }
+        }
+      },
+      "UpdateTaskRequest" : {
+        "type" : "object",
+        "required" : [ "trainer_id", "task_type", "title", "description", "max_score", "is_active", "auto_check_enabled" ],
+        "properties" : {
+          "trainer_id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "exclusiveMinimum" : 0
+          },
+          "task_type" : {
+            "type" : "string",
+            "pattern" : "TEST|ERROR_FIND|OPEN"
+          },
+          "title" : {
+            "type" : "string",
+            "pattern" : "\\S",
+            "maxLength" : 255
+          },
+          "description" : {
+            "type" : "string",
+            "pattern" : "\\S"
+          },
+          "content" : {
+            "type" : "string"
+          },
+          "max_score" : {
+            "type" : "integer",
+            "format" : "int32",
+            "minimum" : 0
+          },
+          "is_active" : {
+            "type" : "boolean"
+          },
+          "auto_check_enabled" : {
+            "type" : "boolean"
+          },
+          "options" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/UpdateTaskOptionRequest"
+            }
+          },
+          "error_items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/UpdateTaskErrorItemRequest"
+            }
+          }
+        }
+      },
+      "UpdateTrainerRequest" : {
+        "type" : "object",
+        "required" : [ "title", "is_active" ],
+        "properties" : {
+          "title" : {
+            "type" : "string",
+            "pattern" : "\\S",
+            "maxLength" : 255
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "difficulty_level" : {
+            "type" : "string",
+            "pattern" : "EASY|MEDIUM|HARD"
+          },
+          "is_active" : {
+            "type" : "boolean"
+          }
+        }
       }
     }
   },
   "paths" : {
+    "/admin/tasks" : {
+      "post" : {
+        "summary" : "Создание нового задания",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateTaskRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        },
+        "tags" : [ "Admin Controller" ]
+      }
+    },
+    "/admin/tasks/{id}" : {
+      "put" : {
+        "summary" : "Редактирование задания",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateTaskRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        },
+        "tags" : [ "Admin Controller" ]
+      },
+      "delete" : {
+        "summary" : "Удаление задания",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          }
+        },
+        "tags" : [ "Admin Controller" ]
+      }
+    },
+    "/admin/trainers" : {
+      "post" : {
+        "summary" : "Создание нового тренажера",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateTrainerRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        },
+        "tags" : [ "Admin Controller" ]
+      }
+    },
+    "/admin/trainers/{id}" : {
+      "put" : {
+        "summary" : "Редактирование тренажера",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateTrainerRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        },
+        "tags" : [ "Admin Controller" ]
+      }
+    },
     "/attempts" : {
       "post" : {
         "summary" : "Отправка ответа на задание",
@@ -287,9 +670,149 @@
         "tags" : [ "Auth Controller" ]
       }
     },
+    "/leaderboard" : {
+      "get" : {
+        "summary" : "Глобальный рейтинг всех пользователей",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          }
+        },
+        "tags" : [ "Leaderboard Controller" ]
+      }
+    },
+    "/leaderboard/{trainerId}" : {
+      "get" : {
+        "summary" : "Рейтинг по конкретному тренажеру",
+        "parameters" : [ {
+          "name" : "trainerId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          }
+        },
+        "tags" : [ "Leaderboard Controller" ]
+      }
+    },
+    "/profile" : {
+      "put" : {
+        "summary" : "Обновление профиля пользователя",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateProfileRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request"
+          }
+        },
+        "tags" : [ "Profile Controller" ]
+      },
+      "get" : {
+        "summary" : "Получение профиля пользователя",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          }
+        },
+        "tags" : [ "Profile Controller" ]
+      }
+    },
+    "/progress" : {
+      "get" : {
+        "summary" : "Получение общего прогресса пользователя",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          }
+        },
+        "tags" : [ "Progress Controller" ]
+      }
+    },
+    "/progress/histrory" : {
+      "get" : {
+        "summary" : "История изменения прогресса пользователя",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          }
+        },
+        "tags" : [ "Progress Controller" ]
+      }
+    },
+    "/progress/trainers" : {
+      "get" : {
+        "summary" : "Прогресс пользователя по всем тренажерам",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : { }
+              }
+            }
+          }
+        },
+        "tags" : [ "Progress Controller" ]
+      }
+    },
     "/tasks" : {
       "get" : {
-        "summary" : "Список всех заданий",
+        "summary" : "Получение списка всех заданий по тренажеру",
+        "parameters" : [ {
+          "name" : "trainer_id",
+          "in" : "query",
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
         "responses" : {
           "200" : {
             "description" : "OK",
@@ -305,7 +828,7 @@
     },
     "/tasks/random" : {
       "get" : {
-        "summary" : "Получение деталей случайной задачи",
+        "summary" : "Получение случайного задания",
         "responses" : {
           "200" : {
             "description" : "OK",
@@ -321,7 +844,7 @@
     },
     "/tasks/{id}" : {
       "get" : {
-        "summary" : "Получение деталей задачи по id",
+        "summary" : "Получение деталей конкретного задания",
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
@@ -466,10 +989,10 @@
     "version" : "1.0-SNAPSHOT"
   },
   "servers" : [ {
-    "url" : "http://localhost:8087",
+    "url" : "http://localhost:8080",
     "description" : "Auto generated value"
   }, {
-    "url" : "http://0.0.0.0:8087",
+    "url" : "http://0.0.0.0:8080",
     "description" : "Auto generated value"
   } ]
 }

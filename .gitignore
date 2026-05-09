@@ -6,6 +6,9 @@ config/
 !**/src/test/**/build/
 .env
 
+### frontend
+frontend/node_modules
+
 ### IntelliJ IDEA ###
 .idea
 *.iws

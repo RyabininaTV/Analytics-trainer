@@ -4,8 +4,12 @@
   width: 400px;
   box-shadow: vars.$box-shadow;
 
-  .authType + .authType {
-    margin-left: 10px;
+  .authType {
+    display: inline-block;
+
+    & + .authType {
+      margin-left: 10px;
+    }
   }
 
   .submitButton {
