@@ -26,6 +26,8 @@ public class TaskErrorItemsRepository {
                 .from(TASK_ERROR_ITEMS)
                 .where(TASK_ERROR_ITEMS.ID.eq(errorItemId))
                 .fetchOptional(TASK_ERROR_ITEMS.FRAGMENT_TEXT);
+    }
+
     public List<CreateTaskErrorItemResponseEntity> create(@Nonnull List<CreateTaskErrorItemRequestEntity> requests) {
         return requests.stream()
                 .map(this::create)

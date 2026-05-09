@@ -26,6 +26,8 @@ public class TaskOptionsRepository {
                 .from(TASK_OPTIONS)
                 .where(TASK_OPTIONS.ID.eq(optionId))
                 .fetchOptional(TASK_OPTIONS.OPTION_TEXT);
+    }
+
     public List<CreateTaskOptionResponseEntity> create(@Nonnull List<CreateTaskOptionRequestEntity> requests) {
         return requests.stream()
                 .map(this::create)
