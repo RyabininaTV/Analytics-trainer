@@ -43,8 +43,8 @@ public class SubmitAttemptService {
 
     @Transactional
     public SubmitAttemptResponse submitAttempt(SubmitAttemptRequest request) {
-        Long userId = resolveUserId(request);
-        TasksRecord task = getTask(request.getTaskId());
+        Long userId = currentUserContext.require().id();
+        TasksRecord task = getTask(request.taskId());
 
         validateDuplicateSubmission(userId, task);
 
@@ -52,32 +52,27 @@ public class SubmitAttemptService {
         TaskTypeEnum taskType = task.getTaskType();
 
         if (taskType == TaskTypeEnum.TEST) {
-            Long optionId = parseAnswerId(request.getAnswer());
+            Long optionId = parseAnswerId(request.answer());
             TaskOptionsRecord option = getTaskOption(optionId, task.getId());
             entityRequest = buildTestRequest(userId, request, task, option);
         } else if (taskType == TaskTypeEnum.ERROR_FIND) {
-            Long errorItemId = parseAnswerId(request.getAnswer());
+            Long errorItemId = parseAnswerId(request.answer());
             TaskErrorItemsRecord errorItem = getTaskErrorItem(errorItemId, task.getId());
             entityRequest = buildErrorFindRequest(userId, request, task, errorItem);
         } else {
             entityRequest = buildOpenRequest(userId, request, task);
         }
 
-        AttemptResultEntityResponse result = processAttempt(entityRequest, task);
+        AttemptResultEntityResponse result = processAttempt(entityRequest, task)
+                .orElseThrow(() -> new RuntimeException("Failed to create attempt"));
 
         // Обновляем прогресс, всегда получая актуальные данные из БД
-        updateUserProgress(userId, task.getTrainerId(), taskType);
+        updateUserProgress(userId, task.getTrainerId(), taskType, task.getId());
 
-        Integer totalScore = Optional.ofNullable(
-                attemptsRepository.getTotalScoreByUserAndTrainer(userId, task.getTrainerId())
-        ).orElse(0);
+        Integer totalScore = attemptsRepository.getTotalScoreByUserAndTrainer(userId, task.getTrainerId())
+                .orElse(0);
 
-        return buildResponse(request.getTaskId(), userId, result, totalScore);
-    }
-
-    private Long resolveUserId(SubmitAttemptRequest request) {
-        return Optional.ofNullable(request.getUserId())
-                .orElseGet(() -> currentUserContext.require().id());
+        return buildResponse(request.taskId(), userId, result, totalScore);
     }
 
     private TasksRecord getTask(Long taskId) {
@@ -105,7 +100,7 @@ public class SubmitAttemptService {
                 .score(option.getIsCorrect() ? task.getMaxScore() : null)
                 .isCorrect(option.getIsCorrect())
                 .answerType(AnswerTypeEnum.TEST_OPTION)
-                .selectedOptionId(Long.parseLong(request.getAnswer()))
+                .selectedOptionId(Long.parseLong(request.answer()))
                 .build();
     }
 
@@ -119,12 +114,12 @@ public class SubmitAttemptService {
                 .score(errorItem.getIsError() ? task.getMaxScore() : null)
                 .isCorrect(errorItem.getIsError())
                 .answerType(AnswerTypeEnum.ERROR_ITEM)
-                .selectedErrorItemId(Long.parseLong(request.getAnswer()))
+                .selectedErrorItemId(Long.parseLong(request.answer()))
                 .build();
     }
 
     private SubmitAttemptEntityRequest buildOpenRequest(Long userId, SubmitAttemptRequest request, TasksRecord task) {
-        String answerText = request.getAnswer();
+        String answerText = request.answer();
         boolean isValid = !answerText.trim().isEmpty();
 
         return SubmitAttemptEntityRequest.builder()
@@ -137,17 +132,17 @@ public class SubmitAttemptService {
                 .build();
     }
 
-    private AttemptResultEntityResponse processAttempt(SubmitAttemptEntityRequest request, TasksRecord task) {
+    private Optional<AttemptResultEntityResponse> processAttempt(SubmitAttemptEntityRequest request, TasksRecord task) {
         return switch (task.getTaskType()) {
             case TEST, ERROR_FIND -> attemptsRepository.createAutoCheckedAttempt(request);
             case OPEN -> attemptsRepository.createOpenAttempt(request);
         };
     }
 
-    private void updateUserProgress(Long userId, Long trainerId, TaskTypeEnum taskType) {
+    private void updateUserProgress(Long userId, Long trainerId, TaskTypeEnum taskType, Long taskId) {
         // Всегда получаем актуальные данные из БД
-        Integer totalScore = attemptsRepository.getTotalScoreByUserAndTrainer(userId, trainerId);
-        if (totalScore == null) totalScore = 0;
+        Integer totalScore = attemptsRepository.getTotalScoreByUserAndTrainer(userId, trainerId)
+                .orElse(0);
 
         // Получаем актуальное количество выполненных заданий (только TEST и ERROR_FIND)
         Integer currentCompletedTasksCount = getCurrentCompletedTasksCount(userId, trainerId);
@@ -160,10 +155,13 @@ public class SubmitAttemptService {
 
         // Увеличиваем completedTasksCount только для TEST и ERROR_FIND (если это задание еще не учтено)
         int newCompletedTasksCount = currentCompletedTasksCount;
+
         if (taskType == TaskTypeEnum.TEST || taskType == TaskTypeEnum.ERROR_FIND) {
-            // Проверяем, не учтено ли уже это задание (на случай повторной отправки)
-            boolean alreadyCounted = isTaskAlreadyCountedInProgress(taskType);
-            if (!alreadyCounted) {
+            // Проверяем, есть ли уже попытка по этому конкретному заданию
+            boolean hasExistingAttempt = attemptsRepository.hasUserAttemptForTask(userId, taskId);
+
+            // Увеличиваем счетчик только если это первая попытка по заданию
+            if (!hasExistingAttempt) {
                 newCompletedTasksCount = currentCompletedTasksCount + 1;
             }
         }
@@ -180,15 +178,6 @@ public class SubmitAttemptService {
                         .completionPercent(completionPercent)
                         .build()
         );
-    }
-
-    /**
-     * Проверяет, учтено ли уже это задание в прогрессе пользователя
-     * (чтобы не увеличивать счетчик при повторных попытках)
-     */
-    private boolean isTaskAlreadyCountedInProgress(TaskTypeEnum taskType) {
-        // Для OPEN заданий счетчик не увеличивается
-        return taskType == TaskTypeEnum.OPEN;
     }
 
     /**

@@ -38,9 +38,9 @@ public class AttemptController {
     @GET
     @Secured(roles = {USER, ADMIN})
     @Path(GET_ATTEMPT_BY_TASK_ID)
-    @Operation(summary = "Получение попытки по конкретному заданию")
-    public Response getAttemptByTaskId(@PathParam("taskId") long taskId) {
-        return Response.ok(getAttemptByTaskIdService.getAttemptByTaskId(taskId)).build();
+    @Operation(summary = "Получение всех попыток по конкретному заданию")
+    public Response getAttemptsByTaskId(@PathParam("taskId") long taskId) {
+        return Response.ok(getAttemptByTaskIdService.getAttemptsByTaskId(taskId)).build();
     }
 
     @GET

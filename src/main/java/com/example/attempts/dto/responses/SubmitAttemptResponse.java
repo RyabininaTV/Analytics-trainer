@@ -5,35 +5,31 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
 
 @Builder
-@Getter
-@Setter
-public class SubmitAttemptResponse {
+public record SubmitAttemptResponse(
 
-    @Nonnull
-    @JsonProperty(value = "task_id", required = true)
-    private Long taskId;
+        @Nonnull
+        @JsonProperty(value = "task_id", required = true)
+        Long taskId,
 
-    @Nonnull
-    @JsonProperty(value = "user_id", required = true)
-    private Long userId;
+        @Nonnull
+        @JsonProperty(value = "user_id", required = true)
+        Long userId,
 
-    @Nonnull
-    @JsonProperty(value = "attempt_id", required = true)
-    private Long attemptId;
+        @Nonnull
+        @JsonProperty(value = "attempt_id", required = true)
+        Long attemptId,
 
-    @Nonnull
-    @JsonProperty(value = "status", required = true)
-    private AttemptStatusEnum status;
+        @Nonnull
+        @JsonProperty(value = "status", required = true)
+        AttemptStatusEnum status,
 
-    @Nullable
-    @JsonProperty("score")
-    private Integer score;
+        @Nullable
+        @JsonProperty("score")
+        Integer score,
 
-    @Nullable
-    @JsonProperty("total_score")
-    private Integer totalScore;
-}
+        @Nullable
+        @JsonProperty("total_score")
+        Integer totalScore
+) {}

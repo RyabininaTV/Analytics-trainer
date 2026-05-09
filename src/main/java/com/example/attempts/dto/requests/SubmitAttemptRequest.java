@@ -1,26 +1,23 @@
 package com.example.attempts.dto.requests;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
 
 @Builder
-@Getter
-@Setter
-public class SubmitAttemptRequest {
+public record SubmitAttemptRequest (
 
-    @Nonnull
+    @NotNull(message = "task_id is required")
+    @Positive(message = "task_id must be positive")
     @JsonProperty(value = "task_id", required = true)
-    private Long taskId;
+    Long taskId,
 
-    @Nullable
-    @JsonProperty("user_id")
-    private Long userId;
-
-    @Nonnull
+    @NotBlank(message = "answer is required")
+    @Size(max = 10000, message = "answer must not exceed {max} characters")
     @JsonProperty(value = "answer", required = true)
-    private String answer;
-}
+    String answer
+
+) {}

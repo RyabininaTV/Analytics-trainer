@@ -3,11 +3,10 @@ package com.example.attempts.services;
 import com.example.attempts.dto.responses.AttemptAnswerDetails;
 import com.example.attempts.dto.responses.AttemptDetailsResponse;
 import com.example.attempts.entities.requests.GetAttemptDetailsEntityRequest;
-import com.example.attempts.entities.responses.AttemptAnswerEntityResponse;
+import com.example.attempts.entities.responses.AttemptAnswerWithTextEntityResponse;
 import com.example.attempts.entities.responses.AttemptWithAnswersEntityResponse;
+import com.example.attempts.exceptions.AttemptNotFoundException;
 import com.example.repositories.AttemptsRepository;
-import com.example.repositories.TaskOptionsRepository;
-import com.example.repositories.TaskErrorItemsRepository;
 import com.example.security.current_user_context.CurrentUserContext;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
@@ -24,8 +23,6 @@ public class GetAttemptDetailsService {
 
     CurrentUserContext currentUserContext;
     AttemptsRepository attemptsRepository;
-    TaskOptionsRepository taskOptionsRepository;
-    TaskErrorItemsRepository taskErrorItemsRepository;
 
     public AttemptDetailsResponse getAttemptDetails(long attemptId) {
         GetAttemptDetailsEntityRequest request = GetAttemptDetailsEntityRequest.builder()
@@ -33,7 +30,8 @@ public class GetAttemptDetailsService {
                 .userId(currentUserContext.require().id())
                 .build();
 
-        AttemptWithAnswersEntityResponse entity = attemptsRepository.getAttemptDetails(request);
+        AttemptWithAnswersEntityResponse entity = attemptsRepository.getAttemptDetails(request)
+                .orElseThrow(() -> new AttemptNotFoundException(request.attemptId()));
 
         return AttemptDetailsResponse.builder()
                 .id(entity.id())
@@ -53,30 +51,18 @@ public class GetAttemptDetailsService {
                 .build();
     }
 
-    private List<AttemptAnswerDetails> mapAnswers(List<AttemptAnswerEntityResponse> answers) {
+    private List<AttemptAnswerDetails> mapAnswers(List<AttemptAnswerWithTextEntityResponse> answers) {
         return answers.stream()
-                .map(answer -> {
-                    var builder = AttemptAnswerDetails.builder()
-                            .id(answer.id())
-                            .answerType(answer.answerType())
-                            .selectedOptionId(answer.selectedOptionId())
-                            .selectedErrorItemId(answer.selectedErrorItemId())
-                            .textAnswer(answer.textAnswer());
-
-                    // Add text for selected option if exists
-                    if (answer.selectedOptionId() != null) {
-                        taskOptionsRepository.findOptionTextById(answer.selectedOptionId())
-                                .ifPresent(builder::selectedOptionText);
-                    }
-
-                    // Add text for selected error item if exists
-                    if (answer.selectedErrorItemId() != null) {
-                        taskErrorItemsRepository.findFragmentTextById(answer.selectedErrorItemId())
-                                .ifPresent(builder::selectedErrorItemText);
-                    }
-
-                    return builder.build();
-                })
+                .map(answer -> AttemptAnswerDetails.builder()
+                        .id(answer.id())
+                        .answerType(answer.answerType())
+                        .selectedOptionId(answer.selectedOptionId())
+                        .selectedOptionText(answer.selectedOptionText())
+                        .selectedErrorItemId(answer.selectedErrorItemId())
+                        .selectedErrorItemText(answer.selectedErrorItemText())
+                        .textAnswer(answer.textAnswer())
+                        .build()
+                )
                 .toList();
     }
 }

@@ -51,5 +51,5 @@ public record AttemptWithAnswersEntityResponse(
         LocalDateTime reviewedAt,
 
         @Nonnull
-        List<AttemptAnswerEntityResponse> answers
+        List<AttemptAnswerWithTextEntityResponse> answers
 ) {}

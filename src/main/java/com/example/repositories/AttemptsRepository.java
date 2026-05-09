@@ -1,17 +1,12 @@
 package com.example.repositories;
 
-import com.example.attempts.entities.responses.AttemptResultEntityResponse;
+import com.example.attempts.entities.responses.*;
 import com.example.trainers.entities.requests.DeleteUserAttemptsByTrainerIdEntityRequest;
 import com.example.attempts.entities.requests.GetAttemptByTaskIdEntityRequest;
 import com.example.attempts.entities.requests.GetAttemptDetailsEntityRequest;
 import com.example.attempts.entities.requests.SubmitAttemptEntityRequest;
-import com.example.attempts.entities.responses.AttemptEntityResponse;
-import com.example.attempts.entities.responses.AttemptWithAnswersEntityResponse;
-import com.example.attempts.entities.responses.AttemptAnswerEntityResponse;
-import com.example.attempts.exceptions.AttemptNotFoundException;
 import jakarta.annotation.Nonnull;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.jooq.DSLContext;
@@ -22,6 +17,8 @@ import java.util.Optional;
 
 import static com.example.jooq.generated.tables.Attempts.ATTEMPTS;
 import static com.example.jooq.generated.tables.AttemptAnswers.ATTEMPT_ANSWERS;
+import static com.example.jooq.generated.tables.TaskOptions.TASK_OPTIONS;
+import static com.example.jooq.generated.tables.TaskErrorItems.TASK_ERROR_ITEMS;
 import static com.example.jooq.generated.tables.Tasks.TASKS;
 import static lombok.AccessLevel.PRIVATE;
 
@@ -43,7 +40,7 @@ public class AttemptsRepository {
                 .execute();
     }
 
-    public List<AttemptEntityResponse> getUserAttempts(@Nonnull Long userId) {
+    public List<AttemptEntityResponse> getUserAttempts(Long userId) {
         return dsl.selectFrom(ATTEMPTS)
                 .where(ATTEMPTS.USER_ID.eq(userId))
                 .orderBy(ATTEMPTS.STARTED_AT.desc())
@@ -61,13 +58,12 @@ public class AttemptsRepository {
                 );
     }
 
-    public Optional<AttemptEntityResponse> getAttemptByTaskId(@Nonnull GetAttemptByTaskIdEntityRequest request) {
+    public List<AttemptEntityResponse> getAttemptsByTaskId(@Nonnull GetAttemptByTaskIdEntityRequest request) {
         return dsl.selectFrom(ATTEMPTS)
                 .where(ATTEMPTS.USER_ID.eq(request.userId()))
                 .and(ATTEMPTS.TASK_ID.eq(request.taskId()))
                 .orderBy(ATTEMPTS.STARTED_AT.desc())
-                .limit(1)
-                .fetchOptional(record -> AttemptEntityResponse.builder()
+                .fetch(record -> AttemptEntityResponse.builder()
                         .id(record.getId())
                         .userId(record.getUserId())
                         .taskId(record.getTaskId())
@@ -81,50 +77,84 @@ public class AttemptsRepository {
                 );
     }
 
-    public AttemptWithAnswersEntityResponse getAttemptDetails(@Nonnull GetAttemptDetailsEntityRequest request) {
-        // Получаем attempt
-        var attemptRecord = dsl.selectFrom(ATTEMPTS)
+    public Optional<AttemptWithAnswersEntityResponse> getAttemptDetails(@Nonnull GetAttemptDetailsEntityRequest request) {
+        // Получаем attempt с joined данными из task_options и task_error_items
+        var attemptRecord = dsl.select(
+                        ATTEMPTS.ID,
+                        ATTEMPTS.USER_ID,
+                        ATTEMPTS.TASK_ID,
+                        ATTEMPTS.STARTED_AT,
+                        ATTEMPTS.SUBMITTED_AT,
+                        ATTEMPTS.STATUS,
+                        ATTEMPTS.SCORE,
+                        ATTEMPTS.MAX_SCORE_SNAPSHOT,
+                        ATTEMPTS.IS_CORRECT,
+                        ATTEMPTS.AUTO_CHECKED,
+                        ATTEMPTS.NEEDS_MANUAL_REVIEW,
+                        ATTEMPTS.REVIEWER_COMMENT,
+                        ATTEMPTS.REVIEWED_AT
+                )
+                .from(ATTEMPTS)
                 .where(ATTEMPTS.ID.eq(request.attemptId()))
                 .and(ATTEMPTS.USER_ID.eq(request.userId()))
-                .fetchOptional()
-                .orElseThrow(() -> new AttemptNotFoundException(request.attemptId()));
+                .fetchOptional();
 
-        // Затем получаем все ответы по этому attempt
-        List<AttemptAnswerEntityResponse> answers = dsl.selectFrom(ATTEMPT_ANSWERS)
+        if (attemptRecord.isEmpty()) {
+            return Optional.empty();
+        }
+
+        var record = attemptRecord.get();
+
+        // Получаем все ответы с joined текстами из соответствующих таблиц
+        List<AttemptAnswerWithTextEntityResponse> answers = dsl.select(
+                        ATTEMPT_ANSWERS.ID,
+                        ATTEMPT_ANSWERS.ANSWER_TYPE,
+                        ATTEMPT_ANSWERS.SELECTED_OPTION_ID,
+                        ATTEMPT_ANSWERS.SELECTED_ERROR_ITEM_ID,
+                        ATTEMPT_ANSWERS.TEXT_ANSWER,
+                        TASK_OPTIONS.OPTION_TEXT,
+                        TASK_ERROR_ITEMS.FRAGMENT_TEXT
+                )
+                .from(ATTEMPT_ANSWERS)
+                .leftJoin(TASK_OPTIONS)
+                .on(ATTEMPT_ANSWERS.SELECTED_OPTION_ID.eq(TASK_OPTIONS.ID))
+                .leftJoin(TASK_ERROR_ITEMS)
+                .on(ATTEMPT_ANSWERS.SELECTED_ERROR_ITEM_ID.eq(TASK_ERROR_ITEMS.ID))
                 .where(ATTEMPT_ANSWERS.ATTEMPT_ID.eq(request.attemptId()))
-                .fetch(record -> AttemptAnswerEntityResponse.builder()
-                        .id(record.getId())
-                        .attemptId(record.getAttemptId())
-                        .answerType(record.getAnswerType())
-                        .selectedOptionId(record.getSelectedOptionId())
-                        .selectedErrorItemId(record.getSelectedErrorItemId())
-                        .textAnswer(record.getTextAnswer())
+                .fetch()
+                .map(fetchRecord -> AttemptAnswerWithTextEntityResponse.builder()
+                        .id(fetchRecord.get(ATTEMPT_ANSWERS.ID))
+                        .answerType(fetchRecord.get(ATTEMPT_ANSWERS.ANSWER_TYPE))
+                        .selectedOptionId(fetchRecord.get(ATTEMPT_ANSWERS.SELECTED_OPTION_ID))
+                        .selectedOptionText(fetchRecord.get(TASK_OPTIONS.OPTION_TEXT))
+                        .selectedErrorItemId(fetchRecord.get(ATTEMPT_ANSWERS.SELECTED_ERROR_ITEM_ID))
+                        .selectedErrorItemText(fetchRecord.get(TASK_ERROR_ITEMS.FRAGMENT_TEXT))
+                        .textAnswer(fetchRecord.get(ATTEMPT_ANSWERS.TEXT_ANSWER))
                         .build()
                 );
 
-        return AttemptWithAnswersEntityResponse.builder()
-                .id(attemptRecord.getId())
-                .userId(attemptRecord.getUserId())
-                .taskId(attemptRecord.getTaskId())
-                .startedAt(attemptRecord.getStartedAt())
-                .submittedAt(attemptRecord.getSubmittedAt())
-                .status(attemptRecord.getStatus())
-                .score(attemptRecord.getScore())
-                .maxScoreSnapshot(attemptRecord.getMaxScoreSnapshot())
-                .isCorrect(attemptRecord.getIsCorrect())
-                .autoChecked(attemptRecord.getAutoChecked())
-                .needsManualReview(attemptRecord.getNeedsManualReview())
-                .reviewerComment(attemptRecord.getReviewerComment())
-                .reviewedAt(attemptRecord.getReviewedAt())
+        return Optional.of(AttemptWithAnswersEntityResponse.builder()
+                .id(record.get(ATTEMPTS.ID))
+                .userId(record.get(ATTEMPTS.USER_ID))
+                .taskId(record.get(ATTEMPTS.TASK_ID))
+                .startedAt(record.get(ATTEMPTS.STARTED_AT))
+                .submittedAt(record.get(ATTEMPTS.SUBMITTED_AT))
+                .status(record.get(ATTEMPTS.STATUS))
+                .score(record.get(ATTEMPTS.SCORE))
+                .maxScoreSnapshot(record.get(ATTEMPTS.MAX_SCORE_SNAPSHOT))
+                .isCorrect(record.get(ATTEMPTS.IS_CORRECT))
+                .autoChecked(record.get(ATTEMPTS.AUTO_CHECKED))
+                .needsManualReview(record.get(ATTEMPTS.NEEDS_MANUAL_REVIEW))
+                .reviewerComment(record.get(ATTEMPTS.REVIEWER_COMMENT))
+                .reviewedAt(record.get(ATTEMPTS.REVIEWED_AT))
                 .answers(answers)
-                .build();
+                .build());
     }
 
     /**
      * Создает новую попытку для TEST или ERROR_FIND типа задания (с автоматической проверкой)
      */
-    @Transactional
-    public AttemptResultEntityResponse createAutoCheckedAttempt(SubmitAttemptEntityRequest request) {
+    public Optional<AttemptResultEntityResponse> createAutoCheckedAttempt(SubmitAttemptEntityRequest request) {
         LocalDateTime now = LocalDateTime.now();
 
         // Создаем запись в attempts
@@ -144,7 +174,7 @@ public class AttemptsRepository {
                 .fetchOne();
 
         if (attempt == null) {
-            throw new RuntimeException("Failed to create attempt");
+            return Optional.empty();
         }
 
         // Создаем запись в attempt_answers
@@ -156,18 +186,17 @@ public class AttemptsRepository {
                 .set(ATTEMPT_ANSWERS.TEXT_ANSWER, request.textAnswer())
                 .execute();
 
-        return AttemptResultEntityResponse.builder()
+        return Optional.of(AttemptResultEntityResponse.builder()
                 .attemptId(attempt.getId())
                 .status(request.status())
                 .score(request.score())
-                .build();
+                .build());
     }
 
     /**
      * Создает новую попытку для OPEN типа задания (требует ручной проверки)
      */
-    @Transactional
-    public AttemptResultEntityResponse createOpenAttempt(SubmitAttemptEntityRequest request) {
+     public Optional<AttemptResultEntityResponse> createOpenAttempt(SubmitAttemptEntityRequest request) {
         LocalDateTime now = LocalDateTime.now();
 
         // Создаем запись в attempts
@@ -187,7 +216,7 @@ public class AttemptsRepository {
                 .fetchOne();
 
         if (attempt == null) {
-            throw new RuntimeException("Failed to create attempt");
+            return Optional.empty();
         }
 
         // Создаем запись в attempt_answers
@@ -199,11 +228,11 @@ public class AttemptsRepository {
                 .set(ATTEMPT_ANSWERS.TEXT_ANSWER, request.textAnswer())
                 .execute();
 
-        return AttemptResultEntityResponse.builder()
+        return Optional.of(AttemptResultEntityResponse.builder()
                 .attemptId(attempt.getId())
                 .status(request.status())
                 .score(null)
-                .build();
+                .build());
     }
 
     /**
@@ -221,12 +250,14 @@ public class AttemptsRepository {
     /**
      * Получает сумму баллов пользователя по всем заданиям тренажера
      */
-    public Integer getTotalScoreByUserAndTrainer(@Nonnull Long userId, @Nonnull Long trainerId) {
-        return dsl.select(org.jooq.impl.DSL.sum(ATTEMPTS.SCORE))
+    public Optional<Integer> getTotalScoreByUserAndTrainer(@Nonnull Long userId, @Nonnull Long trainerId) {
+        Integer totalScore = dsl.select(org.jooq.impl.DSL.sum(ATTEMPTS.SCORE))
                 .from(ATTEMPTS)
                 .join(TASKS).on(ATTEMPTS.TASK_ID.eq(TASKS.ID))
                 .where(ATTEMPTS.USER_ID.eq(userId))
                 .and(TASKS.TRAINER_ID.eq(trainerId))
                 .fetchOne(0, Integer.class);
+
+        return Optional.ofNullable(totalScore);
     }
 }

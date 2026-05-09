@@ -59,11 +59,11 @@ components:
         task_id:
           type: integer
           format: int64
-        user_id:
-          type: integer
-          format: int64
+          exclusiveMinimum: 0
         answer:
           type: string
+          pattern: \S
+          maxLength: 10000
 paths:
   /attempts:
     post:
@@ -114,7 +114,7 @@ paths:
       - Attempt Controller
   /attempts/{taskId}:
     get:
-      summary: Получение попытки по конкретному заданию
+      summary: Получение всех попыток по конкретному заданию
       parameters:
       - name: taskId
         in: path

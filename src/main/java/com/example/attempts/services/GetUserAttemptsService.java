@@ -4,6 +4,7 @@ import com.example.attempts.dto.responses.AttemptResponse;
 import com.example.attempts.entities.responses.AttemptEntityResponse;
 import com.example.repositories.AttemptsRepository;
 import com.example.security.current_user_context.CurrentUserContext;
+import jakarta.annotation.Nonnull;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -29,7 +30,7 @@ public class GetUserAttemptsService {
                 .toList();
     }
 
-    private AttemptResponse mapToDto(AttemptEntityResponse entity) {
+    private AttemptResponse mapToDto(@Nonnull AttemptEntityResponse entity) {
         return AttemptResponse.builder()
                 .id(entity.id())
                 .taskId(entity.taskId())

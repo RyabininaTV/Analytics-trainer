@@ -2,12 +2,16 @@ package com.example.attempts.services;
 
 import com.example.attempts.dto.responses.AttemptResponse;
 import com.example.attempts.entities.requests.GetAttemptByTaskIdEntityRequest;
-import com.example.attempts.exceptions.AttemptNotFoundException;
+import com.example.attempts.entities.responses.AttemptEntityResponse;
+import com.example.attempts.exceptions.TaskAttemptNotFoundException;
 import com.example.repositories.AttemptsRepository;
 import com.example.security.current_user_context.CurrentUserContext;
+import jakarta.annotation.Nonnull;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+
+import java.util.List;
 
 import static lombok.AccessLevel.PRIVATE;
 
@@ -19,19 +23,24 @@ public class GetAttemptByTaskIdService {
     CurrentUserContext currentUserContext;
     AttemptsRepository attemptsRepository;
 
-    public AttemptResponse getAttemptByTaskId(long taskId) {
+    public List<AttemptResponse> getAttemptsByTaskId(long taskId) {
         GetAttemptByTaskIdEntityRequest request = GetAttemptByTaskIdEntityRequest.builder()
                 .userId(currentUserContext.require().id())
                 .taskId(taskId)
                 .build();
 
-        var entity = attemptsRepository.getAttemptByTaskId(request)
-                .orElseThrow(() -> new AttemptNotFoundException("No attempt found for task: " + taskId));
+        List<AttemptEntityResponse> entities = attemptsRepository.getAttemptsByTaskId(request);
 
-        return mapToDto(entity);
+        if (entities.isEmpty()) {
+            throw new TaskAttemptNotFoundException(taskId);
+        }
+
+        return entities.stream()
+                .map(this::mapToDto)
+                .toList();
     }
 
-    private AttemptResponse mapToDto(com.example.attempts.entities.responses.AttemptEntityResponse entity) {
+    private AttemptResponse mapToDto(@Nonnull AttemptEntityResponse entity) {
         return AttemptResponse.builder()
                 .id(entity.id())
                 .taskId(entity.taskId())

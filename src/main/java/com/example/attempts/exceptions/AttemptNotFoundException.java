@@ -9,7 +9,4 @@ public class AttemptNotFoundException extends WebApplicationException {
         super("Attempt not found by id: " + id, Response.Status.NOT_FOUND);
     }
 
-    public AttemptNotFoundException(String message) {
-        super(message, Response.Status.NOT_FOUND);
-    }
 }
