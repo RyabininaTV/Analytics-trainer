@@ -202,6 +202,36 @@ public class TasksRecord extends UpdatableRecordImpl<TasksRecord> {
         return (LocalDateTime) get(10);
     }
 
+    /**
+     * Setter for <code>public.tasks.simulator_id</code>.
+     */
+    public TasksRecord setSimulatorId(Long value) {
+        set(11, value);
+        return this;
+    }
+
+    /**
+     * Getter for <code>public.tasks.simulator_id</code>.
+     */
+    public Long getSimulatorId() {
+        return (Long) get(11);
+    }
+
+    /**
+     * Setter for <code>public.tasks.sort_order</code>.
+     */
+    public TasksRecord setSortOrder(Integer value) {
+        set(12, value);
+        return this;
+    }
+
+    /**
+     * Getter for <code>public.tasks.sort_order</code>.
+     */
+    public Integer getSortOrder() {
+        return (Integer) get(12);
+    }
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -225,7 +255,7 @@ public class TasksRecord extends UpdatableRecordImpl<TasksRecord> {
     /**
      * Create a detached, initialised TasksRecord
      */
-    public TasksRecord(Long id, Long trainerId, TaskTypeEnum taskType, String title, String description, String content, Integer maxScore, Boolean isActive, Boolean autoCheckEnabled, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public TasksRecord(Long id, Long trainerId, TaskTypeEnum taskType, String title, String description, String content, Integer maxScore, Boolean isActive, Boolean autoCheckEnabled, LocalDateTime createdAt, LocalDateTime updatedAt, Long simulatorId, Integer sortOrder) {
         super(Tasks.TASKS);
 
         setId(id);
@@ -239,6 +269,8 @@ public class TasksRecord extends UpdatableRecordImpl<TasksRecord> {
         setAutoCheckEnabled(autoCheckEnabled);
         setCreatedAt(createdAt);
         setUpdatedAt(updatedAt);
+        setSimulatorId(simulatorId);
+        setSortOrder(sortOrder);
         resetChangedOnNotNull();
     }
 }
