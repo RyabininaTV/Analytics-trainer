@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.jooq.DSLContext;
 
+import java.util.Optional;
 import java.util.List;
 
 import static com.example.jooq.generated.tables.TaskOptions.TASK_OPTIONS;
@@ -20,6 +21,11 @@ public class TaskOptionsRepository {
 
     DSLContext dsl;
 
+    public Optional<String> findOptionTextById(Long optionId) {
+        return dsl.select(TASK_OPTIONS.OPTION_TEXT)
+                .from(TASK_OPTIONS)
+                .where(TASK_OPTIONS.ID.eq(optionId))
+                .fetchOptional(TASK_OPTIONS.OPTION_TEXT);
     public List<CreateTaskOptionResponseEntity> create(@Nonnull List<CreateTaskOptionRequestEntity> requests) {
         return requests.stream()
                 .map(this::create)

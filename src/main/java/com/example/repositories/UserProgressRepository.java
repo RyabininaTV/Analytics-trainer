@@ -3,18 +3,21 @@ package com.example.repositories;
 import com.example.progress_and_profile.entity.responses.FindTotalUserProgressResponseEntity;
 import com.example.progress_and_profile.entity.responses.FindUserProgressByUserIdResponseEntity;
 import com.example.ratings_and_achievements.entity.responses.FindLeaderboardByTrainerIdResponseEntity;
+import com.example.attempts.entities.requests.UpdateUserProgressEntityRequest;
 import com.example.trainers.entities.requests.DeleteUserProgressByTrainerIdEntityRequest;
 import com.example.trainers.entities.requests.GetUserProgressByTrainerIdEntityRequest;
 import com.example.trainers.entities.responses.UserProgressByTrainerIdEntityResponse;
 import com.example.utils.ProgressStatUtil;
 import jakarta.annotation.Nonnull;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.jooq.DSLContext;
 import org.jooq.Field;
 import org.jooq.impl.DSL;
 
+import java.time.LocalDateTime;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -59,6 +62,35 @@ public class UserProgressRepository {
                 .execute();
     }
 
+    @Transactional
+    public void updateProgress(@Nonnull UpdateUserProgressEntityRequest request) {
+        var existing = dsl.selectFrom(USER_PROGRESS)
+                .where(USER_PROGRESS.USER_ID.eq(request.userId()))
+                .and(USER_PROGRESS.TRAINER_ID.eq(request.trainerId()))
+                .fetchOptional();
+
+        if (existing.isPresent()) {
+            dsl.update(USER_PROGRESS)
+                    .set(USER_PROGRESS.COMPLETED_TASKS_COUNT, request.completedTasksCount())
+                    .set(USER_PROGRESS.TOTAL_TASKS_COUNT, request.totalTasksCount())
+                    .set(USER_PROGRESS.TOTAL_SCORE, request.totalScore())
+                    .set(USER_PROGRESS.COMPLETION_PERCENT, request.completionPercent())
+                    .set(USER_PROGRESS.LAST_ACTIVITY_AT, LocalDateTime.now())
+                    .where(USER_PROGRESS.USER_ID.eq(request.userId()))
+                    .and(USER_PROGRESS.TRAINER_ID.eq(request.trainerId()))
+                    .execute();
+        } else {
+            dsl.insertInto(USER_PROGRESS)
+                    .set(USER_PROGRESS.USER_ID, request.userId())
+                    .set(USER_PROGRESS.TRAINER_ID, request.trainerId())
+                    .set(USER_PROGRESS.COMPLETED_TASKS_COUNT, request.completedTasksCount())
+                    .set(USER_PROGRESS.TOTAL_TASKS_COUNT, request.totalTasksCount())
+                    .set(USER_PROGRESS.TOTAL_SCORE, request.totalScore())
+                    .set(USER_PROGRESS.COMPLETION_PERCENT, request.completionPercent())
+                    .set(USER_PROGRESS.LAST_ACTIVITY_AT, LocalDateTime.now())
+                    .execute();
+        }
+    }
     public List<FindUserProgressByUserIdResponseEntity> findByUserId(@Nonnull Long userId) {
         return dsl.select(
                         USER_PROGRESS.TRAINER_ID,

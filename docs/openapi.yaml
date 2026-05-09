@@ -2,89 +2,6 @@
 openapi: 3.1.0
 components:
   schemas:
-    CreateTaskErrorItemRequest:
-      type: object
-      required:
-      - fragment_text
-      - is_error
-      properties:
-        fragment_text:
-          type: string
-          pattern: \S
-        is_error:
-          type: boolean
-        explanation:
-          type: string
-    CreateTaskOptionRequest:
-      type: object
-      required:
-      - option_text
-      - is_correct
-      properties:
-        option_text:
-          type: string
-          pattern: \S
-        is_correct:
-          type: boolean
-    CreateTaskRequest:
-      type: object
-      required:
-      - trainer_id
-      - task_type
-      - title
-      - description
-      - max_score
-      - is_active
-      - auto_check_enabled
-      properties:
-        trainer_id:
-          type: integer
-          format: int64
-          exclusiveMinimum: 0
-        task_type:
-          type: string
-          pattern: TEST|ERROR_FIND|OPEN
-        title:
-          type: string
-          pattern: \S
-          maxLength: 255
-        description:
-          type: string
-          pattern: \S
-        content:
-          type: string
-        max_score:
-          type: integer
-          format: int32
-          minimum: 0
-        is_active:
-          type: boolean
-        auto_check_enabled:
-          type: boolean
-        options:
-          type: array
-          items:
-            $ref: "#/components/schemas/CreateTaskOptionRequest"
-        error_items:
-          type: array
-          items:
-            $ref: "#/components/schemas/CreateTaskErrorItemRequest"
-    CreateTrainerRequest:
-      type: object
-      required:
-      - title
-      - is_active
-      properties:
-        title:
-          type: string
-          pattern: \S
-        description:
-          type: string
-        difficulty_level:
-          type: string
-          pattern: EASY|MEDIUM|HARD
-        is_active:
-          type: boolean
     LoginRequest:
       type: object
       required:
@@ -133,121 +50,29 @@ components:
           pattern: \S
           minLength: 8
           maxLength: 100
-    UpdateProfileRequest:
+    SubmitAttemptRequest:
       type: object
       required:
-      - email
-      - username
+      - task_id
+      - answer
       properties:
-        email:
-          type: string
-          pattern: \S
-          maxLength: 255
-        username:
-          type: string
-          pattern: \S
-          minLength: 3
-          maxLength: 100
-        old_password:
-          type: string
-          minLength: 8
-          maxLength: 100
-        new_password:
-          type: string
-          minLength: 8
-          maxLength: 100
-    UpdateTaskErrorItemRequest:
-      type: object
-      required:
-      - fragment_text
-      - is_error
-      properties:
-        fragment_text:
-          type: string
-          pattern: \S
-        is_error:
-          type: boolean
-        explanation:
-          type: string
-    UpdateTaskOptionRequest:
-      type: object
-      required:
-      - option_text
-      - is_correct
-      properties:
-        option_text:
-          type: string
-          pattern: \S
-        is_correct:
-          type: boolean
-    UpdateTaskRequest:
-      type: object
-      required:
-      - trainer_id
-      - task_type
-      - title
-      - description
-      - max_score
-      - is_active
-      - auto_check_enabled
-      properties:
-        trainer_id:
+        task_id:
           type: integer
           format: int64
           exclusiveMinimum: 0
-        task_type:
-          type: string
-          pattern: TEST|ERROR_FIND|OPEN
-        title:
+        answer:
           type: string
           pattern: \S
-          maxLength: 255
-        description:
-          type: string
-          pattern: \S
-        content:
-          type: string
-        max_score:
-          type: integer
-          format: int32
-          minimum: 0
-        is_active:
-          type: boolean
-        auto_check_enabled:
-          type: boolean
-        options:
-          type: array
-          items:
-            $ref: "#/components/schemas/UpdateTaskOptionRequest"
-        error_items:
-          type: array
-          items:
-            $ref: "#/components/schemas/UpdateTaskErrorItemRequest"
-    UpdateTrainerRequest:
-      type: object
-      required:
-      - title
-      - is_active
-      properties:
-        title:
-          type: string
-          pattern: \S
-          maxLength: 255
-        description:
-          type: string
-        difficulty_level:
-          type: string
-          pattern: EASY|MEDIUM|HARD
-        is_active:
-          type: boolean
+          maxLength: 10000
 paths:
-  /admin/tasks:
+  /attempts:
     post:
+      summary: Отправка ответа на задание
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/CreateTaskRequest"
+              $ref: "#/components/schemas/SubmitAttemptRequest"
         required: true
       responses:
         "200":
@@ -257,36 +82,21 @@ paths:
               schema: {}
         "400":
           description: Bad Request
-      summary: Create Task
       tags:
-      - Admin Controller
-  /admin/tasks/{id}:
-    put:
-      parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: integer
-          format: int64
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/UpdateTaskRequest"
-        required: true
+      - Attempt Controller
+    get:
+      summary: Получение истории всех попыток пользователя
       responses:
         "200":
           description: OK
           content:
             application/json:
               schema: {}
-        "400":
-          description: Bad Request
-      summary: Update Task
       tags:
-      - Admin Controller
-    delete:
+      - Attempt Controller
+  /attempts/{id}/details:
+    get:
+      summary: Детали попытки (включая ответ)
       parameters:
       - name: id
         in: path
@@ -300,54 +110,26 @@ paths:
           content:
             application/json:
               schema: {}
-      summary: Delete Task
       tags:
-      - Admin Controller
-  /admin/trainers:
-    post:
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/CreateTrainerRequest"
-        required: true
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema: {}
-        "400":
-          description: Bad Request
-      summary: Create Trainer
-      tags:
-      - Admin Controller
-  /admin/trainers/{id}:
-    put:
+      - Attempt Controller
+  /attempts/{taskId}:
+    get:
+      summary: Получение всех попыток по конкретному заданию
       parameters:
-      - name: id
+      - name: taskId
         in: path
         required: true
         schema:
           type: integer
           format: int64
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/UpdateTrainerRequest"
-        required: true
       responses:
         "200":
           description: OK
           content:
             application/json:
               schema: {}
-        "400":
-          description: Bad Request
-      summary: Update Trainer
       tags:
-      - Admin Controller
+      - Attempt Controller
   /auth/login:
     post:
       summary: Вход пользователя
@@ -424,97 +206,6 @@ paths:
           description: Bad Request
       tags:
       - Auth Controller
-  /leaderboard:
-    get:
-      summary: Глобальный рейтинг всех пользователей
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema: {}
-      tags:
-      - Leaderboard Controller
-  /leaderboard/{trainerId}:
-    get:
-      parameters:
-      - name: trainerId
-        in: path
-        required: true
-        schema:
-          type: integer
-          format: int64
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema: {}
-      summary: Get Leaderboard By Trainer
-      tags:
-      - Leaderboard Controller
-  /profile:
-    put:
-      summary: Обновление профиля пользователя
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/UpdateProfileRequest"
-        required: true
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema: {}
-        "400":
-          description: Bad Request
-      tags:
-      - Profile Controller
-    get:
-      summary: Получение профиля пользователя
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema: {}
-      tags:
-      - Profile Controller
-  /progress:
-    get:
-      summary: Получение общего прогресса пользователя
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema: {}
-      tags:
-      - Progress Controller
-  /progress/histrory:
-    get:
-      summary: История изменения прогресса пользователя
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema: {}
-      tags:
-      - Progress Controller
-  /progress/trainers:
-    get:
-      summary: Прогресс пользователя по всем тренажерам
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema: {}
-      tags:
-      - Progress Controller
   /tasks:
     get:
       summary: Список всех заданий
@@ -642,7 +333,7 @@ info:
   title: Analytics-trainer API
   version: 1.0-SNAPSHOT
 servers:
-- url: http://localhost:8080
+- url: http://localhost:8087
   description: Auto generated value
-- url: http://0.0.0.0:8080
+- url: http://0.0.0.0:8087
   description: Auto generated value
