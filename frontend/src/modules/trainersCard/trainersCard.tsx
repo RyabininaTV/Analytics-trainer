@@ -1,11 +1,18 @@
 import { type FC } from "react";
-import { TrainersCardView } from "../../components/trainersCardView";
-import type { TrainersCardProps } from "../../pages/trainersList/types";
+import { CardInList } from "../../components/cardInList";
+import type { TrainersCardProps } from "./types";
+import { TrainersCardView } from "./components/trainersCardView";
 
 const TrainersCard: FC<TrainersCardProps> = (props) => {
   const { trainersItem } = props;
 
-  return <TrainersCardView key={trainersItem.id} trainersItem={trainersItem} />;
+  // здесь будет дополнительная бизнес логика
+
+  return (
+    <CardInList url={`/trainers/${trainersItem.id}/tasks`}>
+      <TrainersCardView trainersItem={trainersItem} />
+    </CardInList>
+  );
 };
 
 export default TrainersCard;

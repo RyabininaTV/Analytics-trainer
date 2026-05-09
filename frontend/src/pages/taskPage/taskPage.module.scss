@@ -1,0 +1,24 @@
+@use "../../styles/constants.scss" as vars;
+
+.taskPage {
+
+  .subtitleInfo {
+    span + span {
+      margin-left: 10px;
+    }
+
+    & > span { 
+      font-size: 16px;
+    }
+
+    .infoDescription {
+      font-size: 12px;
+      color: vars.$grey;
+    }
+  }
+
+  .description {
+    font-size: 20px;
+    margin: 20px 0;
+  }
+}

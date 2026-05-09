@@ -1,13 +1,11 @@
 import type { FC } from "react";
-import { Link } from "react-router-dom";
-import type { TrainersCardProps } from "../../pages/trainersList/types";
 import styles from "./trainersCardView.module.scss";
-import "./trainersCardView.ant.scss";
+import type { TrainersCardProps } from "../types";
 
-const TrainersCardView: FC<TrainersCardProps> = (props) => {
+export const TrainersCardView: FC<TrainersCardProps> = (props) => {
   const { trainersItem } = props;
   return (
-    <Link to={`trainers/${trainersItem.id}`} className={styles.trainersCard}>
+    <>
       <p className={styles.title}>{trainersItem.title}</p>
       <p className={styles.description}>{trainersItem.description}</p>
       <div className={styles.meta}>
@@ -20,8 +18,6 @@ const TrainersCardView: FC<TrainersCardProps> = (props) => {
           {trainersItem.difficulty_level}
         </span>
       </div>
-    </Link>
+    </>
   );
 };
-
-export default TrainersCardView;
