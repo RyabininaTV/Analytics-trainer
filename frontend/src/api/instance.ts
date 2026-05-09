@@ -1,8 +1,7 @@
 import axios from "axios";
 import { getFromLocalStorage } from "../utils";
 import type { RegistrationResponse } from "../hooks/api/useRegistrationQuery";
-
-const PUBLIC_ENDPOINTS = ["auth/login", "auth/register"];
+import { PUBLIC_ENDPOINTS } from "../constants/constants";
 
 const api = axios.create({
   baseURL: "http://localhost:8080/",
@@ -26,5 +25,31 @@ api.interceptors.request.use((config) => {
 
   return config;
 });
+
+api.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
+    console.log("originalRequest: ", originalRequest);
+
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      try {
+        const refreshToken =
+          getFromLocalStorage<RegistrationResponse>("user")?.refreshToken;
+
+        const response = await axios.post("auth/refresh", { refreshToken });
+        console.log("response: ", response);
+
+        return api(originalRequest);
+      } catch (refreshError) {
+        localStorage.removeItem("user");
+        window.location.href = "/login";
+        return Promise.reject(refreshError);
+      }
+    }
+
+    return Promise.reject(error);
+  },
+);
 
 export default api;

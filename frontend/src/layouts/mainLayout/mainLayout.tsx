@@ -1,4 +1,4 @@
-import { useEffect, type FC } from "react";
+import { Suspense, useEffect, type FC } from "react";
 import {
   Link,
   NavLink,
@@ -11,6 +11,8 @@ import { Button, Col } from "antd";
 import { useLogoutQuery } from "../../hooks/api";
 import { getFromLocalStorage } from "../../utils";
 import type { RegistrationResponse } from "../../hooks/api/useRegistrationQuery";
+import { LoadingSpin } from "../../components/loadingSpin";
+import { BackSpace } from "../../modules/backSpace";
 
 const menuItemHandler = ({ isActive }: NavLinkRenderProps) => {
   return isActive ? styles.active : "";
@@ -62,9 +64,15 @@ const MainLayout: FC = () => {
         )}
       </header>
       <main>
-        <Col span={16}>
-          <Outlet />
+        <Col span={4}>
+          <BackSpace />
         </Col>
+        <Col span={16}>
+          <Suspense fallback={<LoadingSpin />}>
+            <Outlet />
+          </Suspense>
+        </Col>
+        <Col span={4} />
       </main>
     </div>
   );
