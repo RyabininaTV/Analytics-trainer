@@ -5,8 +5,7 @@ import com.example.auth.dto.responses.AuthResponse;
 import com.example.auth.entities.responses.FindUserByEmailResponseEntity;
 import com.example.auth.exceptions.InvalidEmailOrPasswordException;
 import com.example.auth.exceptions.UserIsBlockedException;
-import com.example.auth.services.LoginService;
-import com.example.repositories.UsersRepository;
+import com.example.repositories.UserRepository;
 import com.example.utils.JwtUtil;
 import com.example.yaml.AppYamlConfig;
 import io.jsonwebtoken.Claims;
@@ -43,7 +42,7 @@ class LoginServiceTest {
     private static final long REFRESH_TOKEN_TTL_DAYS = 14L;
 
     @Mock
-    UsersRepository usersRepository;
+    UserRepository userRepository;
 
     @Mock
     AppYamlConfig appYaml;
@@ -62,10 +61,10 @@ class LoginServiceTest {
 
             FindUserByEmailResponseEntity user = activeUser(passwordHash);
 
-            when(usersRepository.findByEmail(EMAIL))
+            when(userRepository.findByEmail(EMAIL))
                     .thenReturn(Optional.of(user));
 
-            LoginService loginService = new LoginService(usersRepository, appYaml);
+            LoginService loginService = new LoginService(userRepository, appYaml);
 
             AuthResponse response = loginService.login(LoginRequest.builder()
                     .email(RAW_EMAIL)
@@ -95,16 +94,16 @@ class LoginServiceTest {
             assertEquals(String.valueOf(USER_ID), refreshClaims.getSubject());
             assertEquals("refresh", refreshClaims.get("token_type", String.class));
 
-            verify(usersRepository).findByEmail(EMAIL);
-            verifyNoMoreInteractions(usersRepository);
+            verify(userRepository).findByEmail(EMAIL);
+            verifyNoMoreInteractions(userRepository);
         }
 
         @Test
         void userDoesNotExist_shouldThrowInvalidEmailOrPasswordException() {
-            when(usersRepository.findByEmail(EMAIL))
+            when(userRepository.findByEmail(EMAIL))
                     .thenReturn(Optional.empty());
 
-            LoginService loginService = new LoginService(usersRepository, appYaml);
+            LoginService loginService = new LoginService(userRepository, appYaml);
 
             assertThrows(
                     InvalidEmailOrPasswordException.class,
@@ -115,8 +114,8 @@ class LoginServiceTest {
                     )
             );
 
-            verify(usersRepository).findByEmail(EMAIL);
-            verifyNoMoreInteractions(usersRepository);
+            verify(userRepository).findByEmail(EMAIL);
+            verifyNoMoreInteractions(userRepository);
             verifyNoInteractions(appYaml);
         }
 
@@ -126,10 +125,10 @@ class LoginServiceTest {
 
             FindUserByEmailResponseEntity user = activeUser(passwordHash);
 
-            when(usersRepository.findByEmail(EMAIL))
+            when(userRepository.findByEmail(EMAIL))
                     .thenReturn(Optional.of(user));
 
-            LoginService loginService = new LoginService(usersRepository, appYaml);
+            LoginService loginService = new LoginService(userRepository, appYaml);
 
             assertThrows(
                     InvalidEmailOrPasswordException.class,
@@ -140,8 +139,8 @@ class LoginServiceTest {
                     )
             );
 
-            verify(usersRepository).findByEmail(EMAIL);
-            verifyNoMoreInteractions(usersRepository);
+            verify(userRepository).findByEmail(EMAIL);
+            verifyNoMoreInteractions(userRepository);
             verifyNoInteractions(appYaml);
         }
 
@@ -151,10 +150,10 @@ class LoginServiceTest {
 
             FindUserByEmailResponseEntity user = blockedUser(passwordHash);
 
-            when(usersRepository.findByEmail(EMAIL))
+            when(userRepository.findByEmail(EMAIL))
                     .thenReturn(Optional.of(user));
 
-            LoginService loginService = new LoginService(usersRepository, appYaml);
+            LoginService loginService = new LoginService(userRepository, appYaml);
 
             assertThrows(
                     UserIsBlockedException.class,
@@ -165,8 +164,8 @@ class LoginServiceTest {
                     )
             );
 
-            verify(usersRepository).findByEmail(EMAIL);
-            verifyNoMoreInteractions(usersRepository);
+            verify(userRepository).findByEmail(EMAIL);
+            verifyNoMoreInteractions(userRepository);
             verifyNoInteractions(appYaml);
         }
 

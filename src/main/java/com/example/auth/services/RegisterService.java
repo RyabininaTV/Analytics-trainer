@@ -6,7 +6,7 @@ import com.example.auth.entities.requests.CreateUserRequestEntity;
 import com.example.auth.entities.responses.CreateUserResponseEntity;
 import com.example.auth.exceptions.EmailIsAlreadyUsedException;
 import com.example.auth.exceptions.UsernameIsAlreadyUsedException;
-import com.example.repositories.UsersRepository;
+import com.example.repositories.UserRepository;
 import com.example.utils.EmailUtil;
 import com.example.utils.JwtUtil;
 import com.example.yaml.AppYamlConfig;
@@ -23,7 +23,7 @@ import static lombok.AccessLevel.PRIVATE;
 @FieldDefaults(level = PRIVATE, makeFinal = true)
 public class RegisterService {
 
-    UsersRepository usersRepository;
+    UserRepository userRepository;
 
     AppYamlConfig appYaml;
 
@@ -31,16 +31,16 @@ public class RegisterService {
         String email = EmailUtil.normalize(request.email());
         String username = request.username().trim();
 
-        if (usersRepository.existsByEmail(email)) {
+        if (userRepository.existsByEmail(email)) {
             throw new EmailIsAlreadyUsedException();
         }
-        if (usersRepository.existsByUsername(username)) {
+        if (userRepository.existsByUsername(username)) {
             throw new UsernameIsAlreadyUsedException();
         }
 
         String passwordHash = BcryptUtil.bcryptHash(request.password());
 
-        CreateUserResponseEntity user = usersRepository.create(CreateUserRequestEntity.builder()
+        CreateUserResponseEntity user = userRepository.create(CreateUserRequestEntity.builder()
                         .email(email)
                         .username(username)
                         .passwordHash(passwordHash)

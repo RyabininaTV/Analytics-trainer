@@ -7,7 +7,7 @@ import com.example.auth.exceptions.InvalidRefreshTokenException;
 import com.example.auth.exceptions.RefreshTokenIsRevokedException;
 import com.example.auth.exceptions.UserIsBlockedException;
 import com.example.repositories.RevokedTokensRepository;
-import com.example.repositories.UsersRepository;
+import com.example.repositories.UserRepository;
 import com.example.utils.JwtUtil;
 import com.example.yaml.AppYamlConfig;
 import io.jsonwebtoken.Claims;
@@ -24,7 +24,7 @@ import static lombok.AccessLevel.PRIVATE;
 @FieldDefaults(level = PRIVATE, makeFinal = true)
 public class RefreshTokenService {
 
-    UsersRepository usersRepository;
+    UserRepository userRepository;
     RevokedTokensRepository revokedTokensRepository;
 
     AppYamlConfig appYaml;
@@ -39,7 +39,7 @@ public class RefreshTokenService {
             throw new RefreshTokenIsRevokedException();
         }
 
-        FindUserByIdResponseEntity user = usersRepository.findById(Long.valueOf(claims.getSubject()))
+        FindUserByIdResponseEntity user = userRepository.findById(Long.valueOf(claims.getSubject()))
                 .orElseThrow(InvalidRefreshTokenException::new);
 
         if (user.status() != ACTIVE) {
