@@ -1,0 +1,19 @@
+@use "../../styles/constants.scss" as vars;
+
+.emptyContent {
+  font-size: 24px;
+  padding-top: 40px;
+  color: vars.$red;
+}
+
+.contentWrapper {
+  margin-bottom: 20px;
+
+  p:first-child {
+    color: vars.$grey;
+  }
+
+  p:last-child {
+    font-size: 16px;
+  }
+}

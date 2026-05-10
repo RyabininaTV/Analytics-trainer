@@ -27,41 +27,52 @@ const MainLayout: FC = () => {
   const isAuth = user ? true : false;
 
   useEffect(() => {
-    if (!isAuth) navigate("login");
+    if (!isAuth) navigate("/login");
   }, [isAuth, navigate]);
 
   return (
     <div>
       <header className={styles.header}>
-        <nav>
-          <ul>
-            <li>
-              <NavLink to={"/"} className={menuItemHandler}>
-                <span>Тренажеры</span>
-              </NavLink>
-            </li>
-          </ul>
-        </nav>
-        {!isAuth ? (
-          <Link
-            to={"login"}
-            onClick={(e) => {
-              e.stopPropagation();
-            }}
-          >
-            <Button color="primary" variant="outlined">
-              Войти
-            </Button>
-          </Link>
-        ) : (
-          <Button
-            onClick={() => logout.mutate()}
-            color="danger"
-            variant="outlined"
-          >
-            Выйти
-          </Button>
-        )}
+        <Col span={3} />
+        <Col span={18}>
+          <div className={styles.menu}>
+            <nav>
+              <ul>
+                <li>
+                  <NavLink to={"/"} className={menuItemHandler}>
+                    <span>Тренажеры</span>
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to={"/profile"} className={menuItemHandler}>
+                    <span>Профиль</span>
+                  </NavLink>
+                </li>
+              </ul>
+            </nav>
+            {!isAuth ? (
+              <Link
+                to={"/login"}
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
+              >
+                <Button color="primary" variant="outlined">
+                  Войти
+                </Button>
+              </Link>
+            ) : (
+              <Button
+                onClick={() => logout.mutate()}
+                color="danger"
+                variant="outlined"
+              >
+                Выйти
+              </Button>
+            )}
+          </div>
+        </Col>
+        <Col span={3} />
       </header>
       <main>
         <Col span={4}>
