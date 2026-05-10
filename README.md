@@ -32,6 +32,7 @@
 
 ## 📘 Документация по процессам
 - [Endpoints](docs/endpoints/index.md)
+- [База данных](docs/database.md)
 - [Git flow](docs/git-flow.md)
 - [Принципы разработки](docs/principles-of-development.md)
 
