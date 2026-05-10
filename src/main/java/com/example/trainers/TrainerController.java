@@ -28,12 +28,14 @@ public class TrainerController {
     ResetUserProgressByTrainerIdService resetUserProgressByTrainerIdService;
 
     @GET
+    @Secured(roles = {USER, ADMIN})
     @Operation(summary = "Получение списка всех тренажеров")
     public Response getAllTrainers() {
         return Response.ok(getAllTrainersService.getAllTrainers()).build();
     }
 
     @GET
+    @Secured(roles = {USER, ADMIN})
     @Path(GET_TRAINER_INFO_BY_ID)
     @Operation(summary = "Получение информации о тренажере по ID")
     public Response getTrainerInfoById(@PathParam("id") long id) {
@@ -41,6 +43,7 @@ public class TrainerController {
     }
 
     @GET
+    @Secured(roles = {USER, ADMIN})
     @Path(GET_TRAINER_TASKS_BY_ID)
     @Operation(summary = "Получение задач тренажера по ID")
     public Response getTrainerTasksById(@PathParam("id") long id) {
