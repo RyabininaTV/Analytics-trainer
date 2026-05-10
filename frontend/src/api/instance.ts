@@ -16,7 +16,7 @@ api.interceptors.request.use((config) => {
 
   if (!isPublicEndpoint) {
     const accessToken =
-      getFromLocalStorage<RegistrationResponse>("user")?.accessToken;
+      getFromLocalStorage<RegistrationResponse>("user")?.access_token;
 
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;
@@ -35,7 +35,7 @@ api.interceptors.response.use(
     if (error.response?.status === 401 && !originalRequest._retry) {
       try {
         const refreshToken =
-          getFromLocalStorage<RegistrationResponse>("user")?.refreshToken;
+          getFromLocalStorage<RegistrationResponse>("user")?.refresh_token;
 
         const response = await axios.post("auth/refresh", { refreshToken });
         console.log("response: ", response);

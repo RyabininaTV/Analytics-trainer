@@ -8,8 +8,6 @@ import { getFromLocalStorage } from "../../utils";
 const BackSpaceView: FC = () => {
   const location = useLocation();
 
-  // const linksList = activeBackSpaceInPage["taskPage"];
-
   const linksList = backSpaceLinks.find((link) =>
     link.matchLink.test(location.pathname),
   )?.goBack;
