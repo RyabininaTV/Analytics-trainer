@@ -25,12 +25,28 @@ export interface TaskResponse {
 
 export type AllTasksResponse = Array<TaskResponse>;
 
-export interface TaskDetailResponse {
-  auto_check: boolean;
-  description: string;
+export interface TaskDetailOptions {
   id: number;
-  max_score: number;
-  title: string;
+  option_text: string;
+}
+
+export interface TaskDetailErrorItem {
+  id: number;
+  fragment_text: string;
+}
+
+export interface TaskDetailResponse {
+  id: number;
   trainer_id: number;
-  type: string;
+  trainer_title: string;
+  task_type: string;
+  title: string;
+  description: string;
+  max_score: number;
+  auto_check_enabled: boolean;
+  created_at: string;
+  updated_at: string;
+  options?: TaskDetailOptions[];
+  error_items?: TaskDetailErrorItem[];
+  content?: string;
 }

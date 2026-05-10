@@ -16,8 +16,8 @@ interface ValidationErrorResponse {
 }
 
 export interface RegistrationResponse {
-  accessToken: string;
-  refreshToken: string;
+  access_token: string;
+  refresh_token: string;
   user: {
     email: string;
     id: number;

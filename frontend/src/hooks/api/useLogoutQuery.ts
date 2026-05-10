@@ -12,7 +12,7 @@ export function useLogoutQuery() {
         return Promise.reject(new Error("No refresh token"));
       }
 
-      return authApi.logout({ refreshToken: user?.refreshToken });
+      return authApi.logout({ refreshToken: user?.refresh_token });
     },
     onSuccess: () => {
       localStorage.removeItem("user");
