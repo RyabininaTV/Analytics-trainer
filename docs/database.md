@@ -176,23 +176,22 @@ completion_percent = (completed_tasks_count * 100.0) / total_tasks_count
 
 ## 🔗 Схема связей таблиц
 
-```mermaid
 erDiagram
-    users ||--o{ attempts : makes
-    users ||--o{ user_progress : has
-    users ||--o{ revoked_tokens : can_have
+    users ||--o{ attempts : "имеет попытки"
+    users ||--o{ user_progress : "имеет прогресс"
+    users ||--o{ revoked_tokens : "имеет отозванные токены"
 
-    trainers ||--o{ tasks : contains
-    trainers ||--o{ user_progress : tracks
+    trainers ||--o{ tasks : "содержит задания"
+    trainers ||--o{ user_progress : "отслеживает прогресс"
 
-    tasks ||--o{ attempts : is_solved_in
-    tasks ||--o{ task_options : has (if TEST)
-    tasks ||--o{ task_error_items : has (if ERROR_FIND)
+    tasks ||--o{ attempts : "выполняется пользователями"
+    tasks ||--o{ task_options : "имеет варианты ответов"
+    tasks ||--o{ task_error_items : "имеет элементы ошибок"
 
-    attempts ||--o{ attempt_answers : contains
+    attempts ||--o{ attempt_answers : "содержит ответы"
 
-    attempt_answers |o--o| task_options : refers (if TEST_OPTION)
-    attempt_answers |o--o| task_error_items : refers (if ERROR_ITEM)
+    attempt_answers |o--o| task_options : "ссылается на вариант"
+    attempt_answers |o--o| task_error_items : "ссылается на элемент"
 
 ## 🔗 Схема базы данных
 
@@ -200,32 +199,32 @@ erDiagram
     %% ===== ОСНОВНЫЕ СУЩНОСТИ =====
     
     users ||--o{ attempts : "имеет попытки"
-    simulators ||--o{ tasks : "содержит задания"
+    trainers ||--o{ tasks : "содержит задания"
     tasks ||--o{ task_options : "имеет варианты ответов"
-    tasks ||--o{ task_error_items : "имеет элементы для поиска ошибок"
+    tasks ||--o{ task_error_items : "имеет элементы ошибок"
     tasks ||--o{ attempts : "выполняется пользователями"
     attempts ||--o{ attempt_answers : "содержит ответы"
-    users ||--o{ user_progress : "имеет прогресс по тренажёрам"
-    simulators ||--o{ user_progress : "отслеживает прогресс пользователей"
+    users ||--o{ user_progress : "имеет прогресс"
+    trainers ||--o{ user_progress : "отслеживает прогресс"
 
     %% ===== ТАБЛИЦА: ПОЛЬЗОВАТЕЛИ =====
     users {
         bigserial id PK "Уникальный ID пользователя"
-        varchar email UK "Email (логин)"
+        varchar email UK "Email логин"
         varchar username UK "Отображаемое имя"
         varchar password_hash "Хэш пароля"
-        user_role_enum role "Роль: USER или ADMIN"
-        user_status_enum status "Статус: ACTIVE или BLOCKED"
+        user_role_enum role "Роль USER или ADMIN"
+        user_status_enum status "Статус ACTIVE или BLOCKED"
         timestamp created_at "Дата создания"
         timestamp updated_at "Дата обновления"
     }
 
     %% ===== ТАБЛИЦА: ТРЕНАЖЁРЫ =====
-    simulators {
+    trainers {
         bigserial id PK "ID тренажёра"
         varchar title "Название тренажёра"
         text description "Описание"
-        varchar difficulty_level "Уровень: easy/medium/hard"
+        varchar difficulty_level "Уровень EASY MEDIUM HARD"
         boolean is_active "Доступен ли тренажёр"
         timestamp created_at "Дата создания"
         timestamp updated_at "Дата обновления"
@@ -234,25 +233,24 @@ erDiagram
     %% ===== ТАБЛИЦА: ЗАДАНИЯ =====
     tasks {
         bigserial id PK "ID задания"
-        bigint simulator_id FK "Какому тренажёру принадлежит"
-        task_type_enum task_type "Тип: TEST/ERROR_FIND/OPEN"
+        bigint trainer_id FK "Какому тренажёру принадлежит"
+        task_type_enum task_type "Тип TEST ERROR_FIND OPEN"
         varchar title "Название задания"
         text description "Условие задания"
-        text content "Доп. контент (кейс, артефакт)"
-        integer max_score "Макс. балл за задание"
+        text content "Дополнительный контент"
+        integer max_score "Максимальный балл за задание"
         boolean is_active "Доступно ли задание"
-        boolean auto_check_enabled "Автопроверка включена?"
+        boolean auto_check_enabled "Автопроверка включена"
         timestamp created_at "Дата создания"
         timestamp updated_at "Дата обновления"
     }
 
-    %% ===== ТАБЛИЦА: ВАРИАНТЫ ОТВЕТОВ (для TEST) =====
+    %% ===== ТАБЛИЦА: ВАРИАНТЫ ОТВЕТОВ =====
     task_options {
         bigserial id PK "ID варианта ответа"
         bigint task_id FK "К какому тестовому заданию"
         text option_text "Текст варианта"
         boolean is_correct "Правильный ли вариант"
-        integer sort_order "Порядок показа"
     }
 
     %% ===== ТАБЛИЦА: ЭЛЕМЕНТЫ ДЛЯ ПОИСКА ОШИБОК =====
@@ -260,24 +258,23 @@ erDiagram
         bigserial id PK "ID элемента"
         bigint task_id FK "К заданию типа ERROR_FIND"
         text fragment_text "Текст фрагмента"
-        boolean is_error "Содержит ошибку?"
-        text explanation "Пояснение (почему ошибка/верно)"
-        integer sort_order "Порядок показа"
+        boolean is_error "Содержит ошибку"
+        text explanation "Пояснение"
     }
 
-    %% ===== ТАБЛИЦА: ПОПЫТКИ ВЫПОЛНЕНИЯ =====
+    %% ===== ТАБЛИЦА: ПОПЫТКИ =====
     attempts {
         bigserial id PK "ID попытки"
         bigint user_id FK "Какой пользователь"
         bigint task_id FK "Какое задание"
         timestamp started_at "Время начала"
-        timestamp submitted_at "Время отправки на проверку"
-        attempt_status_enum status "Статус: IN_PROGRESS/SUBMITTED/CHECKED/REJECTED"
+        timestamp submitted_at "Время отправки"
+        attempt_status_enum status "Статус попытки"
         integer score "Набранные баллы"
-        integer max_score_snapshot "Макс. балл на момент прохождения"
-        boolean is_correct "Полностью верно?"
-        boolean auto_checked "Проверено автоматически?"
-        boolean needs_manual_review "Нужна ручная проверка?"
+        integer max_score_snapshot "Макс балл на момент прохождения"
+        boolean is_correct "Полностью верно"
+        boolean auto_checked "Проверено автоматически"
+        boolean needs_manual_review "Нужна ручная проверка"
         text reviewer_comment "Комментарий проверяющего"
         timestamp reviewed_at "Дата проверки"
     }
@@ -287,20 +284,19 @@ erDiagram
         bigserial id PK "ID ответа"
         bigint attempt_id FK "К какой попытке"
         answer_type_enum answer_type "Тип ответа"
-        bigint selected_option_id FK "Выбранный вариант (для TEST)"
-        bigint selected_error_item_id FK "Выбранный элемент (для ERROR_FIND)"
-        text text_answer "Текстовый ответ (для OPEN)"
+        bigint selected_option_id FK "Выбранный вариант для TEST"
+        bigint selected_error_item_id FK "Выбранный элемент для ERROR_FIND"
+        text text_answer "Текстовый ответ для OPEN"
     }
 
     %% ===== ТАБЛИЦА: АГРЕГИРОВАННЫЙ ПРОГРЕСС =====
     user_progress {
         bigserial id PK "ID записи прогресса"
         bigint user_id FK "Пользователь"
-        bigint simulator_id FK "Тренажёр"
-        integer completed_tasks_count "Кол-во завершённых заданий"
+        bigint trainer_id FK "Тренажёр"
+        integer completed_tasks_count "Количество завершённых заданий"
         integer total_tasks_count "Всего заданий в тренажёре"
         integer total_score "Сумма баллов"
-        numeric completion_percent "Процент прохождения (0-100)"
+        numeric completion_percent "Процент прохождения 0-100"
         timestamp last_activity_at "Последняя активность"
     }
-
