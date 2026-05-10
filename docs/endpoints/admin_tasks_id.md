@@ -12,19 +12,19 @@
 
 ## Алгоритм
 
-1. UPDATE tasks SET ... WHERE id = ?
-2. DELETE FROM task_options WHERE task_id = ? и INSERT новых вариантов.
+1. `UPDATE tasks SET ... WHERE id = ?`
+2. `DELETE FROM task_options WHERE task_id = ?` и INSERT новых вариантов.
 3. Аналогично для task_error_items.
 
 ---
 
-### Успешный ответ: 
+## Успешный ответ: 
 
 200 OK (обновлённое задание)
 
 ---
 
-# Удаление задания (транзакция)
+# Удаление задания
 
 ## Параметры эндпоинта
 
@@ -35,13 +35,13 @@
 
 ## Алгоритм
 
-1. DELETE FROM attempt_answers WHERE attempt_id IN (SELECT id FROM attempts WHERE task_id = ?)
-2. DELETE FROM attempts WHERE task_id = ?
-3. DELETE FROM task_options WHERE task_id = ? (или task_error_items)
-4. DELETE FROM tasks WHERE id = ?
+1. `DELETE FROM attempt_answers WHERE attempt_id IN (SELECT id FROM attempts WHERE task_id = ?)`
+2. `DELETE FROM attempts WHERE task_id = ?`
+3. `DELETE FROM task_options WHERE task_id = ?` (или task_error_items)
+4. `DELETE FROM tasks WHERE id = ?`
 
 ---
 
-### Успешный ответ: 
+## Успешный ответ: 
 
 204 No Content

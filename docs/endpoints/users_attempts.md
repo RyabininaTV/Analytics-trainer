@@ -1,12 +1,11 @@
-# История попыток пользователя
+# Получение истории всех попыток пользователя
 
-> /attempts/users/attempts
+> /attempts
 
 ## Параметры эндпоинта
 
-Метод: `GET`
-Доступ: публичный (не требует токена)
-Тело запроса: `RegisterRequest (email, username, password)`
+- Метод: `GET`
+- Тело запроса: `RegisterRequest (email, username, password)`
 
 ---
 
@@ -23,6 +22,6 @@ ORDER BY a.created_at DESC
 
 ---
 
-### Успешный ответ: 
+## Успешный ответ: 
 
 200 OK (массив попыток)

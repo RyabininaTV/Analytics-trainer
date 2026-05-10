@@ -4,12 +4,13 @@
 
 ## 🔐 Авторизация
 - [/auth/register](auth_register.md)
-- [/auth//login](auth_login.md)
-- [/auth//logout](auth_logout.md)
-- [/auth//refresh](auth_refresh.md)
+- [/auth/login](auth_login.md)
+- [/auth/logout](auth_logout.md)
+- [/auth/refresh](auth_refresh.md)
 
+---
   
-## 👤 Профиль пользователя
+## 🙋 Профиль пользователя
 - [/profile](profile.md)
 
 ---
@@ -26,15 +27,15 @@
 ## 📝 Задания
 - [/tasks?trainer_id={id}](task_trainer_id.md)
 - [/task/{id}](task_id.md)
-- [/task//random](task_random.md)
+- [/task/random](task_random.md)
 
 ---
 
 ## 🎯 Попытки
-- [/attempts/users/attempts](attempts_users_attempts.md)
-- [/attempts/task/{taskId}](attempts_task_taskId.md)
+- [/attempts](users_attempts.md)
+- [/attempts/{taskId}](attempts_task_taskId.md)
 - [/attempts/{id}/details](attempts_id_details.md)
-- [/attempts/submit](attempts_submit.md)
+- [/attempts](attempts_submit.md)
 
 ---
 

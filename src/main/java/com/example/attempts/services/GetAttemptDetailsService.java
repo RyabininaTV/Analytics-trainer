@@ -8,6 +8,7 @@ import com.example.attempts.entities.responses.AttemptWithAnswersEntityResponse;
 import com.example.attempts.exceptions.AttemptNotFoundException;
 import com.example.repositories.AttemptsRepository;
 import com.example.security.current_user_context.CurrentUserContext;
+import jakarta.annotation.Nonnull;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -22,6 +23,7 @@ import static lombok.AccessLevel.PRIVATE;
 public class GetAttemptDetailsService {
 
     CurrentUserContext currentUserContext;
+
     AttemptsRepository attemptsRepository;
 
     public AttemptDetailsResponse getAttemptDetails(long attemptId) {
@@ -51,7 +53,8 @@ public class GetAttemptDetailsService {
                 .build();
     }
 
-    private List<AttemptAnswerDetails> mapAnswers(List<AttemptAnswerWithTextEntityResponse> answers) {
+    @Nonnull
+    private List<AttemptAnswerDetails> mapAnswers(@Nonnull List<AttemptAnswerWithTextEntityResponse> answers) {
         return answers.stream()
                 .map(answer -> AttemptAnswerDetails.builder()
                         .id(answer.id())
@@ -65,4 +68,5 @@ public class GetAttemptDetailsService {
                 )
                 .toList();
     }
+
 }

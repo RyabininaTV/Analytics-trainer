@@ -1,4 +1,4 @@
-# Детали попытки
+# Детали попытки (включая ответ)
 
 > /attempts/{id}/details
 
@@ -10,11 +10,11 @@
 
 ## Алгоритм
 
-1. SELECT * FROM attempts WHERE id = ? – проверка принадлежности пользователю.
-2. SELECT * FROM attempt_answers WHERE attempt_id = ?
+1. `SELECT * FROM attempts WHERE id = ?` – проверка принадлежности пользователю.
+2. `SELECT * FROM attempt_answers WHERE attempt_id = ?`
 
 ---
 
-### Успешный ответ: 
+## Успешный ответ: 
 
 200 OK (детали с ответами)

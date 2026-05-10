@@ -1,4 +1,4 @@
-# Прогресс по тренажёрам
+# Прогресс пользователя всем по тренажёрам
 
 > /progress/trainers
 
@@ -13,12 +13,12 @@
 ```sql
 SELECT up.*, t.title
 FROM user_progress up
-JOIN trainers t ON up.trainer_id = t.id
+         JOIN trainers t ON up.trainer_id = t.id
 WHERE up.user_id = ?
 ```
 
 ---
 
-### Успешный ответ: 
+## Успешный ответ: 
 
 200 OK (массив прогресса по тренажёрам)

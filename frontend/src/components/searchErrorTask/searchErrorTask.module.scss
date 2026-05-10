@@ -1,0 +1,11 @@
+.contentWrapper {
+  margin-bottom: 20px;
+
+  p:first-child {
+    color: vars.$grey;
+  }
+
+  p:last-child {
+    font-size: 16px;
+  }
+}

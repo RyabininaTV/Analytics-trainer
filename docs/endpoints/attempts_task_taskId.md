@@ -1,6 +1,6 @@
-# Попытки по заданию
+# Получение всех попыток по конкретному заданию
 
-> /attempts/task/{taskId}
+> /attempts/{taskId}
 
 ## Параметры эндпоинта
 
@@ -10,10 +10,15 @@
 
 ## Алгоритм
 
-SELECT id, created_at, score, status FROM attempts WHERE user_id = ? AND task_id = ?
+```sql
+SELECT id, created_at, score, status
+FROM attempts
+WHERE user_id = ?
+  AND task_id = ?
+```
 
 ---
 
-### Успешный ответ: 
+## Успешный ответ: 
 
 200 OK (массив попыток)

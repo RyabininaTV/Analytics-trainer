@@ -12,10 +12,13 @@
 
 ## Алгоритм
 
-INSERT INTO trainers (title, description, created_at) VALUES (?, ?, NOW())
+```sql
+INSERT INTO trainers (title, description, created_at)
+VALUES (?, ?, NOW())
+```
 
 ---
 
-### Успешный ответ: 
+## Успешный ответ: 
 
-200 OK (созданный объект)
+201 CREATED (созданный объект)
