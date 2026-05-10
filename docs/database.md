@@ -176,6 +176,57 @@ completion_percent = (completed_tasks_count * 100.0) / total_tasks_count
 
 ## 🔗 Схема связей таблиц
 
+erDiagram
+    %% Сущности
+    USERS {
+      integer id
+    }
+    TRAINERS {
+      integer id
+    }
+    TASKS {
+      integer id
+      string type
+    }
+    ATTEMPTS {
+      integer id
+    }
+    ATTEMPT_ANSWERS {
+      integer id
+      string answer_type
+    }
+    TASK_OPTIONS {
+      integer id
+    }
+    TASK_ERROR_ITEMS {
+      integer id
+    }
+    USER_PROGRESS {
+      integer id
+    }
+    REVOKED_TOKENS {
+      integer id
+    }
+
+    %% Основные связи
+    USERS ||--o{ ATTEMPTS : "один пользователь → много попыток"
+    USERS ||--o{ USER_PROGRESS : "один пользователь → прогресс по тренажёрам"
+    USERS ||--o{ REVOKED_TOKENS : "один пользователь → много отозванных токенов"
+
+    TRAINERS ||--o{ TASKS : "один тренажёр → много заданий"
+    TRAINERS ||--o{ USER_PROGRESS : "один тренажёр → прогресс многих пользователей"
+
+    TASKS ||--o{ ATTEMPTS : "одно задание → много попыток"
+    TASKS ||--o{ TASK_OPTIONS : "одно задание → много вариантов ответов (только для type=TEST)"
+    TASKS ||--o{ TASK_ERROR_ITEMS : "одно задание → много фрагментов (только для type=ERROR_FIND)"
+
+    ATTEMPTS ||--o{ ATTEMPT_ANSWERS : "одна попытка → много ответов"
+
+    %% Условные связи для типов ответов в attempt_answers
+    ATTEMPT_ANSWERS }o--|| TASK_OPTIONS : "при answer_type = 'TEST_OPTION'"
+    ATTEMPT_ANSWERS }o--|| TASK_ERROR_ITEMS : "при answer_type = 'ERROR_ITEM'"
+
+
 ┌─────────────────────────────────────────────────────────────────────────────────────────────┐
 │                                   ОСНОВНЫЕ СВЯЗИ                                             │
 ├─────────────────────────────────────────────────────────────────────────────────────────────┤
