@@ -4,9 +4,9 @@
 
 ## 🔐 Авторизация
 - [/auth/register](auth_register.md)
-- [/auth//login(auth_login.md)
-- [/auth//logout(auth_logout.md)
-- [/auth//refresh (auth_refresh.md)
+- [/auth//login](auth_login.md)
+- [/auth//logout](auth_logout.md)
+- [/auth//refresh](auth_refresh.md)
 
   
 ## 👤 Профиль пользователя
