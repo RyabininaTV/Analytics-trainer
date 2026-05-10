@@ -3,9 +3,9 @@
 > /auth/login
 
 ## Параметры эндпоинта
-Метод: `POST`
-Доступ: публичный
-Тело запроса: ``LoginRequest` (email/username, password)`
+- Метод: `POST`
+- Доступ: публичный
+- Тело запроса: ``LoginRequest` (email/username, password)`
 
 ---
 
