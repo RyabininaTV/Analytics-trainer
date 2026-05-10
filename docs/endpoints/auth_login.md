@@ -18,4 +18,6 @@
 
 ---
 
-### Успешный ответ:  `200 OK` (accessToken, refreshToken, данные пользователя)
+### Успешный ответ:  
+
+`200 OK` (accessToken, refreshToken, данные пользователя)
