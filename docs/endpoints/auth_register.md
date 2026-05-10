@@ -4,9 +4,9 @@
 
 ### Параметры эндпоинта
 
-- Метод: `POST`.
-- Доступ: публичный (не требует токена).
-- Тело запроса: `RegisterRequest (email, username, password)`.
+- Метод: `POST`
+- Доступ: публичный (не требует токена)
+- Тело запроса: `RegisterRequest (email, username, password)`
 
 ---
 
