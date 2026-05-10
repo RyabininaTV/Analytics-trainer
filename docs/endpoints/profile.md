@@ -1,8 +1,10 @@
 # Получение профиля
 
-> /auth/register
+> /profile
 
-## Алгоритм работы с БД:
+## Метод: `GET`
+
+### Алгоритм работы с БД:
 
 1. Из JWT-контекста получаем `userId`.
 2. `SELECT id, email, username, role, status, created_at FROM users WHERE id = ?`.
@@ -11,3 +13,21 @@
 ---
 
 ### Успешный ответ: `200 OK` (объект профиля)
+
+---
+
+## Метод: `PUT`
+Тело запроса: `UpdateProfileRequest` (email, username, currentPassword, newPassword)
+
+---
+
+### Алгоритм работы с БД:
+
+1. `SELECT password_hash FROM users WHERE id = ?` – проверка текущего пароля.
+2. Если меняется email – `SELECT COUNT(*) FROM users WHERE email = ? AND id != ?` – проверка уникальности.
+3. `UPDATE users SET email = ?, username = ?, password_hash = ? WHERE id = ?`.
+4. (При смене пароля) `DELETE FROM revoked_tokens WHERE user_id = ?`.
+
+---
+
+### Успешный ответ: `200 OK` (обновлённые данные профиля)
