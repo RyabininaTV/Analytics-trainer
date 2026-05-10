@@ -176,6 +176,7 @@ completion_percent = (completed_tasks_count * 100.0) / total_tasks_count
 
 ## 🔗 Схема связей таблиц
 
+```mermaid
 erDiagram
     users ||--o{ attempts : "имеет попытки"
     users ||--o{ user_progress : "имеет прогресс"
@@ -195,6 +196,7 @@ erDiagram
 
 ## 🔗 Схема базы данных
 
+```mermaid
 erDiagram
     %% ===== ОСНОВНЫЕ СУЩНОСТИ =====
     
