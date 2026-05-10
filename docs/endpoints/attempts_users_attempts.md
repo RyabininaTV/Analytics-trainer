@@ -3,7 +3,8 @@
 > /attempts/users/attempts
 
 ## Параметры эндпоинта
-Метод: `POST`
+
+Метод: `GET`
 Доступ: публичный (не требует токена)
 Тело запроса: `RegisterRequest (email, username, password)`
 
@@ -22,4 +23,6 @@ ORDER BY a.created_at DESC
 
 ---
 
-### Успешный ответ: 200 OK (массив попыток)
+### Успешный ответ: 
+
+200 OK (массив попыток)
