@@ -176,129 +176,202 @@ completion_percent = (completed_tasks_count * 100.0) / total_tasks_count
 
 ## 🔗 Схема связей таблиц
 
-```mermaid
-erDiagram
-    users ||--o{ attempts : "имеет попытки"
-    users ||--o{ user_progress : "имеет прогресс"
-    users ||--o{ revoked_tokens : "имеет отозванные токены"
+┌─────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                   ОСНОВНЫЕ СВЯЗИ                                             │
+├─────────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                               │
+│   users ──────┬────── attempts                      users ──────┬────── user_progress         │
+│               │                                                  │                            │
+│               │   один пользователь → много попыток              │   один пользователь →       │
+│               │                                                  │   прогресс по тренажёрам    │
+│               │                                                                               │
+│               └────── revoked_tokens                                                            │
+│                         один пользователь → много отозванных токенов                           │
+│                                                                                               │
+│                                                                                               │
+│   trainers ──┬────── tasks                          trainers ──┬────── user_progress          │
+│              │                                                 │                              │
+│              │   один тренажёр → много заданий                 │   один тренажёр →            │
+│              │                                                 │   прогресс многих пользователей│
+│              │                                                                               │
+│                                                                                               │
+│   tasks ─────┬────── attempts                      tasks ──────┬────── task_options           │
+│              │                                                 │                              │
+│              │   одно задание → много попыток                  │   одно задание →             │
+│              │                                                 │   много вариантов ответов    │
+│              │                                                 │   (только для типа TEST)     │
+│              │                                                                               │
+│              └────── task_error_items                                                         │
+│                        одно задание → много фрагментов                                        │
+│                        (только для типа ERROR_FIND)                                          │
+│                                                                                               │
+│                                                                                               │
+│   attempts ──┬────── attempt_answers                                                          │
+│              │                                                                               │
+│              │   одна попытка → много ответов                                                 │
+│              │                                                                               │
+│              │                                                                               │
+│   attempt_answers ──┬────── task_options                                                      │
+│                     │   (при answer_type = 'TEST_OPTION')                                     │
+│                     │                                                                         │
+│                     └────── task_error_items                                                  │
+│                           (при answer_type = 'ERROR_ITEM')                                    │
+│                                                                                               │
+└─────────────────────────────────────────────────────────────────────────────────────────────┘
 
-    trainers ||--o{ tasks : "содержит задания"
-    trainers ||--o{ user_progress : "отслеживает прогресс"
+## 📋 Детальные схемы таблиц
 
-    tasks ||--o{ attempts : "выполняется пользователями"
-    tasks ||--o{ task_options : "имеет варианты ответов"
-    tasks ||--o{ task_error_items : "имеет элементы ошибок"
+### 1. Таблица users
 
-    attempts ||--o{ attempt_answers : "содержит ответы"
+┌─────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                     USERS                                                    │
+├─────────────┬───────────────────────────┬───────────────────────────────────────────────────┤
+│ Поле        │ Тип                       │ Описание                                          │
+├─────────────┼───────────────────────────┼───────────────────────────────────────────────────┤
+│ id          │ bigserial (PK)            │ Уникальный ID пользователя                        │
+│ email       │ varchar(255) (UK)         │ Email (логин)                                     │
+│ username    │ varchar(100) (UK)         │ Отображаемое имя                                  │
+│ password_hash│ varchar(255)              │ Хэш пароля                                        │
+│ role        │ user_role_enum            │ Роль: USER или ADMIN                              │
+│ status      │ user_status_enum          │ Статус: ACTIVE или BLOCKED                        │
+│ created_at  │ timestamp                 │ Дата регистрации                                  │
+│ updated_at  │ timestamp                 │ Дата последнего обновления                        │
+└─────────────┴───────────────────────────┴───────────────────────────────────────────────────┘
+**Связи:** users → attempts (1:N), users → user_progress (1:N), users → revoked_tokens (1:N)
 
-    attempt_answers |o--o| task_options : "ссылается на вариант"
-    attempt_answers |o--o| task_error_items : "ссылается на элемент"
+### 2. Таблица trainers
 
-## 🔗 Схема базы данных
+┌─────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                    TRAINERS                                                  │
+├─────────────┬───────────────────────────┬───────────────────────────────────────────────────┤
+│ Поле        │ Тип                       │ Описание                                          │
+├─────────────┼───────────────────────────┼───────────────────────────────────────────────────┤
+│ id          │ bigserial (PK)            │ ID тренажёра                                      │
+│ title       │ varchar(255)              │ Название тренажёра                                │
+│ description │ text                      │ Описание тренажёра                                │
+│ difficulty_level│ varchar(30)           │ Уровень: EASY / MEDIUM / HARD                     │
+│ is_active   │ boolean                   │ Доступен ли тренажёр (true/false)                 │
+│ created_at  │ timestamp                 │ Дата создания                                     │
+│ updated_at  │ timestamp                 │ Дата обновления                                   │
+└─────────────┴───────────────────────────┴───────────────────────────────────────────────────┘
+**Связи:** trainers → tasks (1:N), trainers → user_progress (1:N)
 
-```mermaid
-erDiagram
-    %% ===== ОСНОВНЫЕ СУЩНОСТИ =====
-    
-    users ||--o{ attempts : "имеет попытки"
-    trainers ||--o{ tasks : "содержит задания"
-    tasks ||--o{ task_options : "имеет варианты ответов"
-    tasks ||--o{ task_error_items : "имеет элементы ошибок"
-    tasks ||--o{ attempts : "выполняется пользователями"
-    attempts ||--o{ attempt_answers : "содержит ответы"
-    users ||--o{ user_progress : "имеет прогресс"
-    trainers ||--o{ user_progress : "отслеживает прогресс"
+### 3. Таблица tasks
 
-    %% ===== ТАБЛИЦА: ПОЛЬЗОВАТЕЛИ =====
-    users {
-        bigserial id PK "Уникальный ID пользователя"
-        varchar email UK "Email логин"
-        varchar username UK "Отображаемое имя"
-        varchar password_hash "Хэш пароля"
-        user_role_enum role "Роль USER или ADMIN"
-        user_status_enum status "Статус ACTIVE или BLOCKED"
-        timestamp created_at "Дата создания"
-        timestamp updated_at "Дата обновления"
-    }
+┌─────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                      TASKS                                                   │
+├─────────────┬───────────────────────────┬───────────────────────────────────────────────────┤
+│ Поле        │ Тип                       │ Описание                                          │
+├─────────────┼───────────────────────────┼───────────────────────────────────────────────────┤
+│ id          │ bigserial (PK)            │ ID задания                                        │
+│ trainer_id  │ bigint (FK)               │ Какому тренажёру принадлежит                      │
+│ task_type   │ task_type_enum            │ Тип: TEST / ERROR_FIND / OPEN                     │
+│ title       │ varchar(255)              │ Название задания                                  │
+│ description │ text                      │ Условие задания                                   │
+│ content     │ text                      │ Дополнительный контент (кейс, артефакт)           │
+│ max_score   │ integer                   │ Максимальный балл                                 │
+│ is_active   │ boolean                   │ Доступно ли задание                               │
+│ auto_check_enabled│ boolean              │ Автоматическая проверка включена?                 │
+│ created_at  │ timestamp                 │ Дата создания                                     │
+│ updated_at  │ timestamp                 │ Дата обновления                                   │
+└─────────────┴───────────────────────────┴───────────────────────────────────────────────────┘
+**Связи:** tasks → trainers (N:1), tasks → attempts (1:N), tasks → task_options (1:N), tasks → task_error_items (1:N)
 
-    %% ===== ТАБЛИЦА: ТРЕНАЖЁРЫ =====
-    trainers {
-        bigserial id PK "ID тренажёра"
-        varchar title "Название тренажёра"
-        text description "Описание"
-        varchar difficulty_level "Уровень EASY MEDIUM HARD"
-        boolean is_active "Доступен ли тренажёр"
-        timestamp created_at "Дата создания"
-        timestamp updated_at "Дата обновления"
-    }
+### 4. Таблица task_options
 
-    %% ===== ТАБЛИЦА: ЗАДАНИЯ =====
-    tasks {
-        bigserial id PK "ID задания"
-        bigint trainer_id FK "Какому тренажёру принадлежит"
-        task_type_enum task_type "Тип TEST ERROR_FIND OPEN"
-        varchar title "Название задания"
-        text description "Условие задания"
-        text content "Дополнительный контент"
-        integer max_score "Максимальный балл за задание"
-        boolean is_active "Доступно ли задание"
-        boolean auto_check_enabled "Автопроверка включена"
-        timestamp created_at "Дата создания"
-        timestamp updated_at "Дата обновления"
-    }
+┌─────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                  TASK_OPTIONS                                               │
+├─────────────┬───────────────────────────┬───────────────────────────────────────────────────┤
+│ Поле        │ Тип                       │ Описание                                          │
+├─────────────┼───────────────────────────┼───────────────────────────────────────────────────┤
+│ id          │ bigserial (PK)            │ ID варианта ответа                               │
+│ task_id     │ bigint (FK)               │ К какому тестовому заданию                        │
+│ option_text │ text                      │ Текст варианта ответа                            │
+│ is_correct  │ boolean                   │ Правильный ли вариант                             │
+└─────────────┴───────────────────────────┴───────────────────────────────────────────────────┘
+**Связи:** task_options → tasks (N:1), task_options → attempt_answers (1:N)
 
-    %% ===== ТАБЛИЦА: ВАРИАНТЫ ОТВЕТОВ =====
-    task_options {
-        bigserial id PK "ID варианта ответа"
-        bigint task_id FK "К какому тестовому заданию"
-        text option_text "Текст варианта"
-        boolean is_correct "Правильный ли вариант"
-    }
+### 5. Таблица task_error_items
 
-    %% ===== ТАБЛИЦА: ЭЛЕМЕНТЫ ДЛЯ ПОИСКА ОШИБОК =====
-    task_error_items {
-        bigserial id PK "ID элемента"
-        bigint task_id FK "К заданию типа ERROR_FIND"
-        text fragment_text "Текст фрагмента"
-        boolean is_error "Содержит ошибку"
-        text explanation "Пояснение"
-    }
+┌─────────────────────────────────────────────────────────────────────────────────────────────┐
+│                               TASK_ERROR_ITEMS                                             │
+├─────────────┬───────────────────────────┬───────────────────────────────────────────────────┤
+│ Поле        │ Тип                       │ Описание                                          │
+├─────────────┼───────────────────────────┼───────────────────────────────────────────────────┤
+│ id          │ bigserial (PK)            │ ID элемента                                       │
+│ task_id     │ bigint (FK)               │ К заданию типа ERROR_FIND                         │
+│ fragment_text│ text                     │ Текст фрагмента                                   │
+│ is_error    │ boolean                   │ Содержит ли ошибку                                │
+│ explanation │ text                      │ Пояснение (почему ошибка/верно)                   │
+└─────────────┴───────────────────────────┴───────────────────────────────────────────────────┘
+**Связи:** task_error_items → tasks (N:1), task_error_items → attempt_answers (1:N)
 
-    %% ===== ТАБЛИЦА: ПОПЫТКИ =====
-    attempts {
-        bigserial id PK "ID попытки"
-        bigint user_id FK "Какой пользователь"
-        bigint task_id FK "Какое задание"
-        timestamp started_at "Время начала"
-        timestamp submitted_at "Время отправки"
-        attempt_status_enum status "Статус попытки"
-        integer score "Набранные баллы"
-        integer max_score_snapshot "Макс балл на момент прохождения"
-        boolean is_correct "Полностью верно"
-        boolean auto_checked "Проверено автоматически"
-        boolean needs_manual_review "Нужна ручная проверка"
-        text reviewer_comment "Комментарий проверяющего"
-        timestamp reviewed_at "Дата проверки"
-    }
+### 6. Таблица attempts
 
-    %% ===== ТАБЛИЦА: ОТВЕТЫ ПОЛЬЗОВАТЕЛЯ =====
-    attempt_answers {
-        bigserial id PK "ID ответа"
-        bigint attempt_id FK "К какой попытке"
-        answer_type_enum answer_type "Тип ответа"
-        bigint selected_option_id FK "Выбранный вариант для TEST"
-        bigint selected_error_item_id FK "Выбранный элемент для ERROR_FIND"
-        text text_answer "Текстовый ответ для OPEN"
-    }
+┌─────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                     ATTEMPTS                                                │
+├─────────────┬───────────────────────────┬───────────────────────────────────────────────────┤
+│ Поле        │ Тип                       │ Описание                                          │
+├─────────────┼───────────────────────────┼───────────────────────────────────────────────────┤
+│ id          │ bigserial (PK)            │ ID попытки                                        │
+│ user_id     │ bigint (FK)               │ Какой пользователь                                 │
+│ task_id     │ bigint (FK)               │ Какое задание                                     │
+│ started_at  │ timestamp                 │ Время начала                                      │
+│ submitted_at│ timestamp                 │ Время отправки на проверку                        │
+│ status      │ attempt_status_enum       │ Статус: IN_PROGRESS/SUBMITTED/CHECKED/REJECTED    │
+│ score       │ integer                   │ Набранные баллы                                   │
+│ max_score_snapshot│ integer             │ Максимальный балл на момент прохождения           │
+│ is_correct  │ boolean                   │ Полностью верно?                                  │
+│ auto_checked│ boolean                   │ Проверено автоматически?                          │
+│ needs_manual_review│ boolean            │ Нужна ручная проверка?                            │
+│ reviewer_comment│ text                  │ Комментарий проверяющего                          │
+│ reviewed_at │ timestamp                 │ Дата проверки                                     │
+└─────────────┴───────────────────────────┴───────────────────────────────────────────────────┘
+**Связи:** attempts → users (N:1), attempts → tasks (N:1), attempts → attempt_answers (1:N)
 
-    %% ===== ТАБЛИЦА: АГРЕГИРОВАННЫЙ ПРОГРЕСС =====
-    user_progress {
-        bigserial id PK "ID записи прогресса"
-        bigint user_id FK "Пользователь"
-        bigint trainer_id FK "Тренажёр"
-        integer completed_tasks_count "Количество завершённых заданий"
-        integer total_tasks_count "Всего заданий в тренажёре"
-        integer total_score "Сумма баллов"
-        numeric completion_percent "Процент прохождения 0-100"
-        timestamp last_activity_at "Последняя активность"
-    }
+### 7. Таблица attempt_answers
+
+┌─────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                 ATTEMPT_ANSWERS                                            │
+├─────────────┬───────────────────────────┬───────────────────────────────────────────────────┤
+│ Поле        │ Тип                       │ Описание                                          │
+├─────────────┼───────────────────────────┼───────────────────────────────────────────────────┤
+│ id          │ bigserial (PK)            │ ID ответа                                         │
+│ attempt_id  │ bigint (FK)               │ К какой попытке                                   │
+│ answer_type │ answer_type_enum          │ Тип ответа: TEST_OPTION / ERROR_ITEM / OPEN_TEXT │
+│ selected_option_id│ bigint (FK)         │ Выбранный вариант (для TEST_OPTION)               │
+│ selected_error_item_id│ bigint (FK)     │ Выбранный элемент (для ERROR_ITEM)                │
+│ text_answer │ text                      │ Текстовый ответ (для OPEN_TEXT)                   │
+└─────────────┴───────────────────────────┴───────────────────────────────────────────────────┘
+**Связи:** attempt_answers → attempts (N:1), attempt_answers → task_options (N:1), attempt_answers → task_error_items (N:1)
+
+### 8. Таблица user_progress
+┌─────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                 USER_PROGRESS                                              │
+├─────────────┬───────────────────────────┬───────────────────────────────────────────────────┤
+│ Поле        │ Тип                       │ Описание                                          │
+├─────────────┼───────────────────────────┼───────────────────────────────────────────────────┤
+│ id          │ bigserial (PK)            │ ID записи прогресса                              │
+│ user_id     │ bigint (FK)               │ Пользователь                                      │
+│ trainer_id  │ bigint (FK)               │ Тренажёр                                          │
+│ completed_tasks_count│ integer          │ Количество завершённых заданий                    │
+│ total_tasks_count│ integer              │ Всего заданий в тренажёре                         │
+│ total_score │ integer                   │ Сумма набранных баллов                            │
+│ completion_percent│ numeric(5,2)        │ Процент прохождения (0-100)                       │
+│ last_activity_at│ timestamp             │ Дата последней активности                         │
+└─────────────┴───────────────────────────┴───────────────────────────────────────────────────┘
+**Связи:** user_progress → users (N:1), user_progress → trainers (N:1)
+
+### 9. Таблица revoked_tokens
+
+┌─────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                 REVOKED_TOKENS                                             │
+├─────────────┬───────────────────────────┬───────────────────────────────────────────────────┤
+│ Поле        │ Тип                       │ Описание                                          │
+├─────────────┼───────────────────────────┼───────────────────────────────────────────────────┤
+│ token_id    │ varchar(100) (PK)         │ JWT ID (claim jti)                               │
+│ expires_at  │ timestamp                 │ Дата истечения токена                            │
+│ created_at  │ timestamp                 │ Дата отзыва                                       │
+└─────────────┴───────────────────────────┴───────────────────────────────────────────────────┘
+**Связи:** revoked_tokens → users (N:1) — если привязан к пользователю, иначе независимая.
+
