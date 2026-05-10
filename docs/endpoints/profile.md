@@ -2,7 +2,9 @@
 
 > /profile
 
-## Метод: `GET`
+## Параметры эндпоинта
+- Метод: `GET`
+- Доступ: эндпоинт защищен (`USER`, `ADMIN`)
 
 ### Алгоритм работы с БД:
 
@@ -16,8 +18,9 @@
 
 ---
 
-## Метод: `PUT`
-Тело запроса: `UpdateProfileRequest` (email, username, currentPassword, newPassword)
+## Параметры эндпоинта
+- Метод: `PUT`
+- Доступ: эндпоинт защищен (`USER`, `ADMIN`)
 
 ---
 
