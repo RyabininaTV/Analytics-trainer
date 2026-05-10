@@ -3,9 +3,9 @@
 > /auth/logout
 
 ## Параметры эндпоинта
-Метод: `POST`
-Доступ: USER, ADMIN (требуется токен)
-Тело запроса: `LogoutRequest` (refreshToken)
+- Метод: `POST`
+- Доступ: USER, ADMIN (требуется токен)
+- Тело запроса: `LogoutRequest` (refreshToken)
 
 ---
 
