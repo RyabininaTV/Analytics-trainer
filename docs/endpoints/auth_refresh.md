@@ -3,9 +3,9 @@
 > /auth/refresh
 
 ## Параметры эндпоинта
-Метод: `POST`
-Доступ: публичный (защита через refresh-токен)
-Тело запроса: `RefreshRequest` (refreshToken)
+- Метод: `POST`
+- Доступ: публичный (защита через refresh-токен)
+- Тело запроса: `RefreshRequest` (refreshToken)
 
 ---
 
