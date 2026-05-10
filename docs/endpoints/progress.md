@@ -3,6 +3,7 @@
 > /progress
 
 ## Параметры эндпоинта
+
 Метод: `GET`
 
 ---
@@ -13,4 +14,6 @@ SELECT SUM(total_score) AS total, SUM(completed_tasks) AS completed FROM user_pr
 
 ---
 
-### Успешный ответ: 200 OK (объект прогресса)
+### Успешный ответ: 
+
+200 OK (объект прогресса)
