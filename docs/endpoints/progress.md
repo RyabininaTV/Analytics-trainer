@@ -1,4 +1,4 @@
-# Общий прогресс
+# Получение общего прогресса пользователя
 
 > /progress
 
@@ -10,10 +10,15 @@
 
 ## Алгоритм
 
-SELECT SUM(total_score) AS total, SUM(completed_tasks) AS completed FROM user_progress WHERE user_id = ?
+```sql
+SELECT SUM(total_score) AS total, SUM(completed_tasks) AS completed
+FROM user_progress
+WHERE user_id = ?
+```
+
 
 ---
 
-### Успешный ответ: 
+## Успешный ответ: 
 
 200 OK (объект прогресса)

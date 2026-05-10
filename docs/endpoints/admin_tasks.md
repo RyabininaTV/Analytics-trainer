@@ -1,4 +1,4 @@
-# Создание задания (транзакция)
+# Создание задания нового
 
 > /admin/tasks
 
@@ -12,12 +12,12 @@
 
 ## Алгоритм
 
-1. INSERT INTO tasks (trainer_id, type, title, description, max_score, created_at) VALUES (...).
-2. Для TEST_OPTION: INSERT INTO task_options (task_id, text, is_correct) VALUES (...).
-3. Для ERROR_ITEM: INSERT INTO task_error_items (task_id, text, is_correct) VALUES (...).
+1. `INSERT INTO tasks (trainer_id, type, title, description, max_score, created_at) VALUES (...)`.
+2. Для TEST_OPTION: `INSERT INTO task_options (task_id, text, is_correct) VALUES (...)`.
+3. Для ERROR_ITEM: `INSERT INTO task_error_items (task_id, text, is_correct) VALUES (...)`.
 
 ---
 
-### Успешный ответ: 
+## Успешный ответ: 
 
-200 OK (созданное задание)
+201 CREATED (созданное задание)

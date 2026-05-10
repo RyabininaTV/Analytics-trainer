@@ -1,6 +1,6 @@
-# Рейтинг по тренажёру
+# Рейтинг по конкретному тренажёру
 
-> //leaderboard/trainer/{trainerId}
+> /leaderboard/{trainerId}
 
 ## Параметры эндпоинта
 
@@ -13,10 +13,9 @@
 ```sql
 SELECT u.id, u.username, up.total_score
 FROM user_progress up
-JOIN users u ON up.user_id = u.id
+         JOIN users u ON up.user_id = u.id
 WHERE up.trainer_id = ?
-ORDER BY total_score DESC
-LIMIT 50
+ORDER BY total_score DESC LIMIT 50
 ```
 
 ---

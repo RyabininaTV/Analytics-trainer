@@ -12,11 +12,11 @@
 
 ## Алгоритм
 
-1. SELECT id FROM trainers WHERE id = ? – проверка существования.
-2. UPDATE trainers SET title = ?, description = ? WHERE id = ?
+1. `SELECT id FROM trainers WHERE id = ?` – проверка существования.
+2. `UPDATE trainers SET title = ?, description = ? WHERE id = ?`
 
 ---
 
-### Успешный ответ: 
+## Успешный ответ: 
 
 200 OK (обновлённый объект)
