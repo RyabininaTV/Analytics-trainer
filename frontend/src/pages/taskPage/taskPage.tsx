@@ -4,6 +4,7 @@ import { tasksTypes } from "../../constants/constants";
 import styles from "./taskPage.module.scss";
 import { useEffect } from "react";
 import { OpenTaskContent } from "../../components/openTaskContent";
+import { SearchErrorTask } from "../../components/searchErrorTask";
 
 const TaskPage = () => {
   const { taskId } = useParams();
@@ -32,6 +33,12 @@ const TaskPage = () => {
       <p className={styles.description}>{task?.description}</p>
       {task?.task_type === "OPEN" && (
         <OpenTaskContent content={task?.content} />
+      )}
+      {task?.task_type === "ERROR_FIND" && (
+        <SearchErrorTask
+          content={task?.content}
+          questionsList={task?.error_items}
+        />
       )}
     </article>
   );
