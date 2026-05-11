@@ -4,7 +4,7 @@ import type { RegistrationResponse } from "../hooks/api/useRegistrationQuery";
 import { PUBLIC_ENDPOINTS } from "../constants/constants";
 
 const api = axios.create({
-  baseURL: "http://localhost:8080/",
+  baseURL: "/api",
 });
 
 // baseURL: "http://141.8.198.205:8080/",
