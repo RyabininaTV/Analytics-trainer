@@ -19,11 +19,11 @@ export interface LogoutProps {
 
 export const authApi = {
   registration: async (payload: RegFieldsType) =>
-    await api.post("auth/register/", payload),
+    await api.post("auth/register", payload),
   login: async (payload: LoginFieldsType) =>
-    await api.post("auth/login/", payload),
+    await api.post("auth/login", payload),
   logout: async (payload: LogoutProps) =>
-    await api.post("auth/logout/", payload),
+    await api.post("auth/logout", payload),
 };
 
 export const trainersApi = {
