@@ -1,4 +1,4 @@
-import type { BackSpaceLinks, ITasksTypes } from "./types";
+import type { BackSpaceLinks, ITasksTypes, UserStatusType } from "./types";
 
 export const PUBLIC_ENDPOINTS = ["auth/login", "auth/register"];
 
@@ -32,3 +32,8 @@ export const backSpaceLinks: BackSpaceLinks[] = [
     ],
   },
 ];
+
+export const userStatus: UserStatusType = {
+  ACTIVE: "Активен",
+  BLOCKED: "Заблокирован",
+};

@@ -1,0 +1,28 @@
+@use "../../styles/constants.scss" as vars;
+
+.ant-radio-wrapper.radioCustomStyle {
+
+  &.ant-radio-wrapper-disabled:hover {
+    border-color: unset;
+  }
+
+  &.ant-radio-wrapper-checked.ant-radio-wrapper-disabled {
+    border-color: vars.$grey;
+  }  
+
+  &.ant-radio-wrapper-checked.ant-radio-wrapper-disabled.REJECTED, &.ant-radio-wrapper-checked.ant-radio-wrapper-disabled.ERROR {
+    border-color: vars.$red;
+  }
+
+  &.ant-radio-wrapper-checked.ant-radio-wrapper-disabled.CHECKED {
+    border-color: vars.$green;
+  }
+
+  &:hover, &.ant-radio-wrapper-checked {
+    border-color: vars.$blue;
+  }
+
+  padding: 8px 12px;
+  border: vars.$border;
+  border-radius: vars.$border-radius + vars.$border-radius;
+}

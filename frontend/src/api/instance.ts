@@ -5,8 +5,10 @@ import { PUBLIC_ENDPOINTS } from "../constants/constants";
 
 const api = axios.create({
   baseURL: "/api",
+  // baseURL: "http://localhost:8080/",
 });
 
+// baseURL: "http://localhost:8080/"
 // baseURL: "http://141.8.198.205:8080/",
 
 api.interceptors.request.use((config) => {
@@ -30,7 +32,6 @@ api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
-    console.log("originalRequest: ", originalRequest);
 
     if (error.response?.status === 401 && !originalRequest._retry) {
       try {
@@ -40,7 +41,6 @@ api.interceptors.response.use(
         const response = await api.post("auth/refresh", {
           refresh_token: refreshToken,
         });
-        console.log("response: ", response);
         localStorage.setItem("user", JSON.stringify(response.data));
 
         return api(originalRequest);
