@@ -9,6 +9,7 @@ import { TrainersList } from "../pages/trainersList";
 import { TrainerTasksList } from "../pages/trainerTasksList";
 import { TaskPage } from "../pages/taskPage";
 import { NotFound } from "../pages/notFound";
+import { ProfilePage } from "../pages/profilePage";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -20,6 +21,7 @@ export const router = createBrowserRouter(
           element={<TrainerTasksList />}
         />
         <Route path="tasks/:taskId" element={<TaskPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
       </Route>
       <Route path="login" element={<AuthPage />} />
       <Route path="registration" element={<AuthPage />} />

@@ -69,3 +69,24 @@ export interface SendAnswerErrorResponse {
   code: string;
   message: string;
 }
+
+export interface ProfileResponse {
+  id: number;
+  email: string;
+  username: string;
+  role: "USER" | "ADMIN";
+  status: "ACTIVE" | "BLOCKED";
+  created_at: string;
+  updated_at: string;
+}
+
+export interface GetAllAttemptsResponse {
+  id: number;
+  task_id: number;
+  started_at: string;
+  submitted_at: string;
+  status: "SUBMITTED" | "CHECKED" | "REJECTED";
+  score: number;
+  max_score_snapshot: number;
+  is_correct: boolean;
+}

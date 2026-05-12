@@ -1,6 +1,8 @@
 import type {
   AllTasksResponse,
   AllTrainersResponse,
+  GetAllAttemptsResponse,
+  ProfileResponse,
   SendAnswerBody,
   SendAnswerResponse,
   TaskDetailResponse,
@@ -50,5 +52,12 @@ export const attemptsApi = {
   sendAnswer: async (
     payload: SendAnswerBody,
   ): Promise<{ data: SendAnswerResponse }> =>
-    await api.post(`/attempts`, payload),
+    await api.post("/attempts", payload),
+  getAllAttempts: async (): Promise<{ data: GetAllAttemptsResponse[] }> =>
+    await api.get("/attempts"),
+};
+
+export const profileApi = {
+  getProfile: async (): Promise<{ data: ProfileResponse }> =>
+    await api.get("/profile"),
 };

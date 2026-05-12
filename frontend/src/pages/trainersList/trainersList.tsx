@@ -5,7 +5,7 @@ const TrainersList = () => {
   const { data: trainers } = useGetAllTrainers();
 
   return (
-    <div>
+    <article>
       <h2>Тренажеры</h2>
       {trainers && trainers.length > 0 ? (
         trainers.map((trainer) => (
@@ -14,7 +14,7 @@ const TrainersList = () => {
       ) : (
         <div>Тесты не найдены!</div>
       )}
-    </div>
+    </article>
   );
 };
 

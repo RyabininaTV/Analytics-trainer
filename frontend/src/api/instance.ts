@@ -32,7 +32,6 @@ api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
-    console.log("originalRequest: ", originalRequest);
 
     if (error.response?.status === 401 && !originalRequest._retry) {
       try {
@@ -42,7 +41,6 @@ api.interceptors.response.use(
         const response = await api.post("auth/refresh", {
           refresh_token: refreshToken,
         });
-        console.log("response: ", response);
         localStorage.setItem("user", JSON.stringify(response.data));
 
         return api(originalRequest);

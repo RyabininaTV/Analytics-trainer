@@ -2,7 +2,6 @@ import { useParams } from "react-router-dom";
 import { useGetTask } from "../../hooks/api/useGetTask";
 import { tasksTypes } from "../../constants/constants";
 import styles from "./taskPage.module.scss";
-import { useEffect } from "react";
 import { SearchErrorTask } from "../../modules/searchErrorTask";
 import { TestTask } from "../../modules/testTask";
 import { OpenTask } from "../../modules/openTask";
@@ -11,10 +10,6 @@ const TaskPage = () => {
   const { taskId } = useParams();
 
   const { data: task } = useGetTask(Number(taskId));
-
-  useEffect(() => {
-    console.log("task: ", task);
-  }, [task]);
 
   return (
     <article className={styles.taskPage}>
