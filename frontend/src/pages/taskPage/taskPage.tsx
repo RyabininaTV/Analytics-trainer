@@ -3,8 +3,9 @@ import { useGetTask } from "../../hooks/api/useGetTask";
 import { tasksTypes } from "../../constants/constants";
 import styles from "./taskPage.module.scss";
 import { useEffect } from "react";
-import { OpenTaskContent } from "../../components/openTaskContent";
+import { OpenTask } from "../../components/openTask";
 import { SearchErrorTask } from "../../components/searchErrorTask";
+import { TestTask } from "../../components/testTask";
 
 const TaskPage = () => {
   const { taskId } = useParams();
@@ -31,9 +32,10 @@ const TaskPage = () => {
         )}
       </div>
       <p className={styles.description}>{task?.description}</p>
-      {task?.task_type === "OPEN" && (
-        <OpenTaskContent content={task?.content} />
-      )}
+
+      {task?.task_type === "TEST" && <TestTask questionsList={task?.options} />}
+
+      {task?.task_type === "OPEN" && <OpenTask content={task?.content} />}
       {task?.task_type === "ERROR_FIND" && (
         <SearchErrorTask
           content={task?.content}

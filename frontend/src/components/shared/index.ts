@@ -1,1 +1,1 @@
-export { RadioList } from "./taskRadioListView/radioList";
+export { RadioList } from "./radioList/radioList";

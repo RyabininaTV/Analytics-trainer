@@ -7,4 +7,6 @@ export interface RadioListProps<T> {
     forLabel: keyof T &
       (T[keyof T] extends CheckboxOptionType["label"] ? keyof T : never);
   };
+  value?: unknown; // пропс для FROM antd, передаются автоматически из FORM.ITEM
+  onChange?: (value: unknown) => void; // пропс для FROM antd, передаются автоматически из FORM.ITEM
 }

@@ -6,6 +6,8 @@ import "./radioList.ant.scss";
 export const RadioList = <T,>(props: RadioListProps<T>) => {
   const {
     list: { originalList, forLabel, forValue },
+    value,
+    onChange,
   } = props;
 
   const options = originalList.map((listItem) => ({
@@ -18,6 +20,8 @@ export const RadioList = <T,>(props: RadioListProps<T>) => {
     <Radio.Group
       optionType="default"
       orientation="vertical"
+      value={value}
+      onChange={(e) => onChange?.(e.target.value)}
       options={options}
     />
   );

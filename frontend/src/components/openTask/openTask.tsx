@@ -1,12 +1,12 @@
 import { useState, type FC } from "react";
-import type { OpenTaskContentProps } from "./types";
+import type { OpenTaskProps } from "./types";
 import { Button, Form, Input } from "antd";
-import styles from "./openTaskContent.module.scss";
-import "./openTaskContent.ant.scss";
+import "./openTask.ant.scss";
+import { TaskEmpty, TaskExplanation } from "../shared/taskPageComponents";
 
 const { useForm } = Form;
 
-const OpenTaskContent: FC<OpenTaskContentProps> = (props) => {
+const OpenTask: FC<OpenTaskProps> = (props) => {
   const { content } = props;
 
   const [form] = useForm();
@@ -15,24 +15,26 @@ const OpenTaskContent: FC<OpenTaskContentProps> = (props) => {
   return (
     <section>
       {!content ? (
-        <p className={styles.emptyContent}>Задание еще не добавлено!</p>
+        <TaskEmpty />
       ) : (
         <>
-          <div className={styles.contentWrapper}>
-            <p>Пояснение:</p>
-            <p>{content}</p>
-          </div>
+          <TaskExplanation content={content} />
           <Form
             form={form}
             className="openTaskForm"
             name="openTaskForm"
             layout="vertical"
             onChange={(event) => {
+              console.log("event: ", event.target.value);
+
               if (event.target.value.trim()) {
                 setDisabled(false);
               } else {
                 setDisabled(true);
               }
+            }}
+            onFinish={(fields) => {
+              console.log("fields: ", fields);
             }}
           >
             <Form.Item name={"openAnswer"}>
@@ -55,4 +57,4 @@ const OpenTaskContent: FC<OpenTaskContentProps> = (props) => {
   );
 };
 
-export default OpenTaskContent;
+export default OpenTask;
