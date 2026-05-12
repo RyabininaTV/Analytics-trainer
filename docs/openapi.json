@@ -2,6 +2,149 @@
   "openapi" : "3.1.0",
   "components" : {
     "schemas" : {
+      "AnswerTypeEnum" : {
+        "type" : "string",
+        "enum" : [ "TEST_OPTION", "ERROR_ITEM", "OPEN_TEXT" ]
+      },
+      "AttemptAnswerDetails" : {
+        "type" : "object",
+        "required" : [ "id", "answer_type" ],
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "answer_type" : {
+            "$ref" : "#/components/schemas/AnswerTypeEnum"
+          },
+          "selected_option_id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "selected_option_text" : {
+            "type" : "string"
+          },
+          "selected_error_item_id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "selected_error_item_text" : {
+            "type" : "string"
+          },
+          "text_answer" : {
+            "type" : "string"
+          }
+        }
+      },
+      "AttemptDetailsResponse" : {
+        "type" : "object",
+        "required" : [ "id", "user_id", "task_id", "started_at", "status", "max_score_snapshot", "answers" ],
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "user_id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "task_id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "started_at" : {
+            "$ref" : "#/components/schemas/LocalDateTime"
+          },
+          "submitted_at" : {
+            "$ref" : "#/components/schemas/LocalDateTime"
+          },
+          "status" : {
+            "$ref" : "#/components/schemas/AttemptStatusEnum"
+          },
+          "score" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "max_score_snapshot" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "is_correct" : {
+            "type" : "boolean"
+          },
+          "auto_checked" : {
+            "type" : "boolean"
+          },
+          "needs_manual_review" : {
+            "type" : "boolean"
+          },
+          "reviewer_comment" : {
+            "type" : "string"
+          },
+          "reviewed_at" : {
+            "$ref" : "#/components/schemas/LocalDateTime"
+          },
+          "answers" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/AttemptAnswerDetails"
+            }
+          }
+        }
+      },
+      "AttemptResponse" : {
+        "type" : "object",
+        "required" : [ "id", "task_id", "started_at", "status", "max_score_snapshot" ],
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "task_id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "started_at" : {
+            "$ref" : "#/components/schemas/LocalDateTime"
+          },
+          "submitted_at" : {
+            "$ref" : "#/components/schemas/LocalDateTime"
+          },
+          "status" : {
+            "$ref" : "#/components/schemas/AttemptStatusEnum"
+          },
+          "score" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "max_score_snapshot" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "is_correct" : {
+            "type" : "boolean"
+          }
+        }
+      },
+      "AttemptStatusEnum" : {
+        "type" : "string",
+        "enum" : [ "IN_PROGRESS", "SUBMITTED", "CHECKED", "REJECTED" ]
+      },
+      "AuthResponse" : {
+        "type" : "object",
+        "required" : [ "access_token", "refresh_token", "user" ],
+        "properties" : {
+          "access_token" : {
+            "type" : "string"
+          },
+          "refresh_token" : {
+            "type" : "string"
+          },
+          "user" : {
+            "$ref" : "#/components/schemas/UserResponse"
+          }
+        }
+      },
       "CreateTaskErrorItemRequest" : {
         "type" : "object",
         "required" : [ "fragment_text", "is_error" ],
@@ -18,6 +161,25 @@
           }
         }
       },
+      "CreateTaskErrorItemResponse" : {
+        "type" : "object",
+        "required" : [ "id", "fragment_text", "is_error" ],
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "fragment_text" : {
+            "type" : "string"
+          },
+          "is_error" : {
+            "type" : "boolean"
+          },
+          "explanation" : {
+            "type" : "string"
+          }
+        }
+      },
       "CreateTaskOptionRequest" : {
         "type" : "object",
         "required" : [ "option_text", "is_correct" ],
@@ -25,6 +187,22 @@
           "option_text" : {
             "type" : "string",
             "pattern" : "\\S"
+          },
+          "is_correct" : {
+            "type" : "boolean"
+          }
+        }
+      },
+      "CreateTaskOptionResponse" : {
+        "type" : "object",
+        "required" : [ "id", "option_text", "is_correct" ],
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "option_text" : {
+            "type" : "string"
           },
           "is_correct" : {
             "type" : "boolean"
@@ -81,6 +259,60 @@
           }
         }
       },
+      "CreateTaskResponse" : {
+        "type" : "object",
+        "required" : [ "id", "trainer_id", "task_type", "title", "description", "max_score", "is_active", "auto_check_enabled", "created_at", "updated_at" ],
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "trainer_id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "task_type" : {
+            "type" : "string"
+          },
+          "title" : {
+            "type" : "string"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "content" : {
+            "type" : "string"
+          },
+          "max_score" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "is_active" : {
+            "type" : "boolean"
+          },
+          "auto_check_enabled" : {
+            "type" : "boolean"
+          },
+          "created_at" : {
+            "$ref" : "#/components/schemas/LocalDateTime"
+          },
+          "updated_at" : {
+            "$ref" : "#/components/schemas/LocalDateTime"
+          },
+          "options" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/CreateTaskOptionResponse"
+            }
+          },
+          "error_items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/CreateTaskErrorItemResponse"
+            }
+          }
+        }
+      },
       "CreateTrainerRequest" : {
         "type" : "object",
         "required" : [ "title", "is_active" ],
@@ -100,6 +332,276 @@
             "type" : "boolean"
           }
         }
+      },
+      "CreateTrainerResponse" : {
+        "type" : "object",
+        "required" : [ "id", "title", "is_active", "created_at", "updated_at" ],
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "title" : {
+            "type" : "string"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "difficulty_level" : {
+            "type" : "string"
+          },
+          "is_active" : {
+            "type" : "boolean"
+          },
+          "created_at" : {
+            "$ref" : "#/components/schemas/LocalDateTime"
+          },
+          "updated_at" : {
+            "$ref" : "#/components/schemas/LocalDateTime"
+          }
+        }
+      },
+      "GetRandomTaskErrorItemResponse" : {
+        "type" : "object",
+        "required" : [ "id", "fragment_text" ],
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "fragment_text" : {
+            "type" : "string"
+          }
+        }
+      },
+      "GetRandomTaskOptionResponse" : {
+        "type" : "object",
+        "required" : [ "id", "option_text" ],
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "option_text" : {
+            "type" : "string"
+          }
+        }
+      },
+      "GetRandomTaskResponse" : {
+        "type" : "object",
+        "required" : [ "id", "trainer_id", "trainer_title", "task_type", "title", "description", "max_score", "auto_check_enabled", "created_at", "updated_at" ],
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "trainer_id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "trainer_title" : {
+            "type" : "string"
+          },
+          "task_type" : {
+            "type" : "string"
+          },
+          "title" : {
+            "type" : "string"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "content" : {
+            "type" : "string"
+          },
+          "max_score" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "auto_check_enabled" : {
+            "type" : "boolean"
+          },
+          "created_at" : {
+            "$ref" : "#/components/schemas/LocalDateTime"
+          },
+          "updated_at" : {
+            "$ref" : "#/components/schemas/LocalDateTime"
+          },
+          "options" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/GetRandomTaskOptionResponse"
+            }
+          },
+          "error_items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/GetRandomTaskErrorItemResponse"
+            }
+          }
+        }
+      },
+      "GetTaskDetailsResponse" : {
+        "type" : "object",
+        "required" : [ "id", "trainer_id", "trainer_title", "task_type", "title", "description", "max_score", "auto_check_enabled", "created_at", "updated_at" ],
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "trainer_id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "trainer_title" : {
+            "type" : "string"
+          },
+          "task_type" : {
+            "type" : "string"
+          },
+          "title" : {
+            "type" : "string"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "content" : {
+            "type" : "string"
+          },
+          "max_score" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "auto_check_enabled" : {
+            "type" : "boolean"
+          },
+          "created_at" : {
+            "$ref" : "#/components/schemas/LocalDateTime"
+          },
+          "updated_at" : {
+            "$ref" : "#/components/schemas/LocalDateTime"
+          },
+          "options" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/GetTaskOptionResponse"
+            }
+          },
+          "error_items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/GetTaskErrorItemResponse"
+            }
+          }
+        }
+      },
+      "GetTaskErrorItemResponse" : {
+        "type" : "object",
+        "required" : [ "id", "fragment_text" ],
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "fragment_text" : {
+            "type" : "string"
+          }
+        }
+      },
+      "GetTaskItemResponse" : {
+        "type" : "object",
+        "required" : [ "id", "trainer_id", "trainer_title", "task_type", "title", "description", "max_score", "auto_check_enabled", "created_at", "updated_at" ],
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "trainer_id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "trainer_title" : {
+            "type" : "string"
+          },
+          "task_type" : {
+            "type" : "string"
+          },
+          "title" : {
+            "type" : "string"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "content" : {
+            "type" : "string"
+          },
+          "max_score" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "auto_check_enabled" : {
+            "type" : "boolean"
+          },
+          "created_at" : {
+            "$ref" : "#/components/schemas/LocalDateTime"
+          },
+          "updated_at" : {
+            "$ref" : "#/components/schemas/LocalDateTime"
+          }
+        }
+      },
+      "GetTaskOptionResponse" : {
+        "type" : "object",
+        "required" : [ "id", "option_text" ],
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "option_text" : {
+            "type" : "string"
+          }
+        }
+      },
+      "LeaderboardItemResponse" : {
+        "type" : "object",
+        "required" : [ "position", "user_id", "username", "completed_tasks_count", "total_tasks_count", "total_score", "completion_percent" ],
+        "properties" : {
+          "position" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "user_id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "username" : {
+            "type" : "string"
+          },
+          "completed_tasks_count" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "total_tasks_count" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "total_score" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "completion_percent" : {
+            "type" : "number"
+          },
+          "last_activity_at" : {
+            "$ref" : "#/components/schemas/LocalDateTime"
+          }
+        }
+      },
+      "LocalDateTime" : {
+        "type" : "string",
+        "format" : "date-time",
+        "examples" : [ "2022-03-10T12:15:50" ]
       },
       "LoginRequest" : {
         "type" : "object",
@@ -122,6 +624,99 @@
         "properties" : {
           "refresh_token" : {
             "type" : "string"
+          }
+        }
+      },
+      "ProfileResponse" : {
+        "type" : "object",
+        "required" : [ "id", "email", "username", "role", "status", "created_at", "updated_at" ],
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "email" : {
+            "type" : "string"
+          },
+          "username" : {
+            "type" : "string"
+          },
+          "role" : {
+            "$ref" : "#/components/schemas/UserRoleEnum"
+          },
+          "status" : {
+            "$ref" : "#/components/schemas/UserStatusEnum"
+          },
+          "created_at" : {
+            "$ref" : "#/components/schemas/LocalDateTime"
+          },
+          "updated_at" : {
+            "$ref" : "#/components/schemas/LocalDateTime"
+          }
+        }
+      },
+      "ProgressHistoryItemResponse" : {
+        "type" : "object",
+        "required" : [ "changed_at", "total_score" ],
+        "properties" : {
+          "changed_at" : {
+            "$ref" : "#/components/schemas/LocalDateTime"
+          },
+          "total_score" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }
+      },
+      "ProgressItemResponse" : {
+        "type" : "object",
+        "required" : [ "trainer_id", "completed_tasks_count", "total_tasks_count", "total_score", "completion_percent" ],
+        "properties" : {
+          "trainer_id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "completed_tasks_count" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "total_tasks_count" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "total_score" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "completion_percent" : {
+            "type" : "number"
+          },
+          "last_activity_at" : {
+            "$ref" : "#/components/schemas/LocalDateTime"
+          }
+        }
+      },
+      "ProgressResponse" : {
+        "type" : "object",
+        "required" : [ "completed_tasks_count", "total_tasks_count", "total_score", "completion_percent" ],
+        "properties" : {
+          "completed_tasks_count" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "total_tasks_count" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "total_score" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "completion_percent" : {
+            "type" : "number"
+          },
+          "last_activity_at" : {
+            "$ref" : "#/components/schemas/LocalDateTime"
           }
         }
       },
@@ -174,6 +769,137 @@
           }
         }
       },
+      "SubmitAttemptResponse" : {
+        "type" : "object",
+        "required" : [ "task_id", "user_id", "attempt_id", "status" ],
+        "properties" : {
+          "task_id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "user_id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "attempt_id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "status" : {
+            "$ref" : "#/components/schemas/AttemptStatusEnum"
+          },
+          "score" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "total_score" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }
+      },
+      "TaskByTrainerIdResponse" : {
+        "type" : "object",
+        "required" : [ "id", "trainer_id", "task_type", "title", "description", "max_score", "is_active", "auto_check_enabled", "created_at", "updated_at" ],
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "trainer_id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "task_type" : {
+            "$ref" : "#/components/schemas/TaskTypeEnum"
+          },
+          "title" : {
+            "type" : "string"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "content" : {
+            "type" : "string"
+          },
+          "max_score" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "is_active" : {
+            "type" : "boolean"
+          },
+          "auto_check_enabled" : {
+            "type" : "boolean"
+          },
+          "created_at" : {
+            "$ref" : "#/components/schemas/LocalDateTime"
+          },
+          "updated_at" : {
+            "$ref" : "#/components/schemas/LocalDateTime"
+          }
+        }
+      },
+      "TaskTypeEnum" : {
+        "type" : "string",
+        "enum" : [ "TEST", "ERROR_FIND", "OPEN" ]
+      },
+      "TrainerInfoByIdResponse" : {
+        "type" : "object",
+        "required" : [ "id", "title", "is_active", "created_at", "updated_at" ],
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "title" : {
+            "type" : "string"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "difficulty_level" : {
+            "type" : "string"
+          },
+          "is_active" : {
+            "type" : "boolean"
+          },
+          "created_at" : {
+            "$ref" : "#/components/schemas/LocalDateTime"
+          },
+          "updated_at" : {
+            "$ref" : "#/components/schemas/LocalDateTime"
+          }
+        }
+      },
+      "TrainerResponse" : {
+        "type" : "object",
+        "required" : [ "id", "title", "is_active", "created_at", "updated_at" ],
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "title" : {
+            "type" : "string"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "difficulty_level" : {
+            "type" : "string"
+          },
+          "is_active" : {
+            "type" : "boolean"
+          },
+          "created_at" : {
+            "$ref" : "#/components/schemas/LocalDateTime"
+          },
+          "updated_at" : {
+            "$ref" : "#/components/schemas/LocalDateTime"
+          }
+        }
+      },
       "UpdateProfileRequest" : {
         "type" : "object",
         "required" : [ "email", "username" ],
@@ -201,6 +927,34 @@
           }
         }
       },
+      "UpdateProfileResponse" : {
+        "type" : "object",
+        "required" : [ "id", "email", "username", "role", "status", "created_at", "updated_at" ],
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "email" : {
+            "type" : "string"
+          },
+          "username" : {
+            "type" : "string"
+          },
+          "role" : {
+            "$ref" : "#/components/schemas/UserRoleEnum"
+          },
+          "status" : {
+            "$ref" : "#/components/schemas/UserStatusEnum"
+          },
+          "created_at" : {
+            "$ref" : "#/components/schemas/LocalDateTime"
+          },
+          "updated_at" : {
+            "$ref" : "#/components/schemas/LocalDateTime"
+          }
+        }
+      },
       "UpdateTaskErrorItemRequest" : {
         "type" : "object",
         "required" : [ "fragment_text", "is_error" ],
@@ -217,6 +971,25 @@
           }
         }
       },
+      "UpdateTaskErrorItemResponse" : {
+        "type" : "object",
+        "required" : [ "id", "fragment_text", "is_error" ],
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "fragment_text" : {
+            "type" : "string"
+          },
+          "is_error" : {
+            "type" : "boolean"
+          },
+          "explanation" : {
+            "type" : "string"
+          }
+        }
+      },
       "UpdateTaskOptionRequest" : {
         "type" : "object",
         "required" : [ "option_text", "is_correct" ],
@@ -224,6 +997,22 @@
           "option_text" : {
             "type" : "string",
             "pattern" : "\\S"
+          },
+          "is_correct" : {
+            "type" : "boolean"
+          }
+        }
+      },
+      "UpdateTaskOptionResponse" : {
+        "type" : "object",
+        "required" : [ "id", "option_text", "is_correct" ],
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "option_text" : {
+            "type" : "string"
           },
           "is_correct" : {
             "type" : "boolean"
@@ -280,6 +1069,60 @@
           }
         }
       },
+      "UpdateTaskResponse" : {
+        "type" : "object",
+        "required" : [ "id", "trainer_id", "task_type", "title", "description", "max_score", "is_active", "auto_check_enabled", "created_at", "updated_at" ],
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "trainer_id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "task_type" : {
+            "type" : "string"
+          },
+          "title" : {
+            "type" : "string"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "content" : {
+            "type" : "string"
+          },
+          "max_score" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "is_active" : {
+            "type" : "boolean"
+          },
+          "auto_check_enabled" : {
+            "type" : "boolean"
+          },
+          "created_at" : {
+            "$ref" : "#/components/schemas/LocalDateTime"
+          },
+          "updated_at" : {
+            "$ref" : "#/components/schemas/LocalDateTime"
+          },
+          "options" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/UpdateTaskOptionResponse"
+            }
+          },
+          "error_items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/UpdateTaskErrorItemResponse"
+            }
+          }
+        }
+      },
       "UpdateTrainerRequest" : {
         "type" : "object",
         "required" : [ "title", "is_active" ],
@@ -300,6 +1143,100 @@
             "type" : "boolean"
           }
         }
+      },
+      "UpdateTrainerResponse" : {
+        "type" : "object",
+        "required" : [ "id", "title", "is_active", "created_at", "updated_at" ],
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "title" : {
+            "type" : "string"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "difficulty_level" : {
+            "type" : "string"
+          },
+          "is_active" : {
+            "type" : "boolean"
+          },
+          "created_at" : {
+            "$ref" : "#/components/schemas/LocalDateTime"
+          },
+          "updated_at" : {
+            "$ref" : "#/components/schemas/LocalDateTime"
+          }
+        }
+      },
+      "UserProgressByTrainerIdResponse" : {
+        "type" : "object",
+        "required" : [ "id", "user_id", "trainer_id", "completed_tasks_count", "total_tasks_count", "total_score", "completion_percent" ],
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "user_id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "trainer_id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "completed_tasks_count" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "total_tasks_count" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "total_score" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "completion_percent" : {
+            "type" : "number"
+          },
+          "last_activity_at" : {
+            "$ref" : "#/components/schemas/LocalDateTime"
+          }
+        }
+      },
+      "UserResponse" : {
+        "type" : "object",
+        "required" : [ "id", "email", "username", "role", "status" ],
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "email" : {
+            "type" : "string"
+          },
+          "username" : {
+            "type" : "string"
+          },
+          "role" : {
+            "$ref" : "#/components/schemas/UserRoleEnum"
+          },
+          "status" : {
+            "$ref" : "#/components/schemas/UserStatusEnum"
+          }
+        }
+      },
+      "UserRoleEnum" : {
+        "type" : "string",
+        "enum" : [ "USER", "ADMIN" ]
+      },
+      "UserStatusEnum" : {
+        "type" : "string",
+        "enum" : [ "ACTIVE", "BLOCKED" ]
       }
     }
   },
@@ -318,11 +1255,12 @@
           "required" : true
         },
         "responses" : {
-          "200" : {
-            "description" : "OK",
+          "201" : {
             "content" : {
               "application/json" : {
-                "schema" : { }
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateTaskResponse"
+                }
               }
             }
           },
@@ -360,7 +1298,9 @@
             "description" : "OK",
             "content" : {
               "application/json" : {
-                "schema" : { }
+                "schema" : {
+                  "$ref" : "#/components/schemas/UpdateTaskResponse"
+                }
               }
             }
           },
@@ -382,14 +1322,7 @@
           }
         } ],
         "responses" : {
-          "200" : {
-            "description" : "OK",
-            "content" : {
-              "application/json" : {
-                "schema" : { }
-              }
-            }
-          }
+          "204" : { }
         },
         "tags" : [ "Admin Controller" ]
       }
@@ -408,11 +1341,12 @@
           "required" : true
         },
         "responses" : {
-          "200" : {
-            "description" : "OK",
+          "201" : {
             "content" : {
               "application/json" : {
-                "schema" : { }
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateTrainerResponse"
+                }
               }
             }
           },
@@ -450,7 +1384,9 @@
             "description" : "OK",
             "content" : {
               "application/json" : {
-                "schema" : { }
+                "schema" : {
+                  "$ref" : "#/components/schemas/UpdateTrainerResponse"
+                }
               }
             }
           },
@@ -479,7 +1415,9 @@
             "description" : "OK",
             "content" : {
               "application/json" : {
-                "schema" : { }
+                "schema" : {
+                  "$ref" : "#/components/schemas/SubmitAttemptResponse"
+                }
               }
             }
           },
@@ -496,7 +1434,12 @@
             "description" : "OK",
             "content" : {
               "application/json" : {
-                "schema" : { }
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/AttemptResponse"
+                  }
+                }
               }
             }
           }
@@ -521,7 +1464,9 @@
             "description" : "OK",
             "content" : {
               "application/json" : {
-                "schema" : { }
+                "schema" : {
+                  "$ref" : "#/components/schemas/AttemptDetailsResponse"
+                }
               }
             }
           }
@@ -546,7 +1491,12 @@
             "description" : "OK",
             "content" : {
               "application/json" : {
-                "schema" : { }
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/AttemptResponse"
+                  }
+                }
               }
             }
           }
@@ -572,7 +1522,9 @@
             "description" : "OK",
             "content" : {
               "application/json" : {
-                "schema" : { }
+                "schema" : {
+                  "$ref" : "#/components/schemas/AuthResponse"
+                }
               }
             }
           },
@@ -597,14 +1549,7 @@
           "required" : true
         },
         "responses" : {
-          "200" : {
-            "description" : "OK",
-            "content" : {
-              "application/json" : {
-                "schema" : { }
-              }
-            }
-          },
+          "204" : { },
           "400" : {
             "description" : "Bad Request"
           }
@@ -630,7 +1575,9 @@
             "description" : "OK",
             "content" : {
               "application/json" : {
-                "schema" : { }
+                "schema" : {
+                  "$ref" : "#/components/schemas/AuthResponse"
+                }
               }
             }
           },
@@ -655,11 +1602,12 @@
           "required" : true
         },
         "responses" : {
-          "200" : {
-            "description" : "OK",
+          "201" : {
             "content" : {
               "application/json" : {
-                "schema" : { }
+                "schema" : {
+                  "$ref" : "#/components/schemas/AuthResponse"
+                }
               }
             }
           },
@@ -678,7 +1626,12 @@
             "description" : "OK",
             "content" : {
               "application/json" : {
-                "schema" : { }
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/LeaderboardItemResponse"
+                  }
+                }
               }
             }
           }
@@ -703,7 +1656,12 @@
             "description" : "OK",
             "content" : {
               "application/json" : {
-                "schema" : { }
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/LeaderboardItemResponse"
+                  }
+                }
               }
             }
           }
@@ -729,7 +1687,9 @@
             "description" : "OK",
             "content" : {
               "application/json" : {
-                "schema" : { }
+                "schema" : {
+                  "$ref" : "#/components/schemas/UpdateProfileResponse"
+                }
               }
             }
           },
@@ -746,7 +1706,9 @@
             "description" : "OK",
             "content" : {
               "application/json" : {
-                "schema" : { }
+                "schema" : {
+                  "$ref" : "#/components/schemas/ProfileResponse"
+                }
               }
             }
           }
@@ -762,7 +1724,9 @@
             "description" : "OK",
             "content" : {
               "application/json" : {
-                "schema" : { }
+                "schema" : {
+                  "$ref" : "#/components/schemas/ProgressResponse"
+                }
               }
             }
           }
@@ -778,7 +1742,12 @@
             "description" : "OK",
             "content" : {
               "application/json" : {
-                "schema" : { }
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/ProgressHistoryItemResponse"
+                  }
+                }
               }
             }
           }
@@ -794,7 +1763,12 @@
             "description" : "OK",
             "content" : {
               "application/json" : {
-                "schema" : { }
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/ProgressItemResponse"
+                  }
+                }
               }
             }
           }
@@ -818,7 +1792,12 @@
             "description" : "OK",
             "content" : {
               "application/json" : {
-                "schema" : { }
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/GetTaskItemResponse"
+                  }
+                }
               }
             }
           }
@@ -834,7 +1813,9 @@
             "description" : "OK",
             "content" : {
               "application/json" : {
-                "schema" : { }
+                "schema" : {
+                  "$ref" : "#/components/schemas/GetRandomTaskResponse"
+                }
               }
             }
           }
@@ -859,7 +1840,9 @@
             "description" : "OK",
             "content" : {
               "application/json" : {
-                "schema" : { }
+                "schema" : {
+                  "$ref" : "#/components/schemas/GetTaskDetailsResponse"
+                }
               }
             }
           }
@@ -875,7 +1858,12 @@
             "description" : "OK",
             "content" : {
               "application/json" : {
-                "schema" : { }
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/TrainerResponse"
+                  }
+                }
               }
             }
           }
@@ -900,7 +1888,9 @@
             "description" : "OK",
             "content" : {
               "application/json" : {
-                "schema" : { }
+                "schema" : {
+                  "$ref" : "#/components/schemas/TrainerInfoByIdResponse"
+                }
               }
             }
           }
@@ -925,7 +1915,9 @@
             "description" : "OK",
             "content" : {
               "application/json" : {
-                "schema" : { }
+                "schema" : {
+                  "$ref" : "#/components/schemas/UserProgressByTrainerIdResponse"
+                }
               }
             }
           }
@@ -946,14 +1938,7 @@
           }
         } ],
         "responses" : {
-          "200" : {
-            "description" : "OK",
-            "content" : {
-              "application/json" : {
-                "schema" : { }
-              }
-            }
-          }
+          "204" : { }
         },
         "tags" : [ "Trainer Controller" ]
       }
@@ -975,7 +1960,12 @@
             "description" : "OK",
             "content" : {
               "application/json" : {
-                "schema" : { }
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/TaskByTrainerIdResponse"
+                  }
+                }
               }
             }
           }
