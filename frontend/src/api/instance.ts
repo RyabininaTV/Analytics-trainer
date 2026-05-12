@@ -4,9 +4,11 @@ import type { RegistrationResponse } from "../hooks/api/useRegistrationQuery";
 import { PUBLIC_ENDPOINTS } from "../constants/constants";
 
 const api = axios.create({
-  baseURL: "/api",
+  // baseURL: "/api",
+  baseURL: "http://localhost:8080/",
 });
 
+// baseURL: "http://localhost:8080/"
 // baseURL: "http://141.8.198.205:8080/",
 
 api.interceptors.request.use((config) => {
