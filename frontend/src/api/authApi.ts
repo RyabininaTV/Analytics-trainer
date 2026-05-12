@@ -1,6 +1,8 @@
 import type {
   AllTasksResponse,
   AllTrainersResponse,
+  SendAnswerBody,
+  SendAnswerResponse,
   TaskDetailResponse,
 } from "../hooks/api/types";
 import api from "./instance";
@@ -42,4 +44,11 @@ export const trainersApi = {
 export const tasksApi = {
   getTask: async (taskId: number): Promise<{ data: TaskDetailResponse }> =>
     await api.get(`tasks/${taskId}`),
+};
+
+export const attemptsApi = {
+  sendAnswer: async (
+    payload: SendAnswerBody,
+  ): Promise<{ data: SendAnswerResponse }> =>
+    await api.post(`/attempts`, payload),
 };

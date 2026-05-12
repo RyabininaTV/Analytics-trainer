@@ -1,22 +1,31 @@
-import { useEffect, useState, type FC } from "react";
+import { useState, type FC } from "react";
 import type { SearchErrorTaskProps } from "./types";
-import { RadioList } from "../shared";
 import { Button, Form } from "antd";
 import "./searchErrorTask.ant.scss";
-import { TaskEmpty, TaskExplanation } from "../shared/taskPageComponents";
+import { TaskExplanation } from "../../components/taskPageComponents/taskExplanation/taskExplanation";
+import { TaskEmpty } from "../../components/taskPageComponents/taskEmpty/taskEmpty";
+import { RadioList } from "../../components/radioList/radioList";
+import { useSendAnswer } from "../../hooks/api/useSendAnswer";
 
 const { useForm } = Form;
 
 const SearchErrorTask: FC<SearchErrorTaskProps> = (props) => {
-  const { content, questionsList } = props;
+  const { id, content, questionsList } = props;
 
   const [form] = useForm();
 
   const [disabled, setDisabled] = useState<boolean>(true);
+  const sendAnswer = useSendAnswer();
 
-  useEffect(() => {
-    console.log("questionsList: ", questionsList);
-  }, [questionsList]);
+  const disabledDueToRejectedAnswer =
+    sendAnswer.error?.response?.data?.code === "INVALID_ANSWER" &&
+    sendAnswer.error?.response?.data?.message ===
+      "Task already completed correctly" &&
+    sendAnswer.error?.response?.status === 400;
+
+  const disabledReason =
+    sendAnswer.data?.status ??
+    (disabledDueToRejectedAnswer ? "ERROR" : undefined);
 
   return (
     <section>
@@ -37,11 +46,15 @@ const SearchErrorTask: FC<SearchErrorTaskProps> = (props) => {
               }
             }}
             onFinish={(fields) => {
-              console.log("fields: ", fields);
+              sendAnswer.mutate({
+                task_id: id,
+                answer: fields.searchErrorAnswer,
+              });
             }}
           >
             <Form.Item name={"searchErrorAnswer"}>
               <RadioList
+                disabledReason={disabledReason}
                 list={{
                   originalList: questionsList,
                   forValue: "id",
@@ -51,7 +64,7 @@ const SearchErrorTask: FC<SearchErrorTaskProps> = (props) => {
             </Form.Item>
             <Form.Item>
               <Button
-                disabled={disabled}
+                disabled={disabled || !!disabledReason}
                 htmlType="submit"
                 color="primary"
                 variant="filled"

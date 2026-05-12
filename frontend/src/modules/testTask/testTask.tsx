@@ -1,22 +1,30 @@
-import { useEffect, useState, type FC } from "react";
+import { useState, type FC } from "react";
 import type { TestTaskProps } from "./types";
-import { TaskEmpty } from "../shared/taskPageComponents";
 import { Button, Form } from "antd";
-import { RadioList } from "../shared";
 import "./testTask.ant.scss";
+import { TaskEmpty } from "../../components/taskPageComponents/taskEmpty/taskEmpty";
+import { RadioList } from "../../components/radioList/radioList";
+import { useSendAnswer } from "../../hooks/api/useSendAnswer";
 
 const { useForm } = Form;
 
 const TestTask: FC<TestTaskProps> = (props) => {
-  const { questionsList } = props;
+  const { questionsList, id } = props;
 
   const [form] = useForm();
 
   const [disabled, setDisabled] = useState<boolean>(true);
+  const sendAnswer = useSendAnswer();
 
-  useEffect(() => {
-    console.log("TEST: ", questionsList);
-  }, [questionsList]);
+  const disabledDueToRejectedAnswer =
+    sendAnswer.error?.response?.data?.code === "INVALID_ANSWER" &&
+    sendAnswer.error?.response?.data?.message ===
+      "Task already completed correctly" &&
+    sendAnswer.error?.response?.status === 400;
+
+  const disabledReason =
+    sendAnswer.data?.status ??
+    (disabledDueToRejectedAnswer ? "ERROR" : undefined);
 
   return (
     <section>
@@ -35,11 +43,15 @@ const TestTask: FC<TestTaskProps> = (props) => {
             }
           }}
           onFinish={(fields) => {
-            console.log("fields: ", fields);
+            sendAnswer.mutate({
+              task_id: id,
+              answer: fields.testAnswer,
+            });
           }}
         >
           <Form.Item name={"testAnswer"}>
             <RadioList
+              disabledReason={disabledReason}
               list={{
                 originalList: questionsList,
                 forValue: "id",
@@ -49,7 +61,7 @@ const TestTask: FC<TestTaskProps> = (props) => {
           </Form.Item>
           <Form.Item>
             <Button
-              disabled={disabled}
+              disabled={disabled || !!disabledReason}
               htmlType="submit"
               color="primary"
               variant="filled"

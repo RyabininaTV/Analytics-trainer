@@ -50,3 +50,22 @@ export interface TaskDetailResponse {
   error_items?: TaskDetailErrorItem[];
   content?: string;
 }
+
+export interface SendAnswerBody {
+  task_id: number;
+  answer: string;
+}
+
+export interface SendAnswerResponse {
+  attempt_id: number;
+  score: number;
+  status: "SUBMITTED" | "CHECKED" | "REJECTED";
+  task_id: number;
+  total_score: number;
+  user_id: number;
+}
+
+export interface SendAnswerErrorResponse {
+  code: string;
+  message: string;
+}

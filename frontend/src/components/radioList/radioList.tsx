@@ -6,6 +6,8 @@ import "./radioList.ant.scss";
 export const RadioList = <T,>(props: RadioListProps<T>) => {
   const {
     list: { originalList, forLabel, forValue },
+    disabled = false,
+    disabledReason,
     value,
     onChange,
   } = props;
@@ -13,11 +15,12 @@ export const RadioList = <T,>(props: RadioListProps<T>) => {
   const options = originalList.map((listItem) => ({
     value: listItem[forValue],
     label: listItem[forLabel],
-    className: "radioCustomStyle",
+    className: `radioCustomStyle ${disabledReason ?? ""}`,
   })) as CheckboxGroupProps<string | number>["options"];
 
   return (
     <Radio.Group
+      disabled={disabled || !!disabledReason}
       optionType="default"
       orientation="vertical"
       value={value}

@@ -1,0 +1,14 @@
+@use "../../styles/constants.scss" as vars;
+
+:where(.openTaskForm .css-dev-only-do-not-override-xogyor).ant-form-item {
+  margin-bottom: 12px;
+}
+
+.openTaskForm .ant-input-disabled.REJECTED,
+.openTaskForm .ant-input-disabled.ERROR {
+  border-color: vars.$red;
+}
+
+.openTaskForm .ant-input-disabled.CHECKED {
+  border-color: vars.$green;
+}
